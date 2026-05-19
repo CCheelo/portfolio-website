@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 200">
+  <defs>
+    <linearGradient id="copper-bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1c1a0f"/>
+    </linearGradient>
+    <linearGradient id="copper-fill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#b87333" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#b87333" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="forecast-fill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#c2410c" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#c2410c" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="500" height="200" fill="url(#copper-bg)"/>
+
+  <!-- Grid -->
+  <line x1="55" y1="170" x2="475" y2="170" stroke="#2d2416" stroke-width="1"/>
+  <line x1="55" y1="130" x2="475" y2="130" stroke="#1e1a0e" stroke-width="0.5" stroke-dasharray="4,4"/>
+  <line x1="55" y1="95"  x2="475" y2="95"  stroke="#1e1a0e" stroke-width="0.5" stroke-dasharray="4,4"/>
+  <line x1="55" y1="60"  x2="475" y2="60"  stroke="#1e1a0e" stroke-width="0.5" stroke-dasharray="4,4"/>
+
+  <!-- Forecast divider -->
+  <line x1="330" y1="40" x2="330" y2="170" stroke="#334155" stroke-width="1" stroke-dasharray="5,4"/>
+  <text x="334" y="52" font-family="system-ui, sans-serif" font-size="8" fill="#475569">FORECAST</text>
+
+  <!-- Historical fill -->
+  <polygon
+    points="55,135 90,125 125,140 160,110 195,128 230,105 265,118 295,100 330,108 330,170 55,170"
+    fill="url(#copper-fill)"/>
+
+  <!-- Historical line (copper colour) -->
+  <polyline
+    points="55,135 90,125 125,140 160,110 195,128 230,105 265,118 295,100 330,108"
+    fill="none" stroke="#b87333" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+
+  <!-- Forecast confidence band -->
+  <polygon
+    points="330,108 360,98 395,90 430,82 465,76 465,108 430,115 395,118 360,118 330,120"
+    fill="url(#forecast-fill)"/>
+
+  <!-- Forecast line (dashed orange) -->
+  <polyline
+    points="330,108 360,98 395,90 430,82 465,76"
+    fill="none" stroke="#c2410c" stroke-width="2" stroke-dasharray="7,4" stroke-linejoin="round" stroke-linecap="round"/>
+
+  <!-- Price labels -->
+  <text x="46" y="134" font-family="monospace" font-size="9" fill="#5c4a28" text-anchor="end">8k</text>
+  <text x="46" y="99"  font-family="monospace" font-size="9" fill="#5c4a28" text-anchor="end">9k</text>
+  <text x="46" y="64"  font-family="monospace" font-size="9" fill="#5c4a28" text-anchor="end">10k</text>
+
+  <!-- Title -->
+  <text x="62" y="28" font-family="system-ui, sans-serif" font-size="15" fill="#f1f5f9" font-weight="700">Copper Price Forecasting</text>
+  <text x="62" y="46" font-family="system-ui, sans-serif" font-size="10" fill="#64748b">Bank of Zambia Weekly Data · ARMA · AIC/BIC Selection · RMSE</text>
+
+  <!-- Legend -->
+  <line x1="340" y1="162" x2="358" y2="162" stroke="#b87333" stroke-width="2"/>
+  <text x="362" y="165" font-family="system-ui, sans-serif" font-size="9" fill="#94a3b8">Historical</text>
+  <line x1="405" y1="162" x2="423" y2="162" stroke="#c2410c" stroke-width="2" stroke-dasharray="5,3"/>
+  <text x="427" y="165" font-family="system-ui, sans-serif" font-size="9" fill="#94a3b8">Forecast</text>
+</svg>

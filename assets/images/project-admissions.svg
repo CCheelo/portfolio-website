@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 200">
+  <defs>
+    <linearGradient id="adm-bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#130f1a"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="500" height="200" fill="url(#adm-bg)"/>
+
+  <!-- Divider label -->
+  <line x1="250" y1="30" x2="250" y2="175" stroke="#1e293b" stroke-width="1"/>
+  <text x="125" y="24" font-family="system-ui, sans-serif" font-size="9" fill="#475569" text-anchor="middle">AGGREGATE VIEW</text>
+  <text x="375" y="24" font-family="system-ui, sans-serif" font-size="9" fill="#475569" text-anchor="middle">STRATIFIED BY MAJOR</text>
+
+  <!-- Baseline -->
+  <line x1="30" y1="175" x2="475" y2="175" stroke="#1e293b" stroke-width="1"/>
+
+  <!-- LEFT: Aggregate bars (showing apparent bias — men higher) -->
+  <!-- Men bar -->
+  <rect x="65" y="75" width="55" height="100" rx="3" fill="#3b82f6" opacity="0.75"/>
+  <text x="92" y="70" font-family="system-ui, sans-serif" font-size="9" fill="#3b82f6" text-anchor="middle">62%</text>
+  <text x="92" y="188" font-family="system-ui, sans-serif" font-size="9" fill="#64748b" text-anchor="middle">Men</text>
+  <!-- Women bar -->
+  <rect x="140" y="115" width="55" height="60" rx="3" fill="#c2410c" opacity="0.75"/>
+  <text x="167" y="110" font-family="system-ui, sans-serif" font-size="9" fill="#c2410c" text-anchor="middle">38%</text>
+  <text x="167" y="188" font-family="system-ui, sans-serif" font-size="9" fill="#64748b" text-anchor="middle">Women</text>
+
+  <!-- Arrow -->
+  <text x="228" y="112" font-family="system-ui, sans-serif" font-size="20" fill="#c2410c" text-anchor="middle">→</text>
+  <text x="227" y="130" font-family="system-ui, sans-serif" font-size="8" fill="#475569" text-anchor="middle">stratify</text>
+
+  <!-- RIGHT: Stratified — parity within majors -->
+  <!-- Major A -->
+  <rect x="265" y="80" width="22" height="95" rx="2" fill="#3b82f6" opacity="0.7"/>
+  <rect x="290" y="85" width="22" height="90" rx="2" fill="#c2410c" opacity="0.7"/>
+  <text x="280" y="190" font-family="system-ui, sans-serif" font-size="8" fill="#64748b" text-anchor="middle">Maj A</text>
+  <!-- Major B -->
+  <rect x="322" y="90" width="22" height="85" rx="2" fill="#3b82f6" opacity="0.7"/>
+  <rect x="347" y="93" width="22" height="82" rx="2" fill="#c2410c" opacity="0.7"/>
+  <text x="337" y="190" font-family="system-ui, sans-serif" font-size="8" fill="#64748b" text-anchor="middle">Maj B</text>
+  <!-- Major C -->
+  <rect x="378" y="120" width="22" height="55" rx="2" fill="#3b82f6" opacity="0.7"/>
+  <rect x="403" y="117" width="22" height="58" rx="2" fill="#c2410c" opacity="0.7"/>
+  <text x="393" y="190" font-family="system-ui, sans-serif" font-size="8" fill="#64748b" text-anchor="middle">Maj C</text>
+
+  <!-- Legend -->
+  <rect x="275" y="36" width="9" height="9" rx="2" fill="#3b82f6" opacity="0.8"/>
+  <text x="287" y="44" font-family="system-ui, sans-serif" font-size="9" fill="#94a3b8">Men</text>
+  <rect x="315" y="36" width="9" height="9" rx="2" fill="#c2410c" opacity="0.8"/>
+  <text x="327" y="44" font-family="system-ui, sans-serif" font-size="9" fill="#94a3b8">Women</text>
+
+  <!-- Title -->
+  <text x="62" y="14" font-family="system-ui, sans-serif" font-size="13" fill="#f1f5f9" font-weight="700">Admissions Bias Audit</text>
+
+  <!-- Simpson badge -->
+  <rect x="330" y="8" width="140" height="16" rx="8" fill="#7c3aed" opacity="0.2"/>
+  <text x="400" y="19" font-family="system-ui, sans-serif" font-size="8" fill="#a78bfa" text-anchor="middle" font-weight="700">SIMPSON'S PARADOX</text>
+</svg>

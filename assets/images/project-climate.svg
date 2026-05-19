@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 200">
+  <defs>
+    <linearGradient id="cli-bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0c1420"/>
+      <stop offset="100%" stop-color="#0f1a10"/>
+    </linearGradient>
+    <linearGradient id="co2-fill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#c2410c" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#c2410c" stop-opacity="0.05"/>
+    </linearGradient>
+    <linearGradient id="forest-fill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#16a34a" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#16a34a" stop-opacity="0.05"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="500" height="200" fill="url(#cli-bg)"/>
+
+  <!-- Grid -->
+  <line x1="55" y1="170" x2="475" y2="170" stroke="#1e293b" stroke-width="1"/>
+  <line x1="55" y1="130" x2="475" y2="130" stroke="#1e293b" stroke-width="0.5" stroke-dasharray="4,4"/>
+  <line x1="55" y1="100" x2="475" y2="100" stroke="#1e293b" stroke-width="0.5" stroke-dasharray="4,4"/>
+  <line x1="55" y1="70"  x2="475" y2="70"  stroke="#1e293b" stroke-width="0.5" stroke-dasharray="4,4"/>
+
+  <!-- Forest coverage (declining area) -->
+  <polygon
+    points="55,90 115,95 175,102 235,110 295,120 355,132 415,142 475,152 475,170 55,170"
+    fill="url(#forest-fill)"/>
+  <polyline
+    points="55,90 115,95 175,102 235,110 295,120 355,132 415,142 475,152"
+    fill="none" stroke="#16a34a" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+
+  <!-- CO2 rising area -->
+  <polygon
+    points="55,158 115,150 175,140 235,125 295,108 355,90 415,70 475,52 475,170 55,170"
+    fill="url(#co2-fill)"/>
+  <polyline
+    points="55,158 115,150 175,140 235,125 295,108 355,90 415,70 475,52"
+    fill="none" stroke="#c2410c" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+
+  <!-- Title -->
+  <text x="62" y="28" font-family="system-ui, sans-serif" font-size="15" fill="#f1f5f9" font-weight="700">Climate Change Analysis</text>
+  <text x="62" y="46" font-family="system-ui, sans-serif" font-size="10" fill="#64748b">CO₂ Emissions · Forest Coverage · Disaster Impact · IMF &amp; OWiD Data</text>
+
+  <!-- Legend -->
+  <rect x="58" y="155" width="10" height="10" rx="2" fill="#c2410c" opacity="0.7"/>
+  <text x="72" y="164" font-family="system-ui, sans-serif" font-size="9" fill="#94a3b8">CO₂ Emissions (rising)</text>
+  <rect x="195" y="155" width="10" height="10" rx="2" fill="#16a34a" opacity="0.7"/>
+  <text x="209" y="164" font-family="system-ui, sans-serif" font-size="9" fill="#94a3b8">Forest Coverage (declining)</text>
+
+  <!-- Year labels -->
+  <text x="55"  y="183" font-family="monospace" font-size="8" fill="#334155" text-anchor="middle">1990</text>
+  <text x="175" y="183" font-family="monospace" font-size="8" fill="#334155" text-anchor="middle">2000</text>
+  <text x="295" y="183" font-family="monospace" font-size="8" fill="#334155" text-anchor="middle">2010</text>
+  <text x="415" y="183" font-family="monospace" font-size="8" fill="#334155" text-anchor="middle">2020</text>
+</svg>

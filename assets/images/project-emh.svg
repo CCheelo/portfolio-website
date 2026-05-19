@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 200">
+  <defs>
+    <linearGradient id="emh-bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1a2540"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="500" height="200" fill="url(#emh-bg)"/>
+
+  <!-- Grid lines -->
+  <line x1="55" y1="170" x2="475" y2="170" stroke="#1e293b" stroke-width="1"/>
+  <line x1="55" y1="130" x2="475" y2="130" stroke="#1e293b" stroke-width="0.5" stroke-dasharray="4,4"/>
+  <line x1="55" y1="100" x2="475" y2="100" stroke="#1e293b" stroke-width="0.5" stroke-dasharray="4,4"/>
+  <line x1="55" y1="70"  x2="475" y2="70"  stroke="#1e293b" stroke-width="0.5" stroke-dasharray="4,4"/>
+
+  <!-- Expected random walk (dashed grey) -->
+  <line x1="55" y1="140" x2="475" y2="95" stroke="#475569" stroke-width="1.5" stroke-dasharray="8,5"/>
+
+  <!-- Actual price deviations — filled area under line -->
+  <polygon
+    points="55,140 95,122 135,142 175,108 215,125 255,90 295,112 335,95 375,118 415,98 455,111 475,104 475,170 55,170"
+    fill="#c2410c" opacity="0.08"/>
+
+  <!-- Actual price line -->
+  <polyline
+    points="55,140 95,122 135,142 175,108 215,125 255,90 295,112 335,95 375,118 415,98 455,111 475,104"
+    fill="none" stroke="#c2410c" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+
+  <!-- Deviation highlight dots -->
+  <circle cx="255" cy="90"  r="4" fill="#c2410c"/>
+  <circle cx="335" cy="95"  r="4" fill="#c2410c"/>
+  <circle cx="175" cy="108" r="3" fill="#c2410c" opacity="0.7"/>
+
+  <!-- Y-axis labels -->
+  <text x="46" y="134" font-family="monospace" font-size="9" fill="#475569" text-anchor="end">+1σ</text>
+  <text x="46" y="104" font-family="monospace" font-size="9" fill="#475569" text-anchor="end">+2σ</text>
+  <text x="46" y="74"  font-family="monospace" font-size="9" fill="#475569" text-anchor="end">+3σ</text>
+
+  <!-- Title -->
+  <text x="62" y="28" font-family="system-ui, sans-serif" font-size="15" fill="#f1f5f9" font-weight="700" letter-spacing="0.3">EMH Testing</text>
+  <text x="62" y="46" font-family="system-ui, sans-serif" font-size="10" fill="#64748b">Lusaka Securities Exchange · Runs Test · Ljung-Box · Variance Ratio</text>
+
+  <!-- Badge -->
+  <rect x="370" y="16" width="100" height="20" rx="10" fill="#c2410c" opacity="0.15"/>
+  <text x="420" y="30" font-family="system-ui, sans-serif" font-size="9" fill="#c2410c" text-anchor="middle" font-weight="700">PARTIAL INEFFICIENCY</text>
+</svg>
