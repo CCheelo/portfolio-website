@@ -25,7 +25,7 @@ Pushes to `main` auto-deploy via Vercel's GitHub integration. No manual deploy c
 
 **All styling lives in `css/main.css`** — no other CSS files. It is structured in labelled sections (design tokens → reset → components → pages → responsive). Edit one file only.
 
-**All JavaScript lives in `js/main.js`** — two self-contained IIFEs: `timelineProgress` (resume scroll animation) and `bookRotator` (home page). The script tag is `defer` and runs on every page, but each IIFE guards with an `if (!el) return` so they're safe on pages that don't have the relevant elements.
+**All JavaScript lives in `js/main.js`** — three self-contained IIFEs: `timelineProgress` (resume scroll animation), `bookRotator` (home page), and `navbarToggle` (mobile menu). The script tag is `defer` and runs on every page, but each IIFE guards with an `if (!el) return` so they're safe on pages that don't have the relevant elements.
 
 **Navigation and footer are copy-pasted into every HTML file** — there is no templating or includes. When updating nav links or footer content, edit all 11 files.
 
@@ -54,6 +54,12 @@ To change the accent colour, update `--color-accent` **and** `--color-accent-rgb
 
 **`.grid--2` / `.grid--3` / `.grid--4`** — simple CSS grid helpers. All collapse to 1 column at ≤768px via the responsive block.
 
+**`.navbar__toggle`** — mobile hamburger button (pill-shaped, border, "Menu"/"Close" label). Hidden at >768px via `display: none`. At ≤768px the navbar uses `flex-wrap` so the link list wraps below the brand/toggle row — no `position: absolute`, no z-index stacking issues. Toggle state is driven by `navbarToggle` IIFE in `main.js` which adds/removes `.is-open` on both the button and the `<ul>`.
+
+**Mobile breakpoints** — `css/main.css` has two responsive blocks at the bottom:
+- `≤768px` — navbar collapses, timeline uses 2-column grid (`24px node | 1fr content`), cert grid is 2-per-row at compact sizing, floating hero icons reduced to 4 corner icons at 30px.
+- `≤480px` — section padding tightens, hero CTA buttons stack full-width.
+
 ## Icons
 
 All SVG icons are stored locally in `assets/icons/` — there is no icon CDN dependency. If adding a new icon, download the SVG directly (e.g., from Iconify's CDN via PowerShell `Invoke-WebRequest`) rather than using a `<link>` to an external CDN.
@@ -62,10 +68,11 @@ Current icons: `powerbi`, `excel`, `r`, `mysql`, `python`, `github`, `tableau`, 
 
 ## Pending Items (not yet done)
 
-- **Formspree form ID**: `contact.html` contains `REPLACE_WITH_FORM_ID` — replace after creating a Formspree account.
-- **PDF reports**: `reports/` folder is empty. Files expected: `choolwe-cheelo-cv.pdf`, `emh-research-report.pdf`, `climate-change-summary.pdf`, `admissions-bias-exec-summary.pdf`.
+- **Vercel deployment**: Repo is on GitHub (`CCheelo/portfolio-website`) but Vercel integration not yet configured. Go to vercel.com → Import Project → connect GitHub repo → deploy. Once live, `www.choolwecheelo.com` will auto-deploy on every push to `main`.
+- **Formspree form ID**: `contact.html` contains `REPLACE_WITH_FORM_ID` — replace after creating a Formspree account at formspree.io.
+- **PDF reports**: `reports/` folder is empty. Files expected: `choolwe-cheelo-cv.pdf`, `emh-research-report.pdf`, `climate-change-summary.pdf`, `admissions-bias-exec-summary.pdf`. Source PDFs exist in the sibling project folders.
 - **Testimonials**: `testimonials.html` is a placeholder — content to be added by the owner.
-- **Copper Forecasting project**: `project-copper.html` exists but has placeholder content pending project files.
+- **Copper Forecasting project**: `project-copper.html` exists but has placeholder content — pending locating the R code and dataset files.
 
 ## Project Detail Pages
 
