@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resume — Choolwe Cheelo</title>
+  <meta name="description" content="Professional resume and education background of Choolwe Cheelo, Data Analyst and Actuarial Science graduate.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container navbar__container">
+      <a href="index.html" class="navbar__brand">Choolwe Cheelo</a>
+      <button class="navbar__toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+        <span class="navbar__toggle-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span class="navbar__toggle-label">Menu</span>
+      </button>
+      <ul class="navbar__links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="resume.html" class="active">Resume</a></li>
+        <li><a href="skills.html">Skills &amp; Certifications</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="testimonials.html">Testimonials</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <section class="page-header">
+      <div class="container">
+        <h1 class="page-header__title">Resume</h1>
+        <p class="page-header__subtitle">Actuarial Science graduate turning complex data into decisions people can act on.</p>
+      </div>
+    </section>
+
+    <!-- Summary + Highlights -->
+    <section class="section">
+      <div class="container">
+        <div class="resume-summary">
+          <div class="resume-summary__bio">
+            <p>
+              Actuarial Science graduate and data analyst trainee at FSI Outsourcing, Lusaka &mdash;
+              building Power BI dashboards, SQL pipelines, and statistical models that drive real business decisions.
+              PL-300 certified (950&thinsp;/&thinsp;1000) and AI-fluent through Anthropic Academy.
+            </p>
+          </div>
+          <div class="resume-summary__highlights">
+            <div class="highlights">
+              <div class="highlights__item">
+                <div class="highlights__stat">950</div>
+                <div class="highlights__label">PL-300 Score</div>
+                <div class="highlights__desc">Microsoft Power BI, out of 1000</div>
+              </div>
+              <div class="highlights__item">
+                <div class="highlights__stat">3M+</div>
+                <div class="highlights__label">Records Processed</div>
+                <div class="highlights__desc">Answer cards per season at ECZ</div>
+              </div>
+              <div class="highlights__item">
+                <div class="highlights__stat">5</div>
+                <div class="highlights__label">Analytics Projects</div>
+                <div class="highlights__desc">Financial, BI &amp; statistical</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Experience + Education Timeline -->
+    <section class="section section--alt">
+      <div class="container">
+        <h2 class="section__title">Experience &amp; Education</h2>
+
+        <div class="tl" id="mainTimeline">
+          <div class="tl__track" aria-hidden="true">
+            <div class="tl__fill" id="tlFill"></div>
+          </div>
+
+          <!-- Experience label -->
+          <div class="tl__section-label">
+            <span class="tl__label-text">Experience</span>
+          </div>
+
+          <!-- FSI Outsourcing -->
+          <article class="tl__entry" data-tl-entry>
+            <div class="tl__node" aria-hidden="true"></div>
+            <div class="tl__meta">
+              <span class="tl__date">Feb 2026<br>Present</span>
+            </div>
+            <div class="tl__body">
+              <h3 class="tl__title">Data Analyst Trainee</h3>
+              <p class="tl__org">Financial Services International Outsourcing &middot; Lusaka, Zambia</p>
+              <ul class="tl__bullets">
+                <li>Build interactive Power BI dashboards over financial and economic datasets, including portfolio-style performance views, KPI tracking, and trend analysis for stakeholder decision-making.</li>
+                <li>Develop SQL and ETL pipelines to clean, validate, and prepare high-volume financial datasets feeding financial models and investment research deliverables.</li>
+                <li>Conduct exploratory data analysis using Excel (VBA, Power Pivot) and Power BI to identify trends, anomalies, and patterns across financial datasets for client and board-level reporting.</li>
+                <li>Apply AI-assisted workflows (Claude, prompt engineering, MCP) to accelerate analysis, automate repetitive modelling tasks, and shorten turnaround on research outputs.</li>
+                <li>Translate analytical findings into clear written and visual insights, presenting outcomes in client meetings and board-level presentations.</li>
+              </ul>
+            </div>
+          </article>
+
+          <!-- ECZ -->
+          <article class="tl__entry" data-tl-entry>
+            <div class="tl__node" aria-hidden="true"></div>
+            <div class="tl__meta">
+              <span class="tl__date">Nov 2022 &ndash; Feb 2023<br>Nov 2023 &ndash; Feb 2024</span>
+            </div>
+            <div class="tl__body">
+              <h3 class="tl__title">Seasonal Clerk</h3>
+              <p class="tl__org">Examinations Council of Zambia &middot; Lusaka, Zambia</p>
+              <ul class="tl__bullets">
+                <li>Scanned and validated answer cards for Zambia's national Grade 7 and Grade 12 examinations, processing ~3&thinsp;million answer cards per season from a candidate pool of ~475,000 students.</li>
+                <li>Cross-checked scanner output against candidate registers to trace and rescan missing scripts, ensuring complete and accurate results before publication &mdash; precision work under tight deadlines.</li>
+                <li>In the second season, trained new clerks and supervised scanning stations during night shifts, maintaining quality and pace across a small team.</li>
+              </ul>
+            </div>
+          </article>
+
+          <!-- Education label -->
+          <div class="tl__section-label">
+            <span class="tl__label-text">Education</span>
+          </div>
+
+          <!-- UNZA -->
+          <article class="tl__entry" data-tl-entry>
+            <div class="tl__node" aria-hidden="true"></div>
+            <div class="tl__meta">
+              <span class="tl__date">2022 &ndash; 2025</span>
+            </div>
+            <div class="tl__body">
+              <h3 class="tl__title">BSc Actuarial Science</h3>
+              <p class="tl__org">University of Zambia &middot; Lusaka</p>
+              <p class="tl__gpa">Final Year: Merit (3.61&thinsp;/&thinsp;5) &middot; Cumulative GPA: 3.12&thinsp;/&thinsp;5</p>
+              <p class="tl__courses">
+                <strong>Relevant coursework:</strong> Investment &amp; Portfolio Management, Financial Engineering,
+                Risk Management, Time Series Analysis, Financial Reporting, Life &amp; Health Insurance Mathematics,
+                Pensions Design &amp; Valuation.
+              </p>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Areas of Focus -->
+    <section class="section">
+      <div class="container">
+        <h2 class="section__title">Areas of Focus</h2>
+        <p class="section__subtitle">The kinds of problems I work on day to day.</p>
+
+        <div class="numbered-list">
+          <div class="numbered-list__item">
+            <div class="numbered-list__number">01</div>
+            <div class="numbered-list__content">
+              <h3>Data Analysis</h3>
+              <p>Statistical testing, hypothesis validation, and pattern discovery across financial and operational datasets.</p>
+            </div>
+          </div>
+
+          <div class="numbered-list__item">
+            <div class="numbered-list__number">02</div>
+            <div class="numbered-list__content">
+              <h3>Dashboards &amp; BI</h3>
+              <p>Power BI dashboards (PL-300 certified, 950/1000) that surface what matters and let decision-makers act fast.</p>
+            </div>
+          </div>
+
+          <div class="numbered-list__item">
+            <div class="numbered-list__number">03</div>
+            <div class="numbered-list__content">
+              <h3>Forecasting</h3>
+              <p>Time series modeling, financial forecasting, and quantitative analysis using R, Excel, and SQL.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CV Download -->
+    <section class="section section--alt">
+      <div class="container text-center">
+        <h2 class="section__title" style="margin-bottom: 0.5rem;">Want the full picture?</h2>
+        <p class="section__subtitle" style="margin-bottom: 2rem;">Download the PDF version with complete project details and references.</p>
+        <a href="reports/choolwe-cheelo-cv.pdf" class="btn btn--primary" target="_blank" rel="noopener">
+          Download Full CV (PDF)
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__container">
+      <p class="footer__copyright">&copy; Built by Choolwe Cheelo 2026</p>
+      <ul class="footer__social">
+        <li><a href="https://github.com/CCheelo" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://www.linkedin.com/in/choolwe-cheelo" target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a href="mailto:ccheelo@fsioutsourcing.com">Email</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script src="js/main.js" defer></script>
+</body>
+</html>

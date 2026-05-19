@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EMH Testing — Lusaka Securities Exchange | Choolwe Cheelo</title>
+  <meta name="description" content="Final-year research project testing weak-form market efficiency on the Lusaka Securities Exchange using statistical methods.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container navbar__container">
+      <a href="index.html" class="navbar__brand">Choolwe Cheelo</a>
+      <button class="navbar__toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+        <span class="navbar__toggle-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span class="navbar__toggle-label">Menu</span>
+      </button>
+      <ul class="navbar__links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="resume.html">Resume</a></li>
+        <li><a href="skills.html">Skills &amp; Certifications</a></li>
+        <li><a href="projects.html" class="active">Projects</a></li>
+        <li><a href="testimonials.html">Testimonials</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <section class="project-detail__hero">
+      <div class="container">
+        <h1 class="project-detail__title">EMH Testing &mdash; Lusaka Securities Exchange</h1>
+        <div class="project-detail__meta">
+          <span>2025 &middot; Final-Year Research</span>
+          <span>R &middot; Statistical Testing</span>
+          <span>33-page report</span>
+        </div>
+        <p class="project-detail__description">
+          A statistical investigation into whether stock returns on Zambia's Lusaka Securities Exchange
+          follow a random walk &mdash; the foundational assumption of weak-form market efficiency.
+          Used multiple complementary tests on four years of daily closing prices.
+        </p>
+
+        <div class="project-detail__buttons">
+          <a href="reports/emh-research-report.pdf" class="btn btn--primary" target="_blank" rel="noopener">Full Report (PDF)</a>
+          <a href="https://github.com/CCheelo/EMH-testing" class="btn btn--secondary" target="_blank" rel="noopener">GitHub Code</a>
+          <a href="#summary" class="btn btn--secondary">Summary Overview</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="summary">
+      <div class="container container--narrow">
+        <h2 class="section__title">Summary Overview</h2>
+
+        <h3>Research Question</h3>
+        <p>Does the Lusaka Securities Exchange (LuSE) follow weak-form market efficiency? In other words, can past prices be used to predict future prices?</p>
+
+        <h3 style="margin-top: 2rem;">Data &amp; Methodology</h3>
+        <p>Daily closing prices of LuSE-listed companies from January 2022 to October 2025. Three complementary tests applied to log returns:</p>
+        <ul class="skill-group" style="margin-top: 1rem;">
+          <li style="padding-left: 1.25rem; position: relative; color: var(--color-text-secondary);"><span style="position: absolute; left: 0; color: var(--color-accent);">&rarr;</span> <strong>Runs Test</strong> &mdash; nonparametric check for randomness in return signs</li>
+          <li style="padding-left: 1.25rem; position: relative; color: var(--color-text-secondary);"><span style="position: absolute; left: 0; color: var(--color-accent);">&rarr;</span> <strong>Ljung-Box Test</strong> &mdash; joint test for autocorrelation across lags</li>
+          <li style="padding-left: 1.25rem; position: relative; color: var(--color-text-secondary);"><span style="position: absolute; left: 0; color: var(--color-accent);">&rarr;</span> <strong>Variance Ratio Test</strong> &mdash; tests whether return variance scales linearly with horizon</li>
+        </ul>
+
+        <h3 style="margin-top: 2rem;">Key Findings</h3>
+        <p>
+          Results revealed <strong>partial weak-form inefficiency</strong>: several listed stocks
+          showed statistically significant deviations from a pure random walk, indicating that
+          past return patterns carry some predictive information.
+        </p>
+        <p style="margin-top: 1rem;">
+          The full report includes descriptive statistics, complete test results,
+          autocorrelation function plots, variance ratio test outputs, and stock price trend graphs in the appendices.
+        </p>
+
+        <h3 style="margin-top: 2rem;">Why It Matters</h3>
+        <p>
+          Market efficiency has direct implications for investors and regulators in emerging
+          markets. If markets aren't fully efficient, technical analysis can produce abnormal
+          returns &mdash; but it also signals informational frictions worth addressing.
+        </p>
+
+        <div style="margin-top: 3rem;">
+          <a href="projects.html" class="btn btn--secondary">&larr; All Projects</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__container">
+      <p class="footer__copyright">&copy; Built by Choolwe Cheelo 2026</p>
+      <ul class="footer__social">
+        <li><a href="https://github.com/CCheelo" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://www.linkedin.com/in/choolwe-cheelo" target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a href="mailto:ccheelo@fsioutsourcing.com">Email</a></li>
+      </ul>
+    </div>
+  </footer>
+  <script src="js/main.js" defer></script>
+</body>
+</html>

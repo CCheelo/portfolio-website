@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PRC System — Football League Platform | Choolwe Cheelo</title>
+  <meta name="description" content="Web-based football league management platform built collaboratively with a development team using JavaScript, Firebase, and Bootstrap.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container navbar__container">
+      <a href="index.html" class="navbar__brand">Choolwe Cheelo</a>
+      <button class="navbar__toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+        <span class="navbar__toggle-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span class="navbar__toggle-label">Menu</span>
+      </button>
+      <ul class="navbar__links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="resume.html">Resume</a></li>
+        <li><a href="skills.html">Skills &amp; Certifications</a></li>
+        <li><a href="projects.html" class="active">Projects</a></li>
+        <li><a href="testimonials.html">Testimonials</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <section class="project-detail__hero">
+      <div class="container">
+        <h1 class="project-detail__title">PRC System &mdash; Football League Platform</h1>
+        <div class="project-detail__meta">
+          <span>2025&ndash;2026 &middot; Collaborative Project</span>
+          <span>JavaScript &middot; Firebase &middot; Bootstrap</span>
+          <span>In active development</span>
+        </div>
+        <p class="project-detail__description">
+          A web-based football league management system designed to let academy representatives
+          register and manage players, view profiles, and track competition data. Built
+          collaboratively with a multi-team development structure using a feature-branch
+          Git workflow.
+        </p>
+
+        <div class="project-detail__buttons">
+          <a href="https://github.com/astrosanderson/prc-system" class="btn btn--primary" target="_blank" rel="noopener">GitHub Repo</a>
+          <a href="#summary" class="btn btn--secondary">Live Demo (Coming Soon)</a>
+          <a href="#summary" class="btn btn--secondary">Summary Overview</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="summary">
+      <div class="container container--narrow">
+        <h2 class="section__title">Summary Overview</h2>
+
+        <h3>The Platform</h3>
+        <p>
+          PRC System is a multi-page web application for managing football academies and their
+          players. The platform includes authentication, an academies dashboard, player listings,
+          individual profile pages, and a data center for awards and competition outcomes.
+        </p>
+
+        <h3 style="margin-top: 2rem;">Tech Stack</h3>
+        <ul class="skill-group" style="margin-top: 1rem;">
+          <li style="padding-left: 1.25rem; position: relative; color: var(--color-text-secondary);"><span style="position: absolute; left: 0; color: var(--color-accent);">&rarr;</span> <strong>Frontend</strong> &mdash; HTML, CSS, JavaScript, Bootstrap</li>
+          <li style="padding-left: 1.25rem; position: relative; color: var(--color-text-secondary);"><span style="position: absolute; left: 0; color: var(--color-accent);">&rarr;</span> <strong>Backend</strong> &mdash; Firebase (authentication, Firestore database, storage)</li>
+          <li style="padding-left: 1.25rem; position: relative; color: var(--color-text-secondary);"><span style="position: absolute; left: 0; color: var(--color-accent);">&rarr;</span> <strong>Data</strong> &mdash; JSON-structured player, academy, and award records</li>
+        </ul>
+
+        <h3 style="margin-top: 2rem;">Team Workflow</h3>
+        <p>
+          The team is structured across four collaborating groups: Core Dev (Firebase/backend),
+          Frontend (HTML/CSS/Bootstrap), UI/UX (design system), and Data &amp; Content (JSON structures).
+          We use a feature-branch Git workflow with PRs into <code>dev</code> and a single project lead
+          merging <code>dev</code> into <code>main</code> for stable releases.
+        </p>
+
+        <h3 style="margin-top: 2rem;">My Contribution</h3>
+        <p>
+          Working across the project on collaborative tasks aligned with my assigned files
+          and the team's workflow conventions. Detailed contribution log will be published
+          alongside the live demo.
+        </p>
+
+        <h3 style="margin-top: 2rem;">Status</h3>
+        <p>
+          The project is in active development. The live demo and screenshots will be added here
+          once the platform reaches a stable milestone and any personal academy/player data
+          has been replaced with anonymized examples.
+        </p>
+
+        <div style="margin-top: 3rem;">
+          <a href="projects.html" class="btn btn--secondary">&larr; All Projects</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__container">
+      <p class="footer__copyright">&copy; Built by Choolwe Cheelo 2026</p>
+      <ul class="footer__social">
+        <li><a href="https://github.com/CCheelo" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://www.linkedin.com/in/choolwe-cheelo" target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a href="mailto:ccheelo@fsioutsourcing.com">Email</a></li>
+      </ul>
+    </div>
+  </footer>
+  <script src="js/main.js" defer></script>
+</body>
+</html>

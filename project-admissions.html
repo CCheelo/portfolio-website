@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admissions Bias Audit | Choolwe Cheelo</title>
+  <meta name="description" content="Statistical bias audit of university admissions data using hypothesis testing and stratified analysis.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container navbar__container">
+      <a href="index.html" class="navbar__brand">Choolwe Cheelo</a>
+      <button class="navbar__toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+        <span class="navbar__toggle-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span class="navbar__toggle-label">Menu</span>
+      </button>
+      <ul class="navbar__links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="resume.html">Resume</a></li>
+        <li><a href="skills.html">Skills &amp; Certifications</a></li>
+        <li><a href="projects.html" class="active">Projects</a></li>
+        <li><a href="testimonials.html">Testimonials</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <section class="project-detail__hero">
+      <div class="container">
+        <h1 class="project-detail__title">Admissions Bias Audit</h1>
+        <div class="project-detail__meta">
+          <span>March 2026 &middot; Statistical Audit</span>
+          <span>Power BI &middot; Hypothesis Testing</span>
+          <span>4,839 applicants analyzed</span>
+        </div>
+        <p class="project-detail__description">
+          A rigorous statistical investigation into whether university admissions data reveals
+          gender bias. The headline finding flipped expectations &mdash; what looked like
+          discrimination was actually driven by major-selection patterns.
+        </p>
+
+        <div class="project-detail__buttons">
+          <a href="reports/admissions-bias-exec-summary.pdf" class="btn btn--primary" target="_blank" rel="noopener">Full Report (PDF)</a>
+          <a href="https://github.com/CCheelo/bias-audit" class="btn btn--secondary" target="_blank" rel="noopener">GitHub Code</a>
+          <a href="#summary" class="btn btn--secondary">Summary Overview</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <h2 class="section__title">Live Dashboard</h2>
+        <div class="embed-wrapper">
+          <iframe
+            title="Admissions Bias Analysis"
+            src="https://app.fabric.microsoft.com/view?r=eyJrIjoiZTZmNDJhZDItODY5Ny00MDI1LWJmNjQtYWQzMTk0ZjY2YjI1IiwidCI6IjBlMTlhOGE3LTA0NGItNDlhMS1hZDdlLTU3Mzk5ODVjMWYwOCJ9"
+            frameborder="0"
+            allowfullscreen="true">
+          </iframe>
+        </div>
+        <p style="margin-top: 1rem; color: var(--color-text-muted); font-size: 0.875rem; text-align: center;">
+          Best viewed on desktop. <a href="https://app.fabric.microsoft.com/view?r=eyJrIjoiZTZmNDJhZDItODY5Ny00MDI1LWJmNjQtYWQzMTk0ZjY2YjI1IiwidCI6IjBlMTlhOGE3LTA0NGItNDlhMS1hZDdlLTU3Mzk5ODVjMWYwOCJ9" target="_blank" rel="noopener">Open in Power BI Service &rarr;</a>
+        </p>
+      </div>
+    </section>
+
+    <section class="section section--alt" id="summary">
+      <div class="container container--narrow">
+        <h2 class="section__title">Summary Overview</h2>
+
+        <h3>The Question</h3>
+        <p>Does the admissions data from 4,839 university applicants show evidence of gender bias?</p>
+
+        <h3 style="margin-top: 2rem;">Methods</h3>
+        <ul class="skill-group" style="margin-top: 1rem;">
+          <li style="padding-left: 1.25rem; position: relative; color: var(--color-text-secondary);"><span style="position: absolute; left: 0; color: var(--color-accent);">&rarr;</span> Two-sample t-tests comparing acceptance rates by gender</li>
+          <li style="padding-left: 1.25rem; position: relative; color: var(--color-text-secondary);"><span style="position: absolute; left: 0; color: var(--color-accent);">&rarr;</span> Chi-square test of independence (gender vs. acceptance)</li>
+          <li style="padding-left: 1.25rem; position: relative; color: var(--color-text-secondary);"><span style="position: absolute; left: 0; color: var(--color-accent);">&rarr;</span> Stratified analysis by major to isolate confounding</li>
+        </ul>
+
+        <h3 style="margin-top: 2rem;">The Headline Finding</h3>
+        <p>
+          At first glance, men appeared to be accepted at higher rates than women.
+          But once results were broken down by major, the picture flipped:
+        </p>
+        <ul class="skill-group" style="margin-top: 1rem;">
+          <li style="padding-left: 1.25rem; position: relative; color: var(--color-text-secondary);"><span style="position: absolute; left: 0; color: var(--color-accent);">&rarr;</span> <strong>Majors A and B</strong> had high acceptance rates (~70%) and skewed male</li>
+          <li style="padding-left: 1.25rem; position: relative; color: var(--color-text-secondary);"><span style="position: absolute; left: 0; color: var(--color-accent);">&rarr;</span> <strong>Majors C&ndash;F</strong> had low acceptance rates (~26%) and skewed female</li>
+          <li style="padding-left: 1.25rem; position: relative; color: var(--color-text-secondary);"><span style="position: absolute; left: 0; color: var(--color-accent);">&rarr;</span> Within each major, acceptance rates by gender were broadly comparable</li>
+        </ul>
+
+        <h3 style="margin-top: 2rem;">Conclusion</h3>
+        <p>
+          The apparent gender bias was a classic case of Simpson's Paradox &mdash; the headline
+          aggregate hid the real driver (major selection). This is a textbook reminder of why
+          stratified analysis matters when auditing for bias in any decision system.
+        </p>
+
+        <div style="margin-top: 3rem;">
+          <a href="projects.html" class="btn btn--secondary">&larr; All Projects</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__container">
+      <p class="footer__copyright">&copy; Built by Choolwe Cheelo 2026</p>
+      <ul class="footer__social">
+        <li><a href="https://github.com/CCheelo" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://www.linkedin.com/in/choolwe-cheelo" target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a href="mailto:ccheelo@fsioutsourcing.com">Email</a></li>
+      </ul>
+    </div>
+  </footer>
+  <script src="js/main.js" defer></script>
+</body>
+</html>

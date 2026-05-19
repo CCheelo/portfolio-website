@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Climate Change Impact Analysis | Choolwe Cheelo</title>
+  <meta name="description" content="Power BI dashboard analyzing global CO2 emissions, forest coverage, and climate-related disasters.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container navbar__container">
+      <a href="index.html" class="navbar__brand">Choolwe Cheelo</a>
+      <button class="navbar__toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+        <span class="navbar__toggle-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span class="navbar__toggle-label">Menu</span>
+      </button>
+      <ul class="navbar__links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="resume.html">Resume</a></li>
+        <li><a href="skills.html">Skills &amp; Certifications</a></li>
+        <li><a href="projects.html" class="active">Projects</a></li>
+        <li><a href="testimonials.html">Testimonials</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <section class="project-detail__hero">
+      <div class="container">
+        <h1 class="project-detail__title">Climate Change Impact Analysis</h1>
+        <div class="project-detail__meta">
+          <span>2025 &middot; Independent Project</span>
+          <span>Power BI &middot; Excel</span>
+          <span>Published to Power BI Service</span>
+        </div>
+        <p class="project-detail__description">
+          An interactive Power BI dashboard exploring how climate change affects the world we live in &mdash;
+          tracking CO&#8322; emissions, forest coverage, and climate-related disaster impacts across countries and time.
+        </p>
+
+        <div class="project-detail__buttons">
+          <a href="reports/climate-change-summary.pdf" class="btn btn--primary" target="_blank" rel="noopener">Full Report (PDF)</a>
+          <a href="https://github.com/CCheelo/climate-change-bi" class="btn btn--secondary" target="_blank" rel="noopener">GitHub Code</a>
+          <a href="#summary" class="btn btn--secondary">Summary Overview</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <h2 class="section__title">Live Dashboard</h2>
+        <div class="embed-wrapper">
+          <iframe
+            title="Climate Change Analysis Report"
+            src="https://app.fabric.microsoft.com/view?r=eyJrIjoiZjY3NDA5MzEtZDNlMS00OWU5LThjODktMzE3NGE3ZDQzNzdkIiwidCI6IjBlMTlhOGE3LTA0NGItNDlhMS1hZDdlLTU3Mzk5ODVjMWYwOCJ9&pageName=a15deae6345c90a05b94"
+            frameborder="0"
+            allowfullscreen="true">
+          </iframe>
+        </div>
+        <p style="margin-top: 1rem; color: var(--color-text-muted); font-size: 0.875rem; text-align: center;">
+          Best viewed on desktop. <a href="https://app.fabric.microsoft.com/view?r=eyJrIjoiZjY3NDA5MzEtZDNlMS00OWU5LThjODktMzE3NGE3ZDQzNzdkIiwidCI6IjBlMTlhOGE3LTA0NGItNDlhMS1hZDdlLTU3Mzk5ODVjMWYwOCJ9&pageName=a15deae6345c90a05b94" target="_blank" rel="noopener">Open in Power BI Service &rarr;</a>
+        </p>
+      </div>
+    </section>
+
+    <section class="section section--alt" id="summary">
+      <div class="container container--narrow">
+        <h2 class="section__title">Summary Overview</h2>
+
+        <h3>Topic</h3>
+        <p>Climate change indicators and their effect on the world's population &mdash; a multi-dimensional analysis spanning emissions, environmental factors, and human impact.</p>
+
+        <h3 style="margin-top: 2rem;">Data Sources</h3>
+        <ul class="skill-group" style="margin-top: 1rem;">
+          <li style="padding-left: 1.25rem; position: relative; color: var(--color-text-secondary);"><span style="position: absolute; left: 0; color: var(--color-accent);">&rarr;</span> <a href="https://climatedata.imf.org/" target="_blank" rel="noopener">IMF Climate Data</a></li>
+          <li style="padding-left: 1.25rem; position: relative; color: var(--color-text-secondary);"><span style="position: absolute; left: 0; color: var(--color-accent);">&rarr;</span> <a href="https://ourworldindata.org/climate-change" target="_blank" rel="noopener">Our World in Data &mdash; Climate Change</a></li>
+        </ul>
+
+        <h3 style="margin-top: 2rem;">Key Insight</h3>
+        <p>
+          Climate change is a multi-dimensional issue driven by emissions, influenced by environmental
+          factors such as forest coverage, and reflected in significant human impacts.
+          Climate-related disasters have affected large populations over time, demonstrating the
+          widespread human consequences. Addressing these challenges requires coordinated efforts
+          across environmental, economic, and policy dimensions.
+        </p>
+
+        <div style="margin-top: 3rem;">
+          <a href="projects.html" class="btn btn--secondary">&larr; All Projects</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__container">
+      <p class="footer__copyright">&copy; Built by Choolwe Cheelo 2026</p>
+      <ul class="footer__social">
+        <li><a href="https://github.com/CCheelo" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://www.linkedin.com/in/choolwe-cheelo" target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a href="mailto:ccheelo@fsioutsourcing.com">Email</a></li>
+      </ul>
+    </div>
+  </footer>
+  <script src="js/main.js" defer></script>
+</body>
+</html>
