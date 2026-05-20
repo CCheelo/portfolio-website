@@ -75,6 +75,42 @@
   });
 })();
 
+// ========== Contact form (async Formspree submit) ==========
+(function contactForm() {
+  const form    = document.getElementById('contactForm');
+  const success = document.getElementById('contactSuccess');
+  const btn     = document.getElementById('contactSubmit');
+  if (!form || !success || !btn) return;
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      });
+
+      if (res.ok) {
+        form.style.display = 'none';
+        success.style.display = 'block';
+        success.focus();
+      } else {
+        btn.disabled = false;
+        btn.textContent = 'Send Message';
+        alert('Something went wrong — please try again or email me directly.');
+      }
+    } catch {
+      btn.disabled = false;
+      btn.textContent = 'Send Message';
+      alert('Could not send — check your connection and try again.');
+    }
+  });
+})();
+
 // ========== Book rotator (Reading hobby) ==========
 (function bookRotator() {
   const books = [

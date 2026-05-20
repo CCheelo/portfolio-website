@@ -41,9 +41,12 @@
       <div class="container container--narrow">
         <form
           class="contact-form"
-          action="https://formspree.io/f/REPLACE_WITH_FORM_ID"
+          id="contactForm"
+          action="https://formspree.io/f/xykvkoqe"
           method="POST"
         >
+          <input type="text" name="_gotcha" style="display:none">
+
           <div class="form-group">
             <label for="name">Name</label>
             <input type="text" id="name" name="name" required>
@@ -64,8 +67,14 @@
             <textarea id="message" name="message" rows="6" required></textarea>
           </div>
 
-          <button type="submit" class="btn btn--primary">Send Message</button>
+          <button type="submit" class="btn btn--primary" id="contactSubmit">Send Message</button>
         </form>
+
+        <div class="contact-success" id="contactSuccess" hidden>
+          <p class="contact-success__icon" aria-hidden="true">&#10003;</p>
+          <h2>Message sent!</h2>
+          <p>Thanks for reaching out — I'll get back to you as soon as I can.</p>
+        </div>
 
         <div class="contact-info">
           <h2>Other ways to reach me</h2>
