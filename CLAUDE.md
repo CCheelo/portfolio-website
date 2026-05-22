@@ -25,7 +25,7 @@ Pushes to `main` auto-deploy via Vercel's GitHub integration. No manual deploy c
 
 **All styling lives in `css/main.css`** — no other CSS files. It is structured in labelled sections (design tokens → reset → components → pages → responsive). Edit one file only.
 
-**All JavaScript lives in `js/main.js`** — three self-contained IIFEs: `timelineProgress` (resume scroll animation), `bookRotator` (home page), and `navbarToggle` (mobile menu). The script tag is `defer` and runs on every page, but each IIFE guards with an `if (!el) return` so they're safe on pages that don't have the relevant elements.
+**All JavaScript lives in `js/main.js`** — four self-contained IIFEs: `timelineProgress` (resume scroll animation), `bookRotator` (home page), `navbarToggle` (mobile menu), and `contactForm` (async Formspree submission with inline thank-you state). The script tag is `defer` and runs on every page, but each IIFE guards with an `if (!el) return` so they're safe on pages that don't have the relevant elements.
 
 **Navigation and footer are copy-pasted into every HTML file** — there is no templating or includes. When updating nav links or footer content, edit all 11 files.
 
@@ -68,11 +68,15 @@ Current icons: `powerbi`, `excel`, `r`, `mysql`, `python`, `github`, `tableau`, 
 
 ## Pending Items (not yet done)
 
-- **Vercel deployment**: Repo is on GitHub (`CCheelo/portfolio-website`) but Vercel integration not yet configured. Go to vercel.com → Import Project → connect GitHub repo → deploy. Once live, `www.choolwecheelo.com` will auto-deploy on every push to `main`.
-- **Formspree form ID**: `contact.html` contains `REPLACE_WITH_FORM_ID` — replace after creating a Formspree account at formspree.io.
-- **PDF reports**: `reports/` folder is empty. Files expected: `choolwe-cheelo-cv.pdf`, `emh-research-report.pdf`, `climate-change-summary.pdf`, `admissions-bias-exec-summary.pdf`. Source PDFs exist in the sibling project folders.
+- **Custom domain**: Vercel is deployed and live. Still need to connect `choolwecheelo.com` — go to Vercel project → Settings → Domains → add `www.choolwecheelo.com`, then confirm Cloudflare DNS records (`CNAME www → cname.vercel-dns.com`, `A @ → 76.76.21.21`) are set to DNS only (gray cloud).
 - **Testimonials**: `testimonials.html` is a placeholder — content to be added by the owner.
 - **Copper Forecasting project**: `project-copper.html` exists but has placeholder content — pending locating the R code and dataset files.
+
+## Completed Items
+
+- **Vercel deployment**: Configured and live via GitHub auto-deploy. Pushes to `main` deploy automatically.
+- **Formspree contact form**: Configured with form ID `xykvkoqe`. Submits async, hides form on success, shows inline thank-you message. Honeypot spam protection included.
+- **PDF reports**: All 4 reports present in `reports/` — `choolwe-cheelo-cv.pdf`, `emh-research-report.pdf`, `climate-change-summary.pdf`, `admissions-bias-exec-summary.pdf`.
 
 ## Project Detail Pages
 
