@@ -55,6 +55,7 @@
     links.classList.remove('is-open');
     toggle.classList.remove('is-open');
     toggle.setAttribute('aria-expanded', 'false');
+    toggle.setAttribute('aria-label', 'Open menu');
     if (label) label.textContent = 'Menu';
   }
 
@@ -63,6 +64,7 @@
     const isOpen = links.classList.toggle('is-open');
     toggle.classList.toggle('is-open', isOpen);
     toggle.setAttribute('aria-expanded', String(isOpen));
+    toggle.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
     if (label) label.textContent = isOpen ? 'Close' : 'Menu';
   });
 
@@ -95,8 +97,8 @@
       });
 
       if (res.ok) {
-        form.style.display = 'none';
-        success.style.display = 'block';
+        form.hidden = true;
+        success.hidden = false;
         success.focus();
       } else {
         btn.disabled = false;
@@ -127,6 +129,23 @@
   const el = document.getElementById('bookRotator');
   if (!el) return;
 
+  // Populate and wire up the full-list modal
+  const modal = document.getElementById('bookListModal');
+  const closeBtn = document.getElementById('bookListClose');
+  const listEl = document.getElementById('bookListItems');
+
+  if (modal && listEl) {
+    books.forEach(b => {
+      const li = document.createElement('li');
+      li.innerHTML = `<span class="bl-title">${b.title}</span><span class="bl-author">${b.author}</span>`;
+      listEl.appendChild(li);
+    });
+
+    el.addEventListener('click', () => modal.showModal());
+    closeBtn.addEventListener('click', () => modal.close());
+    modal.addEventListener('click', e => { if (e.target === modal) modal.close(); });
+  }
+
   // Respect users who prefer reduced motion — skip the rotation.
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
@@ -137,8 +156,8 @@
   setInterval(() => {
     el.classList.add('fading');
     setTimeout(() => {
-      idx = (idx + 1) % books.length;
       el.textContent = `${books[idx].title} — ${books[idx].author}`;
+      idx = (idx + 1) % books.length;
       el.classList.remove('fading');
     }, fadeMs);
   }, intervalMs);

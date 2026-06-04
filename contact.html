@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
   <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
@@ -70,7 +71,7 @@
           <button type="submit" class="btn btn--primary" id="contactSubmit">Send Message</button>
         </form>
 
-        <div class="contact-success" id="contactSuccess" hidden>
+        <div class="contact-success" id="contactSuccess" role="status" aria-live="polite" tabindex="-1" hidden>
           <p class="contact-success__icon" aria-hidden="true">&#10003;</p>
           <h2>Message sent!</h2>
           <p>Thanks for reaching out — I'll get back to you as soon as I can.</p>

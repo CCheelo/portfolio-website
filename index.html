@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
   <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
@@ -125,8 +126,17 @@
               </p>
               <div class="book-rotator">
                 <span class="book-rotator__label">Currently:</span>
-                <span class="book-rotator__text" id="bookRotator">The Signal and the Noise &mdash; Nate Silver</span>
+                <button class="book-rotator__text" id="bookRotator" aria-haspopup="dialog" aria-label="See full reading list">The Signal and the Noise &mdash; Nate Silver</button>
+                <span class="book-rotator__hint" aria-hidden="true">↗ see full list</span>
               </div>
+
+              <dialog class="book-list-modal" id="bookListModal" aria-label="Full reading list">
+                <div class="book-list-modal__content">
+                  <button class="book-list-modal__close" id="bookListClose" aria-label="Close reading list">&times;</button>
+                  <h3 class="book-list-modal__title">Reading list</h3>
+                  <ul class="book-list-modal__list" id="bookListItems"></ul>
+                </div>
+              </dialog>
             </div>
             <div class="numbered-list__icon" aria-hidden="true">
               <img src="assets/icons/book.svg" alt="" loading="lazy">
