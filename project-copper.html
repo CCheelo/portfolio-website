@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Copper Price Forecasting | Choolwe Cheelo</title>
-  <meta name="description" content="Time series ARMA models forecasting copper prices using Bank of Zambia weekly data.">
+  <meta name="description" content="Time-series modelling of daily copper prices (USD/tonne) in R — an AR(2) model selected by ACF/PACF and BIC, extended to ARMA-GARCH to capture volatility clustering.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -36,18 +36,19 @@
         <h1 class="project-detail__title">Copper Price Forecasting</h1>
         <div class="project-detail__meta">
           <span>2024&ndash;2025 &middot; Academic Project</span>
-          <span>R &middot; ARMA &middot; Time Series</span>
+          <span>R &middot; ARMA &middot; GARCH &middot; Time Series</span>
         </div>
         <p class="project-detail__description">
-          Time series forecasting of copper prices &mdash; a critical input for Zambia's economy &mdash;
-          using ARMA models trained on weekly Bank of Zambia data. The project explored stationarity,
-          model selection via AIC/BIC, and out-of-sample forecast accuracy.
+          Time-series modelling of <strong>daily copper prices</strong> (USD/tonne, 2000&ndash;2025) &mdash;
+          a critical input for Zambia's economy. Following the Box&ndash;Jenkins workflow, the ACF/PACF and
+          BIC select an <strong>AR(2)</strong> model for returns; the analysis then extends it to an
+          <strong>ARMA&ndash;GARCH</strong> model that captures the volatility clustering the AR(2) misses.
         </p>
 
         <div class="project-detail__buttons">
-          <a href="#summary" class="btn btn--primary">Summary Overview</a>
+          <a href="reports/copper-forecasting-report.pdf" class="btn btn--primary" target="_blank" rel="noopener">Full Report (PDF)</a>
           <a href="https://github.com/CCheelo/copper-forecasting" class="btn btn--secondary" target="_blank" rel="noopener">GitHub Code</a>
-          <a href="#summary" class="btn btn--secondary">Full Report (Coming Soon)</a>
+          <a href="#summary" class="btn btn--secondary">Summary Overview</a>
         </div>
       </div>
     </section>
@@ -56,29 +57,67 @@
       <div class="container container--narrow">
         <h2 class="section__title">Summary Overview</h2>
 
-        <div class="placeholder">
-          <h2>Project Documentation In Progress</h2>
-          <p>
-            I'm currently locating and reorganizing the project files for this work.
-            The full report, R code, and dataset will be published here once finalized.
-          </p>
-        </div>
-
-        <h3 style="margin-top: 3rem;">Project Scope</h3>
+        <h3>Research Question</h3>
         <p>
-          Copper accounts for over 70% of Zambia's export earnings, making accurate price
-          forecasts important for fiscal and trade planning. This project applied
-          classical time series methods to weekly copper price data to evaluate how well
-          past prices can predict near-term movements.
+          Can past copper prices predict future ones? Copper is the backbone of Zambia's economy,
+          so the predictability of its price feeds directly into the national budget, the exchange
+          rate, and mining-sector planning. This project models 6,298 daily copper prices
+          (USD/tonne, Dec 2000 &ndash; May 2025) to find out.
         </p>
 
-        <h3 style="margin-top: 2rem;">Methods Used</h3>
+        <h3 style="margin-top: 2rem;">Data &amp; Methodology</h3>
+        <p>
+          Daily copper spot prices (LME-style, USD/tonne). The price level is non-stationary, so the
+          analysis works with log returns and follows the Box&ndash;Jenkins workflow:
+        </p>
         <ul class="skill-group" style="margin-top: 1rem;">
-          <li style="padding-left: 1.25rem; position: relative; color: var(--color-text-secondary);"><span style="position: absolute; left: 0; color: var(--color-accent);">&rarr;</span> Stationarity testing (ADF, KPSS)</li>
-          <li style="padding-left: 1.25rem; position: relative; color: var(--color-text-secondary);"><span style="position: absolute; left: 0; color: var(--color-accent);">&rarr;</span> ACF/PACF inspection for ARMA order selection</li>
-          <li style="padding-left: 1.25rem; position: relative; color: var(--color-text-secondary);"><span style="position: absolute; left: 0; color: var(--color-accent);">&rarr;</span> Model selection via AIC and BIC criteria</li>
-          <li style="padding-left: 1.25rem; position: relative; color: var(--color-text-secondary);"><span style="position: absolute; left: 0; color: var(--color-accent);">&rarr;</span> Out-of-sample backtesting with RMSE and MAE</li>
+          <li style="padding-left: 1.25rem; position: relative; color: var(--color-text-secondary);"><span style="position: absolute; left: 0; color: var(--color-accent);">&rarr;</span> <strong>Stationarity testing</strong> &mdash; ADF and KPSS on the level and on returns</li>
+          <li style="padding-left: 1.25rem; position: relative; color: var(--color-text-secondary);"><span style="position: absolute; left: 0; color: var(--color-accent);">&rarr;</span> <strong>ACF/PACF + BIC</strong> &mdash; a grid search selects an <strong>AR(2)</strong> model</li>
+          <li style="padding-left: 1.25rem; position: relative; color: var(--color-text-secondary);"><span style="position: absolute; left: 0; color: var(--color-accent);">&rarr;</span> <strong>Diagnostics</strong> &mdash; Ljung&ndash;Box, ARCH-LM, and Jarque&ndash;Bera on the residuals</li>
+          <li style="padding-left: 1.25rem; position: relative; color: var(--color-text-secondary);"><span style="position: absolute; left: 0; color: var(--color-accent);">&rarr;</span> <strong>Out-of-sample backtest</strong> &mdash; one-step forecasts vs a random walk (RMSE/MAE)</li>
+          <li style="padding-left: 1.25rem; position: relative; color: var(--color-text-secondary);"><span style="position: absolute; left: 0; color: var(--color-accent);">&rarr;</span> <strong>ARMA&ndash;GARCH extension</strong> &mdash; GARCH(1,1) with Student-<em>t</em> innovations</li>
         </ul>
+
+        <h3 style="margin-top: 2rem;">Original Model &mdash; AR(2)</h3>
+        <p>
+          Both the ACF and PACF of returns spike at lags 1&ndash;2 then cut off, and a BIC grid search
+          (confirmed by <code>auto.arima</code>) lands on <strong>ARMA(2,0)</strong>. Both autoregressive
+          terms are highly significant. But the model is only valid <em>in the mean</em>: out of sample it
+          does <strong>not</strong> beat a naive random walk (RMSE 118.3 vs 117.7), calling the next day's
+          direction correctly just 48.8% of the time. Copper, it turns out, is close to
+          <strong>weak-form efficient</strong> &mdash; its price level is essentially unforecastable.
+        </p>
+
+        <h3 style="margin-top: 2rem;">Improved Model &mdash; ARMA&ndash;GARCH</h3>
+        <p>
+          The AR(2) residuals fail decisively on volatility clustering (ARCH-LM p&nbsp;&asymp;&nbsp;0) and
+          heavy tails. Extending the model to <strong>ARMA(2,0)&ndash;GARCH(1,1)</strong> with Student-<em>t</em>
+          innovations slashes the BIC from 24,742 to 21,872, eliminates the ARCH from the standardised
+          residuals, and recovers the stylised facts of commodity returns: volatility persistence of
+          0.97 and tails near 4.6 degrees of freedom.
+        </p>
+        <p style="margin-top: 1rem;">
+          <strong>Why it's an improvement:</strong> the GARCH model gives valid standard errors,
+          <em>time-varying</em> (honest) forecast intervals, and accurate tail-risk / value-at-risk &mdash;
+          even though it doesn't make the price more predictable in the mean. The key insight: for copper,
+          the <strong>direction</strong> isn't predictable, but the <strong>risk</strong> is &mdash; and the
+          risk is what's worth modelling.
+        </p>
+
+        <h3 style="margin-top: 2rem;">Why It Matters</h3>
+        <p>
+          For a copper-dependent economy, knowing that the price level follows a near-random walk while its
+          volatility is persistent has real implications: forecasting effort is better spent on risk and
+          scenario analysis than on chasing point forecasts, and the persistence of volatility shocks
+          strengthens the case for fiscal stabilisation buffers.
+        </p>
+
+        <p style="margin-top: 1.5rem; color: var(--color-text-secondary);">
+          The full methodology, R output, and figures are in the
+          <a href="reports/copper-forecasting-report.pdf" target="_blank" rel="noopener">PDF report</a>;
+          the complete code and data are on
+          <a href="https://github.com/CCheelo/copper-forecasting" target="_blank" rel="noopener">GitHub</a>.
+        </p>
 
         <div style="margin-top: 3rem;">
           <a href="projects.html" class="btn btn--secondary">&larr; All Projects</a>
