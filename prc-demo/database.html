@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Academy Database — Zambezi Futures</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/zf.css" />
+  <style>
+    .acad-banner { height: 110px; background: linear-gradient(135deg,var(--zf-mid),var(--zf-dark)); display:flex; align-items:center; justify-content:center; font-size:2.4rem; position:relative; }
+    .acad-banner::after { content:''; position:absolute; inset:0; background: radial-gradient(circle at 75% 25%, rgba(201,168,76,.28), transparent 60%); }
+    .acad-banner .status-tag { position:absolute; top:.6rem; right:.6rem; }
+  </style>
+</head>
+<body data-page="academies">
+  <div id="navbarContainer"></div>
+
+  <main class="zf-container py-4">
+    <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2 fade-in-up">
+      <div>
+        <div class="section-eyebrow">The Network</div>
+        <h1 class="zf-display fw-bold mb-0" style="font-size:1.6rem;color:var(--zf-dark)">Academy Registry Database</h1>
+        <p class="text-muted-zf mb-0 small">Browse all registered academies and training facilities.</p>
+      </div>
+      <div class="zf-card stat-card px-3 py-2 text-center">
+        <div class="stat-num" style="font-size:1.5rem"><span data-count="52">0</span></div>
+        <div class="stat-label">Active Institutions</div>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="zf-card p-3 mb-4 fade-in-up" data-delay="1">
+      <div class="row g-2">
+        <div class="col-sm-12 col-lg-6"><input type="search" id="searchInput" class="form-control" placeholder="Search academy name or location…" /></div>
+        <div class="col-sm-6 col-lg-3">
+          <select id="locationFilter" class="form-select"><option value="">All Locations</option></select>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <select id="sortBy" class="form-select">
+            <option value="name">Sort: Name (A–Z)</option>
+            <option value="players">Sort: Most Players</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grid -->
+    <div class="row g-3" id="acadGrid"></div>
+    <div id="emptyMsg" class="text-center py-5" style="display:none;color:var(--zf-muted)">
+      <div style="font-size:2rem">🏫</div><div class="fw-medium">No academies match your search.</div>
+    </div>
+  </main>
+
+  <div id="footerContainer"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    (function () {
+      var d = PRC_DATA;
+
+      var locations = d.academies.map(function (a) { return a.location; }).filter(function (v, i, arr) { return arr.indexOf(v) === i; });
+      locations.sort().forEach(function (loc) {
+        var opt = document.createElement('option'); opt.value = loc; opt.textContent = loc;
+        document.getElementById('locationFilter').appendChild(opt);
+      });
+
+      function render() {
+        var search = document.getElementById('searchInput').value.toLowerCase().trim();
+        var loc    = document.getElementById('locationFilter').value;
+        var sort   = document.getElementById('sortBy').value;
+
+        var list = d.academies.map(function (a) {
+          return { a: a, count: d.players.filter(function (p) { return p.academyId === a.id; }).length };
+        }).filter(function (x) {
+          if (search && !x.a.name.toLowerCase().includes(search) && !x.a.location.toLowerCase().includes(search)) return false;
+          if (loc && x.a.location !== loc) return false;
+          return true;
+        });
+
+        list.sort(function (m, n) { return sort === 'players' ? n.count - m.count : m.a.name.localeCompare(n.a.name); });
+
+        var grid = document.getElementById('acadGrid'), empty = document.getElementById('emptyMsg');
+        if (!list.length) { grid.innerHTML = ''; empty.style.display = 'block'; return; }
+        empty.style.display = 'none';
+
+        grid.innerHTML = list.map(function (x, i) {
+          var a = x.a;
+          var divisions = d.players.filter(function (p) { return p.academyId === a.id; })
+            .map(function (p) { return p.division; })
+            .filter(function (v, idx, arr) { return arr.indexOf(v) === idx; })
+            .sort();
+          return '<div class="col-sm-6 col-lg-4 reveal" data-delay="' + (i % 3) + '">' +
+            '<div class="zf-card hover-lift h-100" style="overflow:hidden">' +
+              '<div class="acad-banner" style="background:linear-gradient(135deg,' + a.color + ',var(--zf-dark))">' + PRC.academyLogo(a, 72) + '<span class="zf-badge badge-active status-tag">Active</span></div>' +
+              '<div class="p-3">' +
+                '<div class="fw-bold" style="font-size:1.05rem;color:var(--zf-dark)">' + a.name + '</div>' +
+                '<div class="small text-muted-zf mb-2">📍 ' + a.location + '</div>' +
+                '<div class="d-flex gap-3 mb-3" style="font-size:.85rem">' +
+                  '<div><span class="fw-bold" style="color:var(--zf-mid)">' + x.count + '</span> players</div>' +
+                  '<div><span class="fw-bold" style="color:var(--zf-mid)">' + divisions.length + '</span> divisions</div>' +
+                '</div>' +
+                '<div class="mb-3 d-flex flex-wrap gap-1">' + divisions.map(function (dv) { return '<span class="zf-badge badge-division">' + dv + '</span>'; }).join('') + '</div>' +
+                '<div class="small text-muted-zf mb-3">Rep: <span class="fw-semibold" style="color:var(--zf-text)">' + a.rep + '</span></div>' +
+                '<a href="players.html" class="btn btn-outline-zf btn-sm w-100">View Players →</a>' +
+              '</div>' +
+            '</div></div>';
+        }).join('');
+      }
+
+      document.getElementById('searchInput').addEventListener('input', render);
+      document.getElementById('locationFilter').addEventListener('change', render);
+      document.getElementById('sortBy').addEventListener('change', render);
+      render();
+    })();
+  </script>
+</body>
+</html>

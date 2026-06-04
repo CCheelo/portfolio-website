@@ -49,6 +49,17 @@ portfolio-website/
 ├── project-admissions.html     # Admissions Bias Audit
 ├── project-prc.html            # PRC System — Player Registry Centre
 │
+├── prc-demo/                   # Self-contained "Zambezi Futures" demo (see below)
+│   ├── index.html              #   Public homepage (hero, live match, academies)
+│   ├── dashboard.html          #   Admin dashboard
+│   ├── players.html            #   Player registry (search/filter)
+│   ├── player.html             #   Player profile (?id=N)
+│   ├── database.html           #   Academy database
+│   ├── archives.html           #   Historical Hub (Hall of Fame + GOAT legend)
+│   ├── register.html           #   3-step registration form
+│   ├── css/zf.css              #   Demo design system + animations
+│   └── js/{data,app}.js        #   Dummy data + shared chrome/animations
+│
 ├── css/main.css                # All styles — single file, labelled sections
 ├── js/main.js                  # All JS — four self-contained IIFEs (see below)
 │
@@ -106,6 +117,23 @@ design tokens → reset → components → pages → responsive
 ## Nav & Footer
 
 Navigation and footer are **copy-pasted into all 11 HTML files** — no templating. When updating a nav link or footer item, edit all 11 files.
+
+> Note: this applies to the **main portfolio pages only**. The `prc-demo/` sub-app is independent and injects its own navbar/footer via `prc-demo/js/app.js`.
+
+---
+
+## PRC System Demo (`prc-demo/`)
+
+An interactive demo of the **Zambezi Futures** Player Registry Centre — a faithful reproduction of the real system ([repo](https://github.com/astrosanderson/prc-system)) running on anonymized dummy data. Linked from the **Live Demo** button on `project-prc.html`.
+
+It is a **separate self-contained sub-app** — it does **not** use `css/main.css` or `js/main.js`:
+
+- **`prc-demo/css/zf.css`** — the demo's entire design system + animations. Palette mirrors the real app: dark green `#1b3a2d`, gold `#c9a84c`, cream `#f5f3ee`; fonts Manrope (body) + Montserrat (display). Includes scroll-reveal, count-up, hover-lift, live pulse, hero glow (all respect `prefers-reduced-motion`).
+- **`prc-demo/js/data.js`** — single data source (`window.PRC_DATA`): 8 academies, players (the real mock roster + the project team), live match, past games, feed, division mix, and archive. Real-format PRC IDs (`ZF-YYYY-NNNN-XX`), divisions U-8…U-18.
+- **`prc-demo/js/app.js`** — injects the shared navbar + footer on every page, runs the animations, and generates each academy's unique themed SVG **crest** (`academyLogo`). **To change the nav, edit the `NAV` array here only.**
+- **Pages** all load `css/zf.css` + `js/data.js` + `js/app.js`; the active nav link is driven by `<body data-page="…">`.
+
+The 15-person development team is featured as the 8 academy reps and 7 Hall-of-Fame legends; Choolwe Cheelo is the headline "GOAT" legend in the Historical Hub (clickable career dossier, uses the portfolio profile photo). **To edit players/academies, change `prc-demo/js/data.js` only** — every page reads from it.
 
 ---
 

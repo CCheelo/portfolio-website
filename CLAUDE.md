@@ -29,6 +29,14 @@ Pushes to `main` auto-deploy via Vercel's GitHub integration. No manual deploy c
 
 **Navigation and footer are copy-pasted into every HTML file** — there is no templating or includes. When updating nav links or footer content, edit all 11 files.
 
+**`prc-demo/` is a self-contained "Zambezi Futures" mini-app** — a faithful, animated reproduction of the real PRC System (repo: `astrosanderson/prc-system`, live at `prc-system-44g8.vercel.app`) running on dummy data. It is a separate sub-app and does NOT use `css/main.css` or `js/main.js`. Structure:
+- `prc-demo/css/zf.css` — the demo's entire design system + animations. Palette mirrors the real app: dark green `#1b3a2d`, mid green `#2d6a4f`, gold `#c9a84c`, cream bg `#f5f3ee`. Fonts: Manrope (body) + Montserrat (display). Has scroll-reveal (`.reveal` / `.is-visible`), `.fade-in-up`, hover-lift, live pulse, hero glow.
+- `prc-demo/js/data.js` — single data source as `window.PRC_DATA`: 8 academies, ~33 players (the real 25 from the repo's `mockData.ts` PLUS the 15-person dev team distributed across academies), live match, past games, feed, critical dates, division mix, archive (hall of fame + tournament records). Players use real-format PRC IDs (`ZF-YYYY-NNNN-XX`) and divisions U-8…U-18. Choolwe Cheelo is id 48 with `role:'Admin'`.
+- `prc-demo/js/app.js` — **injects the shared navbar + footer** into `#navbarContainer` / `#footerContainer` on every page (mirrors the real app's `app.js`), runs scroll-reveal/count-up/mix-bar animations, and exposes helpers on `window.PRC` (`statusBadge`, `divisionBadge`, `initialsAvatar`, `academyLogo`, `getQueryParam`, `animateCount`). The active nav link is driven by `<body data-page="…">`. **To change navigation, edit the `NAV` array in app.js only** — every page picks it up. `academyLogo(academy)` generates a unique themed SVG crest per academy (waterfall, lion, bridge, star, gear, southern-cross, fish, compass) via `crestMotif()` keyed on `academy.id` — no image files. The 15-person dev team appears as the 8 academy `rep`s and the 7 Hall-of-Fame entries; Choolwe Cheelo is also the featured "GOAT" legend in `archive.legend` (uses the portfolio's `../assets/images/profile.jpg`), and every Hall-of-Fame card opens a career-dossier modal.
+- Pages (all load `css/zf.css` + `js/data.js` + `js/app.js`): `index.html` (public homepage — hero, animated stat count-up, live match, academy carousel), `dashboard.html` (admin dashboard — stat cards, recent enrollments, division mix bars, critical dates, live feed), `players.html` (registry table, live search + academy/division/status filters), `player.html` (profile — reads `?id=N`, PRC ID card, season rating, position-aware stats, match history), `database.html` (academy cards with search/sort), `archives.html` (Historical Hub — graduates/championships stats, hall of fame, tournament records, recent results), `register.html` (3-step form with validation + success state, no real POST).
+
+Bootstrap 5.3.3 via CDN is used for grid/utilities only; all bespoke styling is in `zf.css`. To add/edit players or academies, edit `prc-demo/js/data.js` only — all pages read from it.
+
 ## Design System
 
 All colours, spacing, and shadows are CSS custom properties defined in `:root` at the top of `main.css`:
@@ -78,6 +86,7 @@ Current icons: `powerbi`, `excel`, `r`, `mysql`, `python`, `github`, `tableau`, 
 
 ## Completed Items
 
+- **PRC System demo**: Interactive "Zambezi Futures" demo at `prc-demo/` reproducing the real PRC System on dummy data — public homepage, admin dashboard, player registry, player profiles, academy database, historical archive, and registration form, with scroll/count-up animations. Includes the full dev team among the players. Linked from the "Live Demo" button on `project-prc.html`.
 - **Vercel deployment**: Configured and live via GitHub auto-deploy. Pushes to `main` deploy automatically.
 - **Custom domain**: `www.choolwecheelo.com` live via Cloudflare DNS → Vercel.
 - **Formspree contact form**: Configured with form ID `xykvkoqe`. Submits async, hides form on success, shows inline thank-you message. Honeypot spam protection included.

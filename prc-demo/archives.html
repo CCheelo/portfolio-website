@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Historical Hub — Zambezi Futures</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/zf.css" />
+  <style>
+    .arch-hero { background: linear-gradient(135deg,#163025,#1b3a2d 60%,#2d6a4f 140%); color:#fff; border-radius:var(--zf-radius); padding:3rem 2rem; position:relative; overflow:hidden; }
+    .arch-hero::after { content:''; position:absolute; right:-80px; bottom:-80px; width:300px; height:300px; border:2px solid rgba(201,168,76,.12); border-radius:50%; }
+    .arch-stat-dark { background: var(--zf-dark); color:#fff; }
+    .arch-stat-dark .stat-num { color: var(--zf-gold); }
+
+    /* Featured GOAT legend card */
+    .legend-card {
+      background: linear-gradient(120deg,#163025,#1b3a2d 55%,#22503c);
+      border:1px solid rgba(201,168,76,.4); border-radius:var(--zf-radius);
+      color:#fff; overflow:hidden; position:relative; cursor:pointer;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .legend-card:hover { transform: translateY(-4px); box-shadow: var(--zf-shadow-lg); }
+    .legend-card::after { content:''; position:absolute; right:-60px; top:-60px; width:240px; height:240px; border:2px solid rgba(201,168,76,.14); border-radius:50%; }
+    .legend-photo {
+      width:130px; height:130px; border-radius:16px; object-fit:cover;
+      border:3px solid var(--zf-gold); box-shadow:0 8px 24px rgba(0,0,0,.3); flex-shrink:0;
+    }
+    .goat-badge { background:var(--zf-gold); color:var(--zf-dark); font-weight:800; font-size:.72rem; letter-spacing:.08em; padding:.3rem .8rem; border-radius:20px; text-transform:uppercase; }
+    .legend-stat { text-align:center; }
+    .legend-stat b { font-family:'Montserrat',sans-serif; font-size:1.6rem; color:var(--zf-gold); display:block; line-height:1; }
+    .legend-stat span { font-size:.7rem; text-transform:uppercase; letter-spacing:.05em; opacity:.7; }
+
+    .hof-card { cursor:pointer; }
+    .hof-hint { font-size:.72rem; color:var(--zf-mid); font-weight:700; }
+    .award-chip { background:#e8f4f0; color:var(--zf-dark); border-radius:6px; padding:.3rem .7rem; font-size:.82rem; font-weight:600; display:inline-block; }
+    .modal-stat { background:var(--zf-bg); border:1px solid var(--zf-border); border-radius:9px; padding:.75rem; text-align:center; }
+    .modal-stat b { font-family:'Montserrat',sans-serif; font-size:1.5rem; color:var(--zf-dark); display:block; line-height:1; }
+    .modal-stat span { font-size:.7rem; text-transform:uppercase; letter-spacing:.04em; color:var(--zf-muted); }
+  </style>
+</head>
+<body data-page="archive">
+  <div id="navbarContainer"></div>
+
+  <main class="zf-container py-4">
+    <!-- Hero -->
+    <div class="arch-hero mb-4 fade-in-up">
+      <div class="position-relative" style="z-index:2">
+        <span class="zf-hero__eyebrow">Established 2012</span>
+        <h1 class="zf-display fw-bold mt-3 mb-2" style="font-size:clamp(1.8rem,4vw,2.8rem)">Historical <span class="text-gold">Hub</span></h1>
+        <p class="mb-0" style="color:rgba(255,255,255,.8);max-width:600px">
+          Fourteen years of excellence, developing Southern Africa's finest talent. Every match,
+          every goal, every victory — etched into the Zambezi Futures archive.
+        </p>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="row g-3 mb-5">
+      <div class="col-md-4 reveal">
+        <div class="zf-card stat-card hover-lift text-center py-4">
+          <div class="stat-num"><span data-count="142">0</span></div><div class="stat-label mt-2">Total Graduates</div>
+        </div>
+      </div>
+      <div class="col-md-4 reveal" data-delay="1">
+        <div class="zf-card arch-stat-dark hover-lift text-center py-4">
+          <div class="stat-num"><span data-count="28">0</span></div><div class="stat-label mt-2" style="color:rgba(255,255,255,.6)">Championships Won</div>
+        </div>
+      </div>
+      <div class="col-md-4 reveal" data-delay="2">
+        <div class="zf-card hover-lift text-center py-4">
+          <div class="stat-num"><span data-count="14">0</span></div><div class="stat-label mt-2">Years Active</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GOAT legend -->
+    <div class="mb-3 reveal">
+      <div class="section-eyebrow">Greatest of All Time</div>
+      <h2 class="section-title">The Legend</h2>
+    </div>
+    <div class="legend-card mb-5 reveal" id="legendCard">
+      <div class="p-4 p-md-5 d-flex align-items-center gap-4 flex-wrap position-relative" style="z-index:2">
+        <img id="legendPhoto" class="legend-photo" alt="" />
+        <div class="flex-grow-1" style="min-width:240px">
+          <span class="goat-badge">★ Hall of Fame · GOAT</span>
+          <div class="zf-display fw-bold mt-2" id="legendName" style="font-size:1.9rem"></div>
+          <div style="color:rgba(255,255,255,.7)" id="legendMeta"></div>
+          <p class="mt-2 mb-0" style="color:rgba(255,255,255,.78);font-size:.92rem;max-width:560px" id="legendBlurb"></p>
+        </div>
+        <div class="d-flex gap-4" id="legendStats"></div>
+      </div>
+      <div class="px-4 px-md-5 pb-3" style="position:relative;z-index:2">
+        <span class="small" style="color:var(--zf-gold);font-weight:700">Click to view full career record →</span>
+      </div>
+    </div>
+
+    <!-- Hall of Fame -->
+    <div class="mb-3 reveal">
+      <div class="section-eyebrow">Legends of the League</div>
+      <h2 class="section-title">Hall of Fame</h2>
+    </div>
+    <div class="row g-3 mb-5" id="hofGrid"></div>
+
+    <!-- Tournament records -->
+    <div class="mb-3 reveal">
+      <div class="section-eyebrow">The Record Books</div>
+      <h2 class="section-title">Tournament Records</h2>
+    </div>
+    <div class="zf-card reveal" data-delay="1">
+      <div class="table-responsive">
+        <table class="zf-table">
+          <thead><tr><th>Season</th><th>Tournament</th><th>Winner</th><th>Runner-up</th><th>Top Scorer</th></tr></thead>
+          <tbody id="tourTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Past games -->
+    <div class="mb-3 mt-5 reveal">
+      <div class="section-eyebrow">Match Centre</div>
+      <h2 class="section-title">Recent Results</h2>
+    </div>
+    <div class="row g-3" id="gamesGrid"></div>
+  </main>
+
+  <!-- Dossier modal -->
+  <div class="modal fade" id="dossierModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" style="border:none;border-radius:var(--zf-radius);overflow:hidden">
+        <div class="p-4" style="background:linear-gradient(135deg,#163025,#1b3a2d);color:#fff">
+          <div class="d-flex align-items-center gap-3">
+            <div id="mdAvatar"></div>
+            <div>
+              <div class="zf-display fw-bold" id="mdName" style="font-size:1.4rem"></div>
+              <div style="color:rgba(255,255,255,.7);font-size:.9rem" id="mdMeta"></div>
+            </div>
+            <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+        </div>
+        <div class="modal-body p-4">
+          <div class="section-eyebrow mb-2">Career Statistics</div>
+          <div class="row g-2 mb-4" id="mdStats"></div>
+          <div class="section-eyebrow mb-2">Honours &amp; Awards</div>
+          <div class="d-flex flex-wrap gap-2" id="mdAwards"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="footerContainer"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    (function () {
+      var d = PRC_DATA, ar = d.archive, legend = ar.legend;
+      var modalEl = document.getElementById('dossierModal');
+      var modal = new bootstrap.Modal(modalEl);
+
+      function statCell(label, val) {
+        return '<div class="col-3"><div class="modal-stat"><b>' + val + '</b><span>' + label + '</span></div></div>';
+      }
+
+      function openDossier(entry, photo) {
+        document.getElementById('mdAvatar').innerHTML = photo
+          ? '<img src="' + photo + '" alt="" style="width:56px;height:56px;border-radius:12px;object-fit:cover;border:2px solid var(--zf-gold)"/>'
+          : PRC.initialsAvatar(entry.name, 56);
+        document.getElementById('mdName').textContent = entry.name;
+        document.getElementById('mdMeta').textContent =
+          [entry.position, entry.status || entry.award, entry.academy].filter(Boolean).join(' · ');
+
+        var s = entry.stats || {};
+        var cells = [
+          statCell('Apps', s.appearances != null ? s.appearances : '—'),
+          statCell('Goals', s.goals != null ? s.goals : '—'),
+          statCell('Assists', s.assists != null ? s.assists : '—'),
+          statCell(s.cleanSheets != null ? 'Clean Sheets' : 'Trophies', s.cleanSheets != null ? s.cleanSheets : (s.trophies != null ? s.trophies : '—')),
+        ];
+        if (s.cleanSheets != null && s.trophies != null) cells.push(statCell('Trophies', s.trophies));
+        document.getElementById('mdStats').innerHTML = cells.join('');
+
+        document.getElementById('mdAwards').innerHTML = (entry.awards || []).map(function (a) {
+          return '<span class="award-chip">🏅 ' + a + '</span>';
+        }).join('') || '<span class="text-muted-zf small">No awards on record.</span>';
+
+        modal.show();
+      }
+
+      /* Legend card */
+      document.getElementById('legendPhoto').src = legend.photo;
+      document.getElementById('legendPhoto').alt = legend.name;
+      document.getElementById('legendName').textContent = legend.name;
+      document.getElementById('legendMeta').textContent = legend.position + ' · ' + legend.status + ' · ' + legend.academy;
+      document.getElementById('legendBlurb').textContent = legend.blurb;
+      document.getElementById('legendStats').innerHTML = [
+        ['Goals', legend.stats.goals], ['Assists', legend.stats.assists],
+        ['Apps', legend.stats.appearances], ['Trophies', legend.stats.trophies],
+      ].map(function (x) { return '<div class="legend-stat"><b>' + x[1] + '</b><span>' + x[0] + '</span></div>'; }).join('');
+      document.getElementById('legendCard').addEventListener('click', function () { openDossier(legend, legend.photo); });
+
+      /* Hall of fame grid */
+      document.getElementById('hofGrid').innerHTML = ar.hallOfFame.map(function (h, i) {
+        return '<div class="col-md-6 col-lg-4 reveal" data-delay="' + (i % 3) + '">' +
+          '<div class="hof-card h-100" data-idx="' + i + '">' +
+            '<div class="hof-card__top">' + PRC.initialsAvatar(h.name, 56) + '<span class="hof-medal">★ ' + h.award + '</span></div>' +
+            '<div class="p-3">' +
+              '<div class="fw-bold" style="color:var(--zf-dark)">' + h.name + '</div>' +
+              '<div class="small text-muted-zf">' + h.position + ' · ' + (h.stats.goals || 0) + ' G / ' + (h.stats.assists || 0) + ' A</div>' +
+              '<div class="small mt-2" style="color:var(--zf-mid);font-weight:600">' + h.academy + '</div>' +
+              '<div class="hof-hint mt-2">View career record →</div>' +
+            '</div>' +
+          '</div></div>';
+      }).join('');
+      document.querySelectorAll('.hof-card').forEach(function (card) {
+        card.addEventListener('click', function () { openDossier(ar.hallOfFame[+card.getAttribute('data-idx')], null); });
+      });
+
+      /* Tournament records */
+      document.getElementById('tourTable').innerHTML = ar.tournaments.map(function (t) {
+        return '<tr style="cursor:default">' +
+          '<td class="fw-semibold">' + t.season + '</td><td>' + t.name + '</td>' +
+          '<td><span class="zf-badge" style="background:var(--zf-gold);color:var(--zf-dark)">🏆 ' + t.winner + '</span></td>' +
+          '<td class="text-muted-zf">' + t.runnerUp + '</td><td>' + t.topScorer + '</td></tr>';
+      }).join('');
+
+      /* Recent results */
+      document.getElementById('gamesGrid').innerHTML = d.games.map(function (g, i) {
+        var parts = g.fixture.split(' vs ');
+        return '<div class="col-md-6 col-lg-4 reveal" data-delay="' + (i % 3) + '">' +
+          '<div class="zf-card hover-lift p-3 h-100">' +
+            '<div class="d-flex justify-content-between align-items-center mb-2">' +
+              '<span class="zf-badge badge-division">' + g.matchType + '</span><span class="small text-muted-zf">' + d.formatDate(g.date) + '</span></div>' +
+            '<div class="d-flex align-items-center justify-content-between">' +
+              '<div class="fw-semibold text-end flex-fill" style="font-size:.9rem">' + parts[0] + '</div>' +
+              '<div class="zf-display fw-bold px-3" style="font-size:1.3rem;color:var(--zf-dark)">' + g.score + '</div>' +
+              '<div class="fw-semibold flex-fill" style="font-size:.9rem">' + parts[1] + '</div></div>' +
+            '<div class="small text-muted-zf mt-2 text-center">⚽ ' + g.scorers.join(' · ') + '</div>' +
+          '</div></div>';
+      }).join('');
+    })();
+  </script>
+</body>
+</html>

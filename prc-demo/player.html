@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Player Profile — Zambezi Futures</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/zf.css" />
+  <style>
+    .profile-hero { background: linear-gradient(135deg,#163025,#1b3a2d); border-radius: var(--zf-radius); padding: 1.75rem 2rem; color: #fff; position: relative; overflow: hidden; }
+    .profile-hero::after { content:''; position:absolute; right:-60px; top:-60px; width:240px; height:240px; border:2px solid rgba(201,168,76,.12); border-radius:50%; }
+    .profile-name { font-family:'Montserrat',sans-serif; font-weight:800; font-size:1.7rem; }
+    .profile-sub  { color: rgba(255,255,255,.65); font-size:.92rem; }
+    .prc-id-hero  { font-family:'Montserrat',sans-serif; font-size:.85rem; font-weight:700; color:var(--zf-gold); letter-spacing:.06em; }
+    .rating-big   { font-family:'Montserrat',sans-serif; font-size:2.6rem; font-weight:800; color:var(--zf-gold); line-height:1; }
+    .stat-pill    { background:var(--zf-bg); border:1px solid var(--zf-border); border-radius:9px; padding:.85rem 1rem; text-align:center; }
+    .stat-pill-num{ font-family:'Montserrat',sans-serif; font-size:1.7rem; font-weight:800; color:var(--zf-dark); }
+    .stat-pill-lbl{ font-size:.72rem; text-transform:uppercase; letter-spacing:.05em; color:var(--zf-muted); font-weight:700; }
+    .detail-table td { padding:.55rem 0; border-bottom:1px solid var(--zf-border); font-size:.88rem; }
+    .detail-table td:first-child { color:var(--zf-muted); width:130px; font-weight:700; font-size:.74rem; text-transform:uppercase; letter-spacing:.03em; }
+  </style>
+</head>
+<body data-page="players">
+  <div id="navbarContainer"></div>
+
+  <main class="zf-container py-4">
+    <a href="players.html" class="btn btn-outline-zf btn-sm mb-3">← Back to Registry</a>
+
+    <div id="notFound" class="text-center py-5" style="display:none">
+      <div style="font-size:3rem">🔍</div>
+      <h2 class="h4 fw-bold mt-2">Player not found</h2>
+      <p class="text-muted-zf">No player matches this ID in the registry.</p>
+      <a href="players.html" class="btn btn-zf btn-sm px-4">Back to Registry</a>
+    </div>
+
+    <div id="profileContent" style="display:none">
+      <!-- Hero -->
+      <div class="profile-hero mb-4 fade-in-up">
+        <div class="d-flex align-items-center gap-4 flex-wrap position-relative" style="z-index:2">
+          <div id="avatarSlot"></div>
+          <div class="flex-grow-1">
+            <div class="profile-name mb-1" id="playerName"></div>
+            <div class="d-flex flex-wrap gap-2 align-items-center mb-2" id="badgeRow"></div>
+            <div class="profile-sub" id="playerSub"></div>
+          </div>
+          <div class="text-end">
+            <div class="prc-id-hero" id="prcId"></div>
+            <div class="small mt-1" style="color:rgba(255,255,255,.45)">PRC Registry ID</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="zf-card mb-3 reveal">
+            <div class="zf-card-header">Player Details</div>
+            <div class="p-3">
+              <table class="detail-table w-100"><tbody id="detailBody"></tbody></table>
+            </div>
+          </div>
+          <div class="zf-card reveal" data-delay="1" id="ratingCard">
+            <div class="zf-card-header">Season Rating</div>
+            <div class="p-3 d-flex align-items-center gap-3">
+              <div class="rating-big" id="ratingVal"></div>
+              <div>
+                <div class="fw-semibold" style="font-size:.9rem" id="ratingLabel"></div>
+                <div class="small text-muted-zf">Season 2023/24</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-8">
+          <div class="zf-card mb-4 reveal" data-delay="1">
+            <div class="zf-card-header">Season Statistics</div>
+            <div class="p-3"><div class="row g-2" id="statsRow"></div></div>
+          </div>
+          <div class="zf-card reveal" data-delay="2">
+            <div class="zf-card-header">Match History</div>
+            <div class="table-responsive">
+              <table class="zf-table">
+                <thead><tr><th>Fixture</th><th>Date</th><th>Score</th><th>Type</th></tr></thead>
+                <tbody id="matchHistory"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div id="footerContainer"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    (function () {
+      var d = PRC_DATA;
+      var id = PRC.getQueryParam('id');
+      var p = id ? d.getPlayer(id) : null;
+
+      if (!p) { document.getElementById('notFound').style.display = 'block'; return; }
+      document.getElementById('profileContent').style.display = 'block';
+      document.title = d.fullName(p) + ' — Zambezi Futures';
+      var acad = d.getAcademy(p.academyId);
+
+      document.getElementById('avatarSlot').innerHTML = PRC.initialsAvatar(d.fullName(p), 72);
+      document.getElementById('playerName').textContent = d.fullName(p);
+      document.getElementById('badgeRow').innerHTML =
+        PRC.divisionBadge(p.division) + PRC.statusBadge(p.status) +
+        (p.role === 'Admin' ? '<span class="zf-badge" style="background:var(--zf-gold);color:var(--zf-dark)">⚙ Admin</span>' : '');
+      document.getElementById('playerSub').textContent = acad.name + ' · ' + p.position;
+      document.getElementById('prcId').textContent = p.prcId;
+
+      document.getElementById('detailBody').innerHTML = [
+        ['Full Name', d.fullName(p)],
+        ['Date of Birth', d.formatDate(p.dob)],
+        ['Age', d.age(p.dob) + ' years old'],
+        ['Gender', p.gender],
+        ['Nationality', p.nationality],
+        ['Position', p.position],
+        ['Division', PRC.divisionBadge(p.division)],
+        ['Academy', acad.name],
+        ['Location', acad.location],
+        ['Registered', d.formatDate(p.registeredDate)],
+        ['Status', PRC.statusBadge(p.status)],
+      ].map(function (r) { return '<tr><td>' + r[0] + '</td><td>' + r[1] + '</td></tr>'; }).join('');
+
+      /* Rating */
+      if (p.seasonRating) {
+        document.getElementById('ratingVal').textContent = p.seasonRating.toFixed(1) + '/10';
+        document.getElementById('ratingLabel').textContent =
+          p.seasonRating >= 8.5 ? 'Elite — Top 5% in Division' :
+          p.seasonRating >= 7.5 ? 'Strong — Top 25%' : 'Average — Mid Table';
+      } else {
+        document.getElementById('ratingCard').style.display = 'none';
+      }
+
+      /* Stats */
+      var isGK = p.position === 'Goalkeeper';
+      var defs = isGK
+        ? [['Appearances', p.appearances], ['Clean Sheets', Math.floor(p.appearances * 0.4)], ['Saves', p.appearances * 3]]
+        : [['Appearances', p.appearances], ['Goals', p.goals], ['Assists', p.assists], ['Tackles', p.tackles]];
+      document.getElementById('statsRow').innerHTML = defs.map(function (s) {
+        return '<div class="col-6 col-sm-3"><div class="stat-pill"><div class="stat-pill-num">' + s[1] + '</div><div class="stat-pill-lbl">' + s[0] + '</div></div></div>';
+      }).join('');
+
+      /* Match history */
+      var related = d.games.filter(function (g) { return g.fixture.includes(acad.name); }).slice(0, 5);
+      document.getElementById('matchHistory').innerHTML = related.length
+        ? related.map(function (g) {
+            return '<tr><td>' + g.fixture + '</td><td class="text-nowrap">' + d.formatDate(g.date) + '</td>' +
+              '<td><strong>' + g.score + '</strong></td><td><span class="zf-badge badge-division">' + g.matchType + '</span></td></tr>';
+          }).join('')
+        : '<tr><td colspan="4" class="text-center py-3 text-muted-zf">No match history recorded yet.</td></tr>';
+    })();
+  </script>
+</body>
+</html>
