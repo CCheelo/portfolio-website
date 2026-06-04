@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Copper · Forecast Lab — Can you forecast the price of copper?</title>
+  <meta name="description" content="Interactive companion to a time-series study of daily copper prices (2000–2025): an ARMA(2,0) mean model that ties a random walk, extended to ARMA–GARCH where the real predictability lives — in the volatility." />
+  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/copper.css" />
+</head>
+<body data-page="home">
+  <div id="navbarContainer"></div>
+
+  <!-- HERO -->
+  <header class="cu-hero">
+    <div class="cu-hero__glow"></div>
+    <div class="cu-container cu-hero__inner">
+      <div class="grid grid-2" style="align-items:center">
+        <div>
+          <span class="cu-hero__eyebrow fade-in-up">Daily copper · US$/tonne · 2000–2025</span>
+          <h1 class="cu-hero__title fade-in-up" data-delay="1">
+            Can you forecast the<br><span class="text-copper">price of copper?</span>
+          </h1>
+          <p class="cu-hero__lead fade-in-up" data-delay="2">
+            Copper is the backbone of Zambia’s economy, so the predictability of its price matters.
+            This lab models <strong>6,298 daily prices</strong> the Box–Jenkins way — and finds the
+            level behaves like a near-random walk, while the <em>risk</em> turns out to be very
+            predictable indeed.
+          </p>
+          <div class="flex gap-md fade-in-up" data-delay="3" style="flex-wrap:wrap">
+            <a href="forecast.html" class="btn-c btn-primary-c">Try to beat the market →</a>
+            <a href="volatility.html" class="btn-c btn-outline-c">See where the risk lives</a>
+          </div>
+        </div>
+        <div class="fade-in-up" data-delay="2">
+          <div class="chart-panel">
+            <div class="panel-header">Copper price &amp; forecast</div>
+            <div class="chart-box" style="height:300px"><canvas data-cu-chart="pricePath"></canvas></div>
+            <div class="chart-caption">
+              <span class="sim-tag">◑ simulated from estimated parameters</span>
+              A 25-year price path through the study’s real landmarks; the dashed cone is a random-walk forecast.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- COUNT-UP STATS -->
+  <section class="py-section">
+    <div class="cu-container">
+      <div class="grid grid-4">
+        <div class="stat-card reveal">
+          <div class="stat-num"><span data-count="6298">0</span></div>
+          <div class="stat-label">Daily Prices</div>
+          <div class="stat-sub">Dec 2000 – May 2025</div>
+        </div>
+        <div class="stat-card reveal" data-delay="1">
+          <div class="stat-num"><span data-count="49.2" data-decimals="1" data-suffix="%">0</span></div>
+          <div class="stat-label">Direction Hit-Rate</div>
+          <div class="stat-sub">AR(2) out of sample — ≈ a coin flip</div>
+        </div>
+        <div class="stat-card reveal" data-delay="2">
+          <div class="stat-num"><span data-count="2870">0</span></div>
+          <div class="stat-label">BIC Drop with GARCH</div>
+          <div class="stat-sub">24,742 → 21,872</div>
+        </div>
+        <div class="stat-card reveal" data-delay="3">
+          <div class="stat-num"><span data-count="0.974" data-decimals="3">0</span></div>
+          <div class="stat-label">Volatility Persistence</div>
+          <div class="stat-sub">α₁ + β₁ — shocks decay slowly</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VERDICT TEASER -->
+  <section class="py-section" style="padding-top:0">
+    <div class="cu-container">
+      <div class="verdict-banner reveal mb-4">
+        <span class="verdict-banner__pulse"></span>
+        <div>
+          <div class="section-eyebrow">The headline finding</div>
+          <div class="verdict-banner__label">DIRECTION: UNFORECASTABLE · RISK: PERSISTENT &amp; MODELLABLE</div>
+        </div>
+        <a href="forecast.html" class="btn-c btn-primary-c btn-sm-c" style="margin-left:auto">See the evidence →</a>
+      </div>
+
+      <div class="grid grid-3">
+        <a href="forecast.html" class="link-card hover-lift reveal">
+          <div class="link-card__icon">🎯</div>
+          <h3>Forecast</h3>
+          <p>Play “beat the random walk”, then see why an AR(2) model — chosen by ACF/PACF and BIC — can’t beat a coin flip out of sample.</p>
+          <span class="link-card__more">Try the game →</span>
+        </a>
+        <a href="volatility.html" class="link-card hover-lift reveal" data-delay="1">
+          <div class="link-card__icon">📈</div>
+          <h3>Volatility</h3>
+          <p>Toggle constant vs GARCH volatility, drag the persistence dial, and watch the BIC collapse once the model captures the risk.</p>
+          <span class="link-card__more">Explore the risk →</span>
+        </a>
+        <a href="../reports/copper-forecasting-report.pdf" target="_blank" rel="noopener" class="link-card hover-lift reveal" data-delay="2">
+          <div class="link-card__icon">📄</div>
+          <h3>Full Report</h3>
+          <p>The complete methodology, R output and figures — stationarity tests, diagnostics, the backtest and the GARCH extension.</p>
+          <span class="link-card__more">Open the PDF ↗</span>
+        </a>
+      </div>
+
+      <p class="text-center text-muted-c mt-4" style="font-size:.82rem;max-width:740px;margin-left:auto;margin-right:auto">
+        Interactive companion to a time-series study of daily copper prices
+        (Choolwe Cheelo, University of Zambia). Real point estimates are shown as-is;
+        any drawn path is simulated from those estimates and labelled accordingly.
+      </p>
+    </div>
+  </section>
+
+  <div id="footerContainer"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Volatility — Where copper’s predictability lives | Copper Forecast Lab</title>
+  <meta name="description" content="Copper’s direction is unforecastable, but its risk isn’t. Toggle constant vs GARCH volatility, drag the persistence dial, and see the BIC collapse with an ARMA–GARCH model." />
+  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/copper.css" />
+</head>
+<body data-page="volatility">
+  <div id="navbarContainer"></div>
+
+  <!-- INTRO -->
+  <header class="cu-hero" style="padding:3.5rem 0 2rem">
+    <div class="cu-container cu-hero__inner">
+      <span class="section-eyebrow fade-in-up">Step 2 · Where the predictability lives</span>
+      <h1 class="cu-hero__title fade-in-up" data-delay="1" style="font-size:clamp(1.8rem,4.5vw,2.9rem)">
+        The direction is random.<br><span class="text-copper">The risk is not.</span>
+      </h1>
+      <p class="cu-hero__lead fade-in-up" data-delay="2" style="max-width:700px">
+        The AR(2) residuals fail decisively on volatility clustering and heavy tails. Extending the model to
+        <strong>ARMA(2,0)–GARCH(1,1)</strong> with Student-<em>t</em> innovations captures both — and the
+        information criteria reward it overwhelmingly.
+      </p>
+    </div>
+  </header>
+
+  <!-- TOGGLE: CONSTANT VS GARCH -->
+  <section class="py-section" style="padding-top:0">
+    <div class="cu-container">
+      <span class="section-eyebrow reveal">Clustering</span>
+      <h2 class="section-title reveal mb-2">Constant vs time-varying volatility</h2>
+      <p class="section-lead reveal mb-3">
+        Returns arrive in calm and turbulent clusters. A constant-variance band is too wide in quiet
+        periods and too tight in storms; the GARCH band breathes with the market. <strong>Flip the switch.</strong>
+      </p>
+      <div class="chart-panel reveal" data-cu-vol>
+        <div class="panel-header">
+          <span>Daily log returns &amp; ±1.96σ band</span>
+          <div class="seg">
+            <button class="seg__btn" data-cu-vol-mode="constant">ARMA · constant σ</button>
+            <button class="seg__btn active" data-cu-vol-mode="garch">GARCH · time-varying σ</button>
+          </div>
+        </div>
+        <div class="chart-box" style="height:360px"><canvas data-cu-vol-canvas></canvas></div>
+        <div class="chart-caption">
+          <span class="sim-tag">◑ simulated from estimated GARCH(1,1) parameters</span>
+          The same return path under each variance assumption — watch the band hug the clusters in GARCH mode.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PERSISTENCE SLIDER + BIC WIN -->
+  <section class="py-section section--alt">
+    <div class="cu-container">
+      <div class="grid grid-2" style="align-items:start">
+        <div class="reveal">
+          <span class="section-eyebrow">Persistence</span>
+          <h2 class="section-title mb-2">Why shocks linger</h2>
+          <p class="section-lead mb-3">
+            Volatility persistence <span class="mono">α₁ + β₁ = 0.974</span> is close to 1 — a shock’s effect on
+            risk decays only slowly. Drag the dial to see how the half-life of a shock explodes as persistence
+            approaches one.
+          </p>
+          <div class="chart-panel" data-cu-persistence-widget>
+            <div class="panel-header">Share of a volatility shock still present after h days</div>
+            <div class="chart-box" style="height:280px"><canvas data-cu-persistence-canvas></canvas></div>
+            <div class="slider-row">
+              <label>Persistence&nbsp;α+β</label>
+              <input type="range" class="cu-range" min="0.80" max="0.999" step="0.001" value="0.974" data-cu-persistence />
+              <div class="slider-readout"><span data-cu-persistence-val>0.974</span><small>half-life <span data-cu-halflife>—</span></small></div>
+            </div>
+          </div>
+        </div>
+        <div class="reveal" data-delay="1">
+          <span class="section-eyebrow">The verdict</span>
+          <h2 class="section-title mb-2">BIC collapses with GARCH</h2>
+          <p class="section-lead mb-3">
+            Adding the variance equation costs three extra parameters but lowers the BIC by ≈ 2,870 — an
+            overwhelming margin. Lower is better.
+          </p>
+          <div class="chart-panel">
+            <div class="chart-box" style="height:200px"><canvas data-cu-chart="bicCompare"></canvas></div>
+          </div>
+          <div class="panel table-wrap mt-3">
+            <table class="cu-table">
+              <thead><tr><th>Model</th><th class="num">k</th><th class="num">logLik</th><th class="num">BIC</th><th class="num">ARCH-LM p</th></tr></thead>
+              <tbody id="modelCompare"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAT TAILS + GARCH COEFS -->
+  <section class="py-section">
+    <div class="cu-container">
+      <span class="section-eyebrow reveal">Heavy tails</span>
+      <h2 class="section-title reveal mb-2">Fat tails, captured</h2>
+      <p class="section-lead reveal mb-4">
+        Copper returns are far more peaked and fat-tailed than a normal. Student-<em>t</em> innovations with
+        ≈ 4.6 degrees of freedom describe the extremes the normal misses.
+      </p>
+      <div class="grid grid-2" style="align-items:start">
+        <div class="chart-panel reveal">
+          <div class="chart-box" style="height:300px"><canvas data-cu-chart="fatTail"></canvas></div>
+          <div class="chart-caption">
+            <span class="sim-tag">◑ simulated from estimated d.f.</span>
+            Taller peak, fatter tails than the normal reference (gold).
+          </div>
+        </div>
+        <div class="reveal" data-delay="1">
+          <div class="panel table-wrap mb-3">
+            <table class="cu-table">
+              <thead><tr><th>Parameter</th><th class="num">Estimate</th><th class="num">Std. error</th><th class="num">t</th></tr></thead>
+              <tbody id="garchCoef"></tbody>
+            </table>
+          </div>
+          <div class="grid grid-2">
+            <div class="kpi-tile"><div class="kpi-num text-copper">0.974</div><div class="kpi-lbl">Persistence α+β</div></div>
+            <div class="kpi-tile"><div class="kpi-num text-copper">4.6</div><div class="kpi-lbl">Student-t d.f.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- diagnostics -->
+      <h3 style="color:#fff;font-size:1.05rem;margin:2.25rem 0 1rem" class="reveal">Standardised-residual diagnostics — ARCH eliminated</h3>
+      <div class="grid grid-3" id="garchDiag"></div>
+    </div>
+  </section>
+
+  <!-- FINDINGS -->
+  <section class="py-section section--alt">
+    <div class="cu-container cu-container--narrow">
+      <span class="section-eyebrow reveal">Findings</span>
+      <h2 class="section-title reveal mb-3">What it all means</h2>
+      <div class="callout reveal mb-3" id="conclusion"></div>
+      <div class="callout reveal mb-3" id="twist"></div>
+      <h3 style="color:#fff;font-size:1.05rem;margin:1.5rem 0 .5rem" class="reveal">Why it matters</h3>
+      <p class="section-lead reveal mb-4" id="whyMatters"></p>
+
+      <h3 style="color:#fff;font-size:1.05rem;margin:0 0 1rem" class="reveal">Recommendations</h3>
+      <div class="grid grid-2" id="recs"></div>
+
+      <p class="text-center text-muted-c mt-5" style="font-size:.82rem;max-width:720px;margin-left:auto;margin-right:auto" id="honesty"></p>
+      <div class="text-center mt-3">
+        <a href="../reports/copper-forecasting-report.pdf" target="_blank" rel="noopener" class="btn-c btn-primary-c">Read the full report ↗</a>
+      </div>
+    </div>
+  </section>
+
+  <div id="footerContainer"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    (function () {
+      var D = window.COPPER_DATA, fmt = D.fmt;
+
+      /* Model comparison */
+      var mc = document.getElementById('modelCompare');
+      if (mc) mc.innerHTML = D.modelCompare.map(function (m) {
+        return '<tr class="' + (m.clean ? 'is-selected' : '') + '"><td class="tk">' + m.name + '</td><td class="num">' + m.k +
+          '</td><td class="num">' + m.logLik.toLocaleString() + '</td><td class="num">' + m.bic.toLocaleString() +
+          '</td><td class="num ' + (m.clean ? '' : 'sig') + '">' + m.archLmText + '</td></tr>';
+      }).join('');
+
+      /* GARCH coefficients */
+      var gc = document.getElementById('garchCoef');
+      if (gc) gc.innerHTML = D.garch.coef.map(function (c) {
+        return '<tr><td class="tk">' + c.name + '</td><td class="num">' + fmt(c.est, 4) + '</td><td class="num">' + fmt(c.se, 4) +
+          '</td><td class="num">' + fmt(c.t, 2) + '</td></tr>';
+      }).join('');
+
+      /* GARCH residual diagnostics */
+      var gd = document.getElementById('garchDiag'), g = D.garchDiag;
+      function diagCard(d) {
+        return '<div class="test-card is-pass"><div class="test-card__name">' + d.label +
+          '<span class="badge-c badge-pass">clean ✓</span></div>' +
+          '<div class="test-card__stat">χ² = ' + d.x2 + ', df = ' + d.df + ' &nbsp;·&nbsp; p = ' + fmt(d.p, 2) + '</div>' +
+          '<div class="test-card__verdict">No remaining autocorrelation / ARCH</div></div>';
+      }
+      if (gd) gd.innerHTML = diagCard(g.lbStd) + diagCard(g.lbSqStd) + diagCard(g.archLm);
+
+      /* Findings text */
+      var f = D.findings;
+      function set(id, html) { var e = document.getElementById(id); if (e) e.innerHTML = html; }
+      set('conclusion', '<strong>Direction.</strong> ' + f.conclusion);
+      set('twist', '<strong>Risk.</strong> ' + f.twist);
+      set('whyMatters', f.whyMatters);
+      set('honesty', D.honesty);
+
+      var rc = document.getElementById('recs');
+      if (rc) rc.innerHTML = f.recommendations.map(function (r) {
+        return '<div class="rec-card reveal"><div class="rec-group">' + r.group + '</div><p>' + r.text + '</p></div>';
+      }).join('');
+      /* re-reveal dynamically inserted cards */
+      document.querySelectorAll('#recs .reveal').forEach(function (el) { el.classList.add('is-visible'); });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Forecast — Can an AR(2) model beat a random walk? | Copper Forecast Lab</title>
+  <meta name="description" content="Play beat-the-random-walk, then see the Box–Jenkins workflow: stationarity tests, ACF/PACF, BIC selection of AR(2), and an out-of-sample backtest that ties a naive random walk." />
+  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/copper.css" />
+</head>
+<body data-page="forecast">
+  <div id="navbarContainer"></div>
+
+  <!-- INTRO -->
+  <header class="cu-hero" style="padding:3.5rem 0 2rem">
+    <div class="cu-container cu-hero__inner">
+      <span class="section-eyebrow fade-in-up">Step 1 · Is the direction predictable?</span>
+      <h1 class="cu-hero__title fade-in-up" data-delay="1" style="font-size:clamp(1.8rem,4.5vw,2.9rem)">
+        Can you beat a <span class="text-copper">coin flip?</span>
+      </h1>
+      <p class="cu-hero__lead fade-in-up" data-delay="2" style="max-width:680px">
+        If copper’s price is weak-form efficient, yesterday tells you nothing useful about tomorrow’s
+        direction. Make 15 calls below — then compare your score with the fitted statistical model.
+      </p>
+    </div>
+  </header>
+
+  <!-- GAME -->
+  <section class="py-section" style="padding-top:0">
+    <div class="cu-container cu-container--narrow">
+      <div class="game reveal" data-cu-game data-rounds="15" data-seed="4317">
+        <div class="game__board">
+          <div class="game__price" data-cu-price>$9,450<span class="unit">/ t</span></div>
+          <div class="game__move" data-cu-move>&nbsp;</div>
+          <p class="game__prompt">Will copper close <strong>higher</strong> or <strong>lower</strong> tomorrow?</p>
+          <div class="game__btns">
+            <button class="game__btn up" data-cu-up>▲ Higher</button>
+            <button class="game__btn down" data-cu-down>▼ Lower</button>
+          </div>
+          <div class="game__progress" data-cu-progress><i></i></div>
+        </div>
+        <div class="game__scorebar">
+          <div class="game__score"><b data-cu-you>0</b><span>Your correct calls</span></div>
+          <div class="game__score"><b data-cu-rounds>0 / 15</b><span>Rounds</span></div>
+          <div class="game__score"><b>49.2%</b><span>AR(2) model</span></div>
+          <div class="game__score"><b>50%</b><span>Coin flip</span></div>
+        </div>
+        <div class="game__result" data-cu-result>
+          <h4 data-cu-result-head></h4>
+          <p data-cu-result-text></p>
+        </div>
+      </div>
+      <p class="text-center text-muted-c mt-2" style="font-size:.74rem">
+        <span class="sim-tag">◑ simulated</span>&nbsp; Daily moves are a seeded random walk calibrated to copper’s real volatility.
+      </p>
+    </div>
+  </section>
+
+  <!-- BACKTEST -->
+  <section class="py-section section--alt">
+    <div class="cu-container">
+      <span class="section-eyebrow reveal">The model, out of sample</span>
+      <h2 class="section-title reveal mb-3">ARMA(2,0) vs a naive random walk</h2>
+      <div class="grid grid-2" style="align-items:start">
+        <div class="chart-panel reveal">
+          <div class="panel-header">One-step forecast over the 252-day hold-out</div>
+          <div class="chart-box" style="height:320px"><canvas data-cu-chart="backtest"></canvas></div>
+          <div class="chart-caption">
+            <span class="sim-tag">◑ simulated from estimated parameters</span>
+            The forecast tracks the previous day’s price — visually indistinguishable from the actual.
+          </div>
+        </div>
+        <div class="reveal" data-delay="1">
+          <div class="panel" style="padding:1.25rem">
+            <div class="flex-between mb-2">
+              <div>
+                <div class="kpi-lbl">Direction called correctly</div>
+              </div>
+            </div>
+            <div class="chart-box" style="height:190px;padding-top:0"><canvas data-cu-chart="direction"></canvas></div>
+            <table class="kv-table mt-2" id="scoreboard"></table>
+            <div class="callout mt-2">
+              <strong>It loses to a coin toss.</strong> Lower error would mean the model adds information —
+              instead its RMSE is <em>higher</em> than the random walk’s. Copper’s level is essentially unforecastable.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOX-JENKINS -->
+  <section class="py-section">
+    <div class="cu-container">
+      <span class="section-eyebrow reveal">How the model was chosen</span>
+      <h2 class="section-title reveal mb-2">The Box–Jenkins workflow</h2>
+      <p class="section-lead reveal mb-4">
+        The price level is non-stationary, so we model <span class="mono">log returns</span>. Stationarity tests,
+        the ACF/PACF and a BIC grid search all point to the same small model.
+      </p>
+
+      <!-- stationarity -->
+      <h3 style="color:#fff;font-size:1.05rem;margin:0 0 1rem">1 · Stationarity tests</h3>
+      <div class="grid grid-4 mb-4" id="statCards"></div>
+
+      <!-- acf/pacf + bic grid -->
+      <div class="grid grid-2 mb-4" style="align-items:start">
+        <div class="reveal">
+          <h3 style="color:#fff;font-size:1.05rem;margin:0 0 1rem">2 · ACF &amp; PACF of returns</h3>
+          <div class="chart-panel">
+            <div class="chart-box" style="height:300px"><canvas data-cu-chart="acfPacf"></canvas></div>
+            <div class="chart-caption">
+              <span class="sim-tag">◑ from estimated AR(2)</span>
+              Both spike at lags 1–2, then fall inside the ±1.96/√n band — the AR(2) signature.
+            </div>
+          </div>
+        </div>
+        <div class="reveal" data-delay="1">
+          <h3 style="color:#fff;font-size:1.05rem;margin:0 0 1rem">3 · BIC grid search</h3>
+          <div class="panel table-wrap">
+            <table class="cu-table">
+              <thead><tr><th>p</th><th>q</th><th class="num">AIC</th><th class="num">BIC</th></tr></thead>
+              <tbody id="bicGrid"></tbody>
+            </table>
+          </div>
+          <p class="text-muted-c mt-2" style="font-size:.78rem">Lowest BIC selects <strong class="text-copper">ARMA(2,0)</strong> (confirmed by <code>auto.arima</code>).</p>
+        </div>
+      </div>
+
+      <!-- ar2 coefficients -->
+      <h3 style="color:#fff;font-size:1.05rem;margin:0 0 1rem">4 · Selected model — ARMA(2,0) coefficients</h3>
+      <div class="panel table-wrap reveal mb-4">
+        <table class="cu-table">
+          <thead><tr><th>Term</th><th class="num">Estimate</th><th class="num">Std. error</th><th class="num">z</th><th class="num">p-value</th><th>Significant?</th></tr></thead>
+          <tbody id="ar2Coef"></tbody>
+        </table>
+      </div>
+
+      <div class="callout reveal">
+        <strong>Takeaway.</strong> The AR(2) terms are highly significant <em>in sample</em>, but that significance
+        doesn’t translate into <em>out-of-sample</em> gain. Copper’s price level is close to weak-form efficient.
+        So where’s the predictability? <a href="volatility.html" class="text-copper" style="font-weight:700">In the volatility →</a>
+      </div>
+    </div>
+  </section>
+
+  <div id="footerContainer"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    (function () {
+      var D = window.COPPER_DATA, fmt = D.fmt;
+
+      /* Backtest scoreboard */
+      var b = D.backtest, sb = document.getElementById('scoreboard');
+      if (sb) sb.innerHTML =
+        '<tr><td>ARMA(2,0) — RMSE / MAE</td><td class="num">' + fmt(b.arma.rmse) + ' / ' + fmt(b.arma.mae) + '</td></tr>' +
+        '<tr><td>Random walk — RMSE / MAE</td><td class="num">' + fmt(b.rw.rmse) + ' / ' + fmt(b.rw.mae) + '</td></tr>' +
+        '<tr><td>Direction hit-rate</td><td class="num">' + fmt(b.directionPct, 1) + '%</td></tr>' +
+        '<tr><td>Hold-out window</td><td class="num">' + b.holdout + ' days</td></tr>';
+
+      /* Stationarity cards */
+      var sc = document.getElementById('statCards');
+      function card(title, test, stat, verdict, pass) {
+        return '<div class="test-card ' + (pass ? 'is-pass' : 'is-fail') + '">' +
+          '<div class="test-card__name">' + title +
+          '<span class="badge-c ' + (pass ? 'badge-pass' : 'badge-fail') + '">' + (pass ? '✓' : '✗') + '</span></div>' +
+          '<div class="test-card__stat">' + test + ' &nbsp;·&nbsp; ' + stat + '</div>' +
+          '<div class="test-card__verdict">' + verdict + '</div></div>';
+      }
+      if (sc) {
+        var s = D.stationarity;
+        sc.innerHTML =
+          card('Price level', 'ADF', 'stat ' + s.level.adf.stat + ', p = ' + s.level.adf.p, 'Unit root not rejected → non-stationary', false) +
+          card('Price level', 'KPSS', 'p = ' + s.level.kpss.p, 'Stationarity rejected → non-stationary', false) +
+          card('Log returns', 'ADF', 'stat ' + s.returns.adf.stat + ', p = ' + s.returns.adf.p, 'Unit root rejected → stationary', true) +
+          card('Log returns', 'KPSS', 'stat ' + s.returns.kpss.stat + ', p = ' + s.returns.kpss.p, 'Stationarity not rejected → stationary', true);
+      }
+
+      /* BIC grid */
+      var bg = document.getElementById('bicGrid');
+      if (bg) bg.innerHTML = D.bicGrid.map(function (r) {
+        return '<tr class="' + (r.selected ? 'is-selected' : '') + '"><td class="tk">' + r.p + '</td><td class="tk">' + r.q +
+          '</td><td class="num">' + r.aic.toLocaleString() + '</td><td class="num">' + r.bic.toLocaleString() +
+          (r.selected ? ' ★' : '') + '</td></tr>';
+      }).join('');
+
+      /* AR(2) coefficients */
+      var ac = document.getElementById('ar2Coef');
+      if (ac) ac.innerHTML = D.ar2.coef.map(function (c) {
+        return '<tr><td class="tk">' + c.name + '</td><td class="num">' + fmt(c.est, 4) + '</td><td class="num">' + fmt(c.se, 4) +
+          '</td><td class="num">' + fmt(c.z, 2) + '</td><td class="num ' + (c.sig ? 'sig' : 'nosig') + '">' + D.fmtP(c.p) +
+          '</td><td>' + (c.sig ? '<span class="badge-c badge-pass">yes</span>' : '<span class="badge-c badge-neutral">no</span>') + '</td></tr>';
+      }).join('');
+    })();
+  </script>
+</body>
+</html>
