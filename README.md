@@ -73,7 +73,8 @@ portfolio-website/
     ├── choolwe-cheelo-cv.pdf
     ├── emh-research-report.pdf
     ├── climate-change-summary.pdf
-    └── admissions-bias-exec-summary.pdf
+    ├── admissions-bias-exec-summary.pdf
+    └── copper-forecasting-report.pdf
 ```
 
 ---
@@ -151,7 +152,6 @@ Pushes to `main` auto-deploy via Vercel's GitHub integration. No manual command 
 | Item | Notes |
 |---|---|
 | **Testimonials** | `testimonials.html` is a placeholder — content to be added by owner |
-| **Copper project** | `project-copper.html` has placeholder content — pending R code and dataset |
 | **Project images** | `assets/images/project-*.svg` are placeholder graphics — owner to replace with final images |
 
 ---
