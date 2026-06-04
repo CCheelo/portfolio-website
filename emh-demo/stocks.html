@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stock Registry — LUSE Efficiency Lab</title>
+  <meta name="description" content="Every tested LUSE stock with its real descriptive statistics and test results — searchable, filterable and sortable." />
+  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/emh.css" />
+</head>
+<body data-page="stocks">
+  <div id="navbarContainer"></div>
+
+  <main class="emh-container py-section">
+    <div class="flex-between mb-3 fade-in-up">
+      <div>
+        <div class="section-eyebrow">Central Registry</div>
+        <h1 class="section-title">Stock Registry</h1>
+        <p class="text-muted-e" id="rowCount" style="margin:.35rem 0 0;font-size:.86rem"></p>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="panel panel-body mb-3 fade-in-up" data-delay="1">
+      <div class="grid grid-3" style="gap:.9rem">
+        <div>
+          <label class="field-label" for="searchInput">Search</label>
+          <input type="search" id="searchInput" class="emh-input" placeholder="Ticker, company or sector…" />
+        </div>
+        <div>
+          <label class="field-label" for="sectorFilter">Sector</label>
+          <select id="sectorFilter" class="emh-select"><option value="">All sectors</option></select>
+        </div>
+        <div>
+          <label class="field-label" for="statusFilter">Verdict</label>
+          <select id="statusFilter" class="emh-select">
+            <option value="">All verdicts</option>
+            <option value="inefficient">Inefficient (rejects RW)</option>
+            <option value="efficient">Efficient (fails to reject)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="panel fade-in-up" data-delay="2">
+      <div class="table-wrap">
+        <table class="emh-table" id="stockTable">
+          <thead>
+            <tr>
+              <th class="sortable" data-key="ticker">Ticker <span class="arrow">↕</span></th>
+              <th class="sortable" data-key="name">Company <span class="arrow">↕</span></th>
+              <th class="sortable" data-key="sector">Sector <span class="arrow">↕</span></th>
+              <th class="sortable" data-key="mean" style="text-align:right">Mean <span class="arrow">↕</span></th>
+              <th class="sortable" data-key="sd" style="text-align:right">SD <span class="arrow">↕</span></th>
+              <th class="sortable" data-key="skew" style="text-align:right">Skew <span class="arrow">↕</span></th>
+              <th class="sortable" data-key="kurtosis" style="text-align:right">Kurt <span class="arrow">↕</span></th>
+              <th class="sortable" data-key="p" style="text-align:right">LB&nbsp;p <span class="arrow">↕</span></th>
+              <th class="sortable" data-key="vr" style="text-align:right">VR <span class="arrow">↕</span></th>
+              <th class="sortable" data-key="z" style="text-align:right">Z <span class="arrow">↕</span></th>
+              <th class="sortable" data-key="verdict">Verdict <span class="arrow">↕</span></th>
+            </tr>
+          </thead>
+          <tbody id="stockBody"></tbody>
+        </table>
+      </div>
+      <div id="emptyMsg" class="text-center" style="display:none;padding:2.5rem;color:var(--muted)">
+        <div style="font-size:2rem">📭</div><div style="font-weight:600">No stocks match your filters.</div>
+      </div>
+    </div>
+
+    <p class="text-muted-e mt-3" style="font-size:.8rem">
+      All figures are the real estimates from the report (Tables A3.1, A3.3, A3.4).
+      <span class="sig">Red</span> marks a significant result: Ljung–Box p &lt; 0.05 or |Z| &gt; 1.96.
+      Click any row for the full stock profile.
+    </p>
+  </main>
+
+  <div id="footerContainer"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    (function () {
+      var d = EMH_DATA;
+      var sortKey = 'ticker', sortDir = 1;   // 1 asc, -1 desc
+
+      /* sector filter options */
+      var sectorSel = document.getElementById('sectorFilter');
+      d.sectors().forEach(function (sct) {
+        var o = document.createElement('option'); o.value = sct; o.textContent = sct; sectorSel.appendChild(o);
+      });
+
+      function val(c, key) {
+        switch (key) {
+          case 'ticker':   return c.ticker;
+          case 'name':     return c.name;
+          case 'sector':   return c.sector;
+          case 'verdict':  return c.verdict;
+          case 'mean':     return c.desc ? c.desc.mean : null;
+          case 'sd':       return c.desc ? c.desc.sd : null;
+          case 'skew':     return c.desc ? c.desc.skew : null;
+          case 'kurtosis': return c.desc ? c.desc.kurtosis : null;
+          case 'p':        return c.ljungBox.p;
+          case 'vr':       return c.vr.vr;
+          case 'z':        return c.vr.z;
+        }
+        return null;
+      }
+
+      function numCell(v, dp, sig) {
+        if (v === null || v === undefined) return '<td class="num nosig">—</td>';
+        return '<td class="num' + (sig ? ' sig' : '') + '">' + Number(v).toFixed(dp) + '</td>';
+      }
+
+      function render() {
+        var q = document.getElementById('searchInput').value.toLowerCase().trim();
+        var sector = document.getElementById('sectorFilter').value;
+        var status = document.getElementById('statusFilter').value;
+
+        var rows = d.companies.filter(function (c) {
+          if (q && c.ticker.toLowerCase().indexOf(q) < 0 && c.name.toLowerCase().indexOf(q) < 0 && c.sector.toLowerCase().indexOf(q) < 0) return false;
+          if (sector && c.sector !== sector) return false;
+          if (status && c.verdict !== status) return false;
+          return true;
+        });
+
+        rows.sort(function (a, b) {
+          var va = val(a, sortKey), vb = val(b, sortKey);
+          if (va === null && vb === null) return 0;
+          if (va === null) return 1;        // nulls always last
+          if (vb === null) return -1;
+          if (typeof va === 'string') return va.localeCompare(vb) * sortDir;
+          return (va - vb) * sortDir;
+        });
+
+        document.getElementById('rowCount').textContent = rows.length + ' of ' + d.companies.length + ' stocks';
+        var body = document.getElementById('stockBody'), empty = document.getElementById('emptyMsg');
+        if (!rows.length) { body.innerHTML = ''; empty.style.display = 'block'; return; }
+        empty.style.display = 'none';
+
+        body.innerHTML = rows.map(function (c) {
+          var pSig = c.ljungBox.p < 0.05, zSig = Math.abs(c.vr.z) > 1.96;
+          return '<tr onclick="location.href=\'stock.html?ticker=' + c.ticker + '\'">' +
+            '<td><div class="flex gap-sm" style="align-items:center">' + EMH.tickerAvatar(c.ticker, 34, c.verdict) +
+              '<span class="tk">' + c.ticker + '</span></div></td>' +
+            '<td style="color:var(--text)">' + c.name + '</td>' +
+            '<td>' + EMH.sectorBadge(c.sector) + '</td>' +
+            numCell(c.desc ? c.desc.mean : null, 4, false) +
+            numCell(c.desc ? c.desc.sd : null, 4, false) +
+            numCell(c.desc ? c.desc.skew : null, 2, false) +
+            numCell(c.desc ? c.desc.kurtosis : null, 1, false) +
+            numCell(c.ljungBox.p, 4, pSig) +
+            numCell(c.vr.vr, 4, false) +
+            numCell(c.vr.z, 2, zSig) +
+            '<td>' + EMH.statusBadge(c.verdict) + '</td></tr>';
+        }).join('');
+      }
+
+      /* sorting */
+      document.querySelectorAll('#stockTable th.sortable').forEach(function (th) {
+        th.addEventListener('click', function () {
+          var key = th.getAttribute('data-key');
+          if (sortKey === key) sortDir *= -1; else { sortKey = key; sortDir = 1; }
+          document.querySelectorAll('#stockTable th.sortable').forEach(function (h) {
+            h.classList.remove('sorted');
+            h.querySelector('.arrow').textContent = '↕';
+          });
+          th.classList.add('sorted');
+          th.querySelector('.arrow').textContent = sortDir === 1 ? '↑' : '↓';
+          render();
+        });
+      });
+
+      ['searchInput', 'sectorFilter', 'statusFilter'].forEach(function (id) {
+        var el = document.getElementById(id);
+        el.addEventListener(id === 'searchInput' ? 'input' : 'change', render);
+      });
+      render();
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stock Profile — LUSE Efficiency Lab</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/emh.css" />
+</head>
+<body data-page="stocks">
+  <div id="navbarContainer"></div>
+
+  <main class="emh-container py-section">
+    <a href="stocks.html" class="btn-e btn-ghost-e btn-sm-e mb-3">← Back to registry</a>
+
+    <div id="notFound" style="display:none" class="text-center" >
+      <div style="font-size:3rem">🔍</div>
+      <h2 style="color:#fff">Stock not found</h2>
+      <p class="text-muted-e">No tested stock matches this ticker.</p>
+      <a href="stocks.html" class="btn-e btn-primary-e btn-sm-e">Back to registry</a>
+    </div>
+
+    <div id="profileContent" style="display:none">
+      <!-- Hero -->
+      <div class="profile-hero fade-in-up mb-4">
+        <div class="flex gap-md" style="align-items:center;flex-wrap:wrap;position:relative;z-index:2">
+          <div id="tickerSlot"></div>
+          <div style="flex:1;min-width:200px">
+            <div class="flex gap-sm mb-2" style="align-items:center;flex-wrap:wrap" id="badgeRow"></div>
+            <h1 class="fw-display" id="stockName" style="font-size:1.7rem;color:#fff;margin:0"></h1>
+            <div class="text-muted-e" id="stockSub" style="font-size:.88rem;margin-top:.3rem"></div>
+          </div>
+        </div>
+        <div class="grid grid-4 mt-3" id="kpiRow" style="position:relative;z-index:2"></div>
+      </div>
+
+      <!-- Row 1: descriptive stats + price path -->
+      <div class="grid grid-2 mb-4">
+        <div class="panel reveal">
+          <div class="panel-header">Descriptive statistics · daily log returns</div>
+          <div class="panel-body">
+            <table class="kv-table" id="descTable"></table>
+            <p class="text-muted-e mt-2" id="descNote" style="font-size:.8rem"></p>
+          </div>
+        </div>
+        <div class="chart-panel reveal" data-delay="1" id="pricePanel">
+          <div class="panel-header">Price path · random walk vs estimated parameters</div>
+          <div class="chart-box" style="height:280px"><canvas id="priceChart"></canvas></div>
+          <div class="chart-caption"><span class="sim-tag">◑ simulated from estimated parameters</span> Serial dependence set by the real lag-1 ACF.</div>
+        </div>
+      </div>
+
+      <!-- Row 2: ACF + VR -->
+      <div class="grid grid-2 mb-4">
+        <div class="chart-panel reveal">
+          <div class="panel-header">Autocorrelation function · ±1.96/√n band</div>
+          <div class="chart-box" style="height:280px"><canvas id="acfChart"></canvas></div>
+          <div class="chart-caption"><span class="sim-tag">◑ lag-1 real · further lags simulated</span> Bars outside the gold band are significant.</div>
+        </div>
+        <div class="chart-panel reveal" data-delay="1">
+          <div class="panel-header">Variance ratio vs holding period k</div>
+          <div class="chart-box" style="height:280px"><canvas id="vrChart"></canvas></div>
+          <div class="chart-caption"><span class="sim-tag">◑ k = 2 real · curve simulated</span> Random walk would sit flat at VR = 1.</div>
+        </div>
+      </div>
+
+      <!-- Row 3: histogram + per-test verdict -->
+      <div class="grid grid-2 mb-4">
+        <div class="chart-panel reveal" id="histPanel">
+          <div class="panel-header">Return distribution vs normal</div>
+          <div class="chart-box" style="height:280px"><canvas id="histChart"></canvas></div>
+          <div class="chart-caption"><span class="sim-tag">◑ simulated from real skew/kurtosis</span> <span id="histCaption"></span></div>
+        </div>
+        <div class="panel reveal" data-delay="1">
+          <div class="panel-header">Per-test verdict</div>
+          <div class="panel-body" id="testRows"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div id="footerContainer"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    (function () {
+      var d = EMH_DATA;
+      var c = d.getCompany(EMH.getQueryParam('ticker'));
+      if (!c) { document.getElementById('notFound').style.display = 'block'; return; }
+      document.getElementById('profileContent').style.display = 'block';
+      document.title = c.ticker + ' · ' + c.name + ' — LUSE Efficiency Lab';
+
+      /* Hero */
+      document.getElementById('tickerSlot').innerHTML = EMH.tickerAvatar(c.ticker, 64, c.verdict);
+      document.getElementById('badgeRow').innerHTML = EMH.statusBadge(c.verdict) + EMH.sectorBadge(c.sector) +
+        (c.note ? '<span class="badge-e badge-inconclusive">' + c.note + '</span>' : '');
+      document.getElementById('stockName').textContent = c.name;
+      document.getElementById('stockSub').textContent = c.ticker + ' · LUSE-listed · daily log returns, Jan 2022 – Oct 2025';
+
+      /* KPI tiles (always available) */
+      var kpis = [
+        { lbl: 'Lag-1 ACF', val: c.ljungBox.lag1Acf.toFixed(4) },
+        { lbl: 'Ljung–Box p', val: c.ljungBox.p.toFixed(4) },
+        { lbl: 'Variance Ratio', val: c.vr.vr.toFixed(4) },
+        { lbl: 'Z statistic', val: c.vr.z.toFixed(2) },
+      ];
+      document.getElementById('kpiRow').innerHTML = kpis.map(function (k) {
+        return '<div class="kpi-tile"><div class="kpi-num">' + k.val + '</div><div class="kpi-lbl">' + k.lbl + '</div></div>';
+      }).join('');
+
+      /* Descriptive stats */
+      var descTable = document.getElementById('descTable'), descNote = document.getElementById('descNote');
+      if (c.desc) {
+        descTable.innerHTML = [
+          ['Mean (daily)', c.desc.mean.toFixed(6)],
+          ['Std. deviation', c.desc.sd.toFixed(6)],
+          ['Skewness', c.desc.skew.toFixed(4)],
+          ['Kurtosis', c.desc.kurtosis.toFixed(3)],
+        ].map(function (r) { return '<tr><td>' + r[0] + '</td><td class="mono" style="text-align:right">' + r[1] + '</td></tr>'; }).join('');
+        var lepto = c.desc.kurtosis > 3;
+        descNote.innerHTML = 'Returns are <strong>' + (Math.abs(c.desc.skew) > 0.5 ? (c.desc.skew > 0 ? 'right-skewed' : 'left-skewed') : 'roughly symmetric') +
+          '</strong>' + (lepto ? ' and <strong>leptokurtic</strong> (fat tails, kurtosis &gt; 3)' : '') +
+          ' — Jarque–Bera rejected normality for every sampled stock, typical of thin frontier markets.';
+      } else {
+        descTable.innerHTML = '<tr><td colspan="2" class="text-muted-e" style="text-align:center">Descriptive statistics were not reported for this stock (Table A3.1).</td></tr>';
+        descNote.textContent = 'Price-path and return-distribution charts need these parameters, so they are omitted for this stock. The ACF and variance-ratio tests are shown from their real anchors.';
+        document.getElementById('pricePanel').style.display = 'none';
+        document.getElementById('histPanel').style.display = 'none';
+      }
+
+      /* Per-test verdict rows */
+      var rows = [
+        { name: 'Runs Test', cite: 'Bradley (1968)', state: 'na',
+          detail: 'Statistic returned N/A (degenerate sign sequence on this series).' },
+        { name: 'Ljung–Box (ACF)', cite: 'Ljung & Box (1978)', state: c.rejectsACF ? 'fail' : 'pass',
+          detail: 'p = ' + c.ljungBox.p.toFixed(4) + ' · lag-1 ACF = ' + c.ljungBox.lag1Acf.toFixed(4) +
+            (c.rejectsACF ? ' → significant autocorrelation (rejects random walk).' : ' → no significant autocorrelation.') },
+        { name: 'Variance Ratio', cite: 'Lo & MacKinlay (1988)', state: c.rejectsVR ? 'fail' : 'pass',
+          detail: 'VR = ' + c.vr.vr.toFixed(4) + ' · Z = ' + c.vr.z.toFixed(2) +
+            (c.rejectsVR ? ' → VR ≪ 1, |Z| > 1.96 (rejects random walk; momentum).' : ' → cannot reject random walk.') },
+      ];
+      var icon = { pass: '✓', fail: '✗', na: '–' };
+      document.getElementById('testRows').innerHTML = rows.map(function (r) {
+        return '<div class="test-row">' +
+          '<div class="test-row__icon ' + r.state + '">' + icon[r.state] + '</div>' +
+          '<div style="flex:1"><div style="color:#fff;font-weight:700;font-size:.92rem">' + r.name +
+            ' <span class="citation">· ' + r.cite + '</span></div>' +
+          '<div class="text-muted-e" style="font-size:.83rem;margin-top:.15rem">' + r.detail + '</div></div></div>';
+      }).join('');
+
+      /* Charts */
+      var seed = EMH.seedFromString(c.ticker);
+      if (c.desc) {
+        var phi = Math.max(-0.6, Math.min(0.6, c.ljungBox.lag1Acf));
+        EMH.whenVisible(document.getElementById('priceChart'), function () {
+          EMH.priceWalkChart(document.getElementById('priceChart'), {
+            n: 160, seed: seed,
+            series: [
+              { label: 'Random walk (μ = 0)', mean: 0, sd: c.desc.sd, phi: 0, color: EMH.colors.muted, dash: [6, 4] },
+              { label: c.ticker + ' estimated path', mean: c.desc.mean, sd: c.desc.sd, phi: phi, color: EMH.colors.accent, fill: true },
+            ],
+          });
+        });
+        var hc = document.getElementById('histCaption');
+        hc.textContent = 'Real skew ' + c.desc.skew.toFixed(2) + ' · kurtosis ' + c.desc.kurtosis.toFixed(1) + '.';
+        EMH.whenVisible(document.getElementById('histChart'), function () {
+          EMH.histogramChart(document.getElementById('histChart'),
+            { mean: c.desc.mean, sd: c.desc.sd, skew: c.desc.skew, kurtosis: c.desc.kurtosis, seed: seed + 5 });
+        });
+      }
+      EMH.whenVisible(document.getElementById('acfChart'), function () {
+        EMH.acfChart(document.getElementById('acfChart'), { lag1: c.ljungBox.lag1Acf, n: d.meta.tradingDays, seed: seed + 11 });
+      });
+      EMH.whenVisible(document.getElementById('vrChart'), function () {
+        EMH.vrCurveChart(document.getElementById('vrChart'), { vr2: c.vr.vr, seed: seed + 17 });
+      });
+
+      /* #profileContent was display:none when app.js wired its reveal observer,
+         so re-observe the now-visible reveal panels to guarantee the fade-in. */
+      if (window.IntersectionObserver) {
+        var io = new IntersectionObserver(function (es) {
+          es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); } });
+        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+        document.querySelectorAll('#profileContent .reveal:not(.is-visible)').forEach(function (el) { io.observe(el); });
+      } else {
+        document.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('is-visible'); });
+      }
+    })();
+  </script>
+</body>
+</html>

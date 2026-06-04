@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LUSE Efficiency Lab — Does the market follow a random walk?</title>
+  <meta name="description" content="Interactive companion to a final-year study testing weak-form market efficiency on the Lusaka Securities Exchange — Runs, Ljung–Box and Variance Ratio tests on real estimates." />
+  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/emh.css" />
+</head>
+<body data-page="home">
+  <div id="navbarContainer"></div>
+
+  <!-- HERO -->
+  <header class="emh-hero">
+    <div class="emh-hero__glow"></div>
+    <div class="emh-container emh-hero__inner">
+      <div class="grid grid-2" style="align-items:center">
+        <div>
+          <span class="emh-hero__eyebrow fade-in-up">Lusaka Securities Exchange · Weak-form efficiency</span>
+          <h1 class="emh-hero__title fade-in-up" data-delay="1">
+            Does LUSE follow a<br><span class="text-accent">random walk?</span>
+          </h1>
+          <p class="emh-hero__lead fade-in-up" data-delay="2">
+            If a market is weak-form efficient, past prices can’t predict future ones — returns
+            should wander randomly. This lab puts that claim to the test on ~four years of daily
+            closing prices, using three statistical tests and the real estimates from the study.
+          </p>
+          <div class="flex gap-md fade-in-up" data-delay="3" style="flex-wrap:wrap">
+            <a href="dashboard.html" class="btn-e btn-primary-e">Explore the verdict →</a>
+            <a href="stocks.html" class="btn-e btn-outline-e">Browse 19 stocks</a>
+          </div>
+        </div>
+        <div class="fade-in-up" data-delay="2">
+          <div class="chart-panel">
+            <div class="panel-header">Random walk vs estimated-parameter path</div>
+            <div class="chart-box" style="height:300px"><canvas id="heroChart"></canvas></div>
+            <div class="chart-caption">
+              <span class="sim-tag">◑ simulated from estimated parameters</span>
+              Two equity curves from the same volatility — one a pure random walk, one with the serial dependence found on LUSE.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- COUNT-UP STATS -->
+  <section class="py-section">
+    <div class="emh-container">
+      <div class="grid grid-4">
+        <div class="stat-card reveal">
+          <div class="stat-num"><span data-count="20">0</span></div>
+          <div class="stat-label">Listed Stocks</div>
+          <div class="stat-sub">19 with full test results</div>
+        </div>
+        <div class="stat-card reveal" data-delay="1">
+          <div class="stat-num"><span data-count="950" data-prefix="~">0</span></div>
+          <div class="stat-label">Trading Days</div>
+          <div class="stat-sub">Jan 2022 – Oct 2025</div>
+        </div>
+        <div class="stat-card reveal" data-delay="2">
+          <div class="stat-num"><span data-count="3">0</span></div>
+          <div class="stat-label">Statistical Tests</div>
+          <div class="stat-sub">Runs · Ljung–Box · VR</div>
+        </div>
+        <div class="stat-card reveal" data-delay="3">
+          <div class="stat-num"><span data-count="25000">0</span></div>
+          <div class="stat-label">All-Share Index</div>
+          <div class="stat-sub">up from ~17,000 in ~10 months</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VERDICT TEASER -->
+  <section class="py-section" style="padding-top:0">
+    <div class="emh-container">
+      <div class="verdict-banner reveal mb-4">
+        <span class="verdict-banner__pulse"></span>
+        <div>
+          <div class="section-eyebrow">The headline finding</div>
+          <div class="verdict-banner__label">PARTIAL WEAK-FORM INEFFICIENCY — “a market in transition”</div>
+        </div>
+        <a href="dashboard.html" class="btn-e btn-primary-e btn-sm-e" style="margin-left:auto">See the numbers →</a>
+      </div>
+
+      <div class="grid grid-3">
+        <a href="dashboard.html" class="link-card hover-lift reveal">
+          <div class="link-card__icon">📊</div>
+          <h3>Dashboard</h3>
+          <p>The verdict in numbers — how many stocks reject the random walk on each test, plus market-context growth.</p>
+          <span class="link-card__more">Open dashboard →</span>
+        </a>
+        <a href="stocks.html" class="link-card hover-lift reveal" data-delay="1">
+          <div class="link-card__icon">🧾</div>
+          <h3>Stock Registry</h3>
+          <p>Every tested stock with its real mean, volatility, skew, kurtosis, ACF, variance ratio and Z — searchable and sortable.</p>
+          <span class="link-card__more">Browse stocks →</span>
+        </a>
+        <a href="methodology.html" class="link-card hover-lift reveal" data-delay="2">
+          <div class="link-card__icon">🔬</div>
+          <h3>Methodology</h3>
+          <p>The three tests explained — formula, plain English and an interactive mini-visualisation each — then findings &amp; recommendations.</p>
+          <span class="link-card__more">How it works →</span>
+        </a>
+      </div>
+
+      <p class="text-center text-muted-e mt-4" style="font-size:.82rem;max-width:720px;margin-left:auto;margin-right:auto">
+        Interactive companion to <em>“A Quantitative Assessment of Market Efficiency on LUSE”</em>
+        (Choolwe Cheelo, University of Zambia, Nov 2025). Real point estimates are shown as-is;
+        any drawn path is simulated from those estimates and labelled accordingly.
+      </p>
+    </div>
+  </section>
+
+  <div id="footerContainer"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    (function () {
+      var canvas = document.getElementById('heroChart');
+      EMH.whenVisible(canvas, function () {
+        EMH.priceWalkChart(canvas, {
+          n: 150, seed: 1971,
+          series: [
+            { label: 'Random walk (μ = 0)', mean: 0, sd: 0.022, phi: 0, color: EMH.colors.muted, dash: [6, 4] },
+            { label: 'LUSE-style path (serial dependence)', mean: 0.0035, sd: 0.03, phi: 0.22, color: EMH.colors.accent, fill: true },
+          ],
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

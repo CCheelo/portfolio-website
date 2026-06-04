@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — LUSE Efficiency Lab</title>
+  <meta name="description" content="The weak-form efficiency verdict in numbers: how many LUSE stocks reject the random walk on each test, plus market-context growth." />
+  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/emh.css" />
+</head>
+<body data-page="dashboard">
+  <div id="navbarContainer"></div>
+
+  <main class="emh-container py-section">
+    <!-- Header -->
+    <div class="flex-between mb-3 fade-in-up">
+      <div>
+        <div class="section-eyebrow">Results · 5% significance level</div>
+        <h1 class="section-title">Efficiency Verdict</h1>
+      </div>
+      <a href="stocks.html" class="btn-e btn-outline-e btn-sm-e">View stock registry →</a>
+    </div>
+
+    <!-- Verdict banner -->
+    <div class="verdict-banner fade-in-up mb-4" data-delay="1">
+      <span class="verdict-banner__pulse"></span>
+      <div>
+        <div class="section-eyebrow">Collective evidence — Runs · Ljung–Box · Variance Ratio</div>
+        <div class="verdict-banner__label">PARTIAL INEFFICIENCY</div>
+      </div>
+      <div class="text-muted-e" style="margin-left:auto;max-width:340px;font-size:.84rem">
+        Short-horizon dependence exists but weakens with horizon — LUSE is maturing, not failing.
+      </div>
+    </div>
+
+    <!-- Stat cards -->
+    <div class="grid grid-4 mb-4" id="statCards"></div>
+
+    <!-- Test rejection bars + verdict doughnut -->
+    <div class="grid grid-2 mb-4">
+      <div class="chart-panel reveal">
+        <div class="panel-header">Stocks rejecting the random walk · by test</div>
+        <div class="chart-box" style="height:300px"><canvas id="testBars"></canvas></div>
+        <div class="chart-caption">Share of the 19 tested stocks that reject H₀ on each test. Runs statistic was degenerate (N/A) across the sample.</div>
+      </div>
+      <div class="chart-panel reveal" data-delay="1">
+        <div class="panel-header">Overall verdict · efficient vs inefficient</div>
+        <div class="chart-box" style="height:300px"><canvas id="verdictPie"></canvas></div>
+        <div class="chart-caption">A stock is “inefficient” if Ljung–Box p &lt; 0.05 <strong>or</strong> |VR Z| &gt; 1.96.</div>
+      </div>
+    </div>
+
+    <!-- VR scatter -->
+    <div class="chart-panel reveal mb-4">
+      <div class="panel-header">Variance ratio vs |Z| · coloured by verdict</div>
+      <div class="chart-box" style="height:340px"><canvas id="vrScatter"></canvas></div>
+      <div class="chart-caption">Every stock sits well below VR = 1 (momentum) and almost all clear the |Z| = 1.96 line — a strong, near-universal rejection from the variance ratio test.</div>
+    </div>
+
+    <!-- Market context -->
+    <div class="flex-between mb-3 reveal">
+      <div>
+        <div class="section-eyebrow">Why it matters</div>
+        <h2 class="section-title" style="font-size:1.4rem">Market context — a fast-growing frontier exchange</h2>
+      </div>
+    </div>
+    <div class="grid grid-2 mb-2">
+      <div class="chart-panel reveal">
+        <div class="panel-header">All-Share Index surge</div>
+        <div class="chart-box" style="height:260px"><canvas id="indexChart"></canvas></div>
+        <div class="chart-caption"><span class="sim-tag">◑ trajectory illustrative</span> Endpoints real: ≈ 17,000 → 25,000 pts in ~10 months.</div>
+      </div>
+      <div class="chart-panel reveal" data-delay="1">
+        <div class="panel-header">Annual trade count</div>
+        <div class="chart-box" style="height:260px"><canvas id="tradeChart"></canvas></div>
+        <div class="chart-caption"><span class="sim-tag">◑ interior years illustrative</span> Endpoints real: &lt; 5,000 (2020) → 31,800+ (2024).</div>
+      </div>
+    </div>
+    <p class="text-muted-e" style="font-size:.82rem">
+      20 listed companies · trading 09:00–14:00, weekdays only. Thin trading and slow information
+      diffusion are exactly the conditions that create the short-lived patterns the tests detect.
+    </p>
+  </main>
+
+  <div id="footerContainer"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    (function () {
+      var d = EMH_DATA, s = d.summary();
+
+      /* Stat cards */
+      var cards = [
+        { num: s.inefficientPct, suffix: '%', label: 'Reject Random Walk', sub: s.inefficient + ' of ' + s.total + ' stocks' },
+        { num: s.acfPct,  suffix: '%', label: 'Ljung–Box Rejects', sub: s.acfReject + ' stocks · p < 0.05' },
+        { num: s.vrPct,   suffix: '%', label: 'Variance Ratio Rejects', sub: s.vrReject + ' stocks · |Z| > 1.96' },
+        { text: 'N/A', label: 'Runs Test', sub: 'statistic degenerate' },
+      ];
+      document.getElementById('statCards').innerHTML = cards.map(function (c, i) {
+        var val = c.text != null
+          ? '<span class="mono" style="color:var(--muted)">' + c.text + '</span>'
+          : '<span data-count="' + c.num + '" data-suffix="' + (c.suffix || '') + '">0</span>';
+        return '<div class="stat-card fade-in-up" data-delay="' + (i % 3) + '">' +
+          '<div class="stat-num">' + val + '</div>' +
+          '<div class="stat-label">' + c.label + '</div>' +
+          '<div class="stat-sub">' + c.sub + '</div></div>';
+      }).join('');
+      document.querySelectorAll('#statCards [data-count]').forEach(EMH.animateCount);
+
+      /* Charts (deferred until visible) */
+      EMH.whenVisible(document.getElementById('testBars'),  function () { EMH.testSummaryBars(document.getElementById('testBars'), s); });
+      EMH.whenVisible(document.getElementById('verdictPie'),function () { EMH.verdictDoughnut(document.getElementById('verdictPie'), s); });
+      EMH.whenVisible(document.getElementById('vrScatter'), function () { EMH.vrScatter(document.getElementById('vrScatter'), d.companies); });
+      EMH.whenVisible(document.getElementById('indexChart'),function () { EMH.marketGrowthChart(document.getElementById('indexChart'), d.market); });
+      EMH.whenVisible(document.getElementById('tradeChart'),function () { EMH.tradeGrowthChart(document.getElementById('tradeChart'), d.market); });
+    })();
+  </script>
+</body>
+</html>
