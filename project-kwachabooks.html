@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kwacha Books — Mobile-Money Bookkeeping SaaS | Choolwe Cheelo</title>
+  <meta name="description" content="A full-stack SaaS for Zambian small businesses: import Airtel/MTN/Zamtel money statements, auto-categorise income and expenses, forecast cashflow, and issue ZRA-ready invoices.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container navbar__container">
+      <a href="index.html" class="navbar__brand">Choolwe Cheelo</a>
+      <button class="navbar__toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+        <span class="navbar__toggle-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span class="navbar__toggle-label">Menu</span>
+      </button>
+      <ul class="navbar__links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="resume.html">Resume</a></li>
+        <li><a href="skills.html">Skills &amp; Certifications</a></li>
+        <li><a href="projects.html" class="active">Projects</a></li>
+        <li><a href="testimonials.html">Testimonials</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <section class="project-detail__hero">
+      <div class="container">
+        <h1 class="project-detail__title">Kwacha Books</h1>
+        <div class="project-detail__meta">
+          <span>2026 &middot; SaaS Product</span>
+          <span>Next.js &middot; TypeScript &middot; Supabase</span>
+          <span>Demo deploying to Vercel</span>
+        </div>
+        <p class="project-detail__description">
+          A full-stack <strong>SaaS for Zambian small businesses</strong>. Kwacha Books imports your
+          <strong>Airtel, MTN and Zamtel money</strong> statements, sorts income from expenses
+          automatically, shows your real cashflow with a <strong>60-day forecast</strong> and your
+          VAT / turnover-tax position, and turns sales into <strong>ZRA-ready invoices</strong>
+          &mdash; all billed in kwacha over mobile money.
+        </p>
+
+        <div class="project-detail__buttons">
+          <a href="#summary" class="btn btn--primary">Summary Overview</a>
+          <!--
+            Once the demo is deployed to Vercel and the repo is pushed, uncomment these
+            (paste the Vercel URL into the demo link):
+            <a href="https://kwacha-books.vercel.app/dashboard" class="btn btn--secondary" target="_blank" rel="noopener">Try the Live Demo</a>
+            <a href="https://github.com/CCheelo/kwacha-books" class="btn btn--secondary" target="_blank" rel="noopener">GitHub Code</a>
+          -->
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <h2 class="section__title">Live Demo</h2>
+        <div class="embed-wrapper" style="display: flex; align-items: center; justify-content: center; text-align: center; padding: 2rem;">
+          <div>
+            <p style="font-size: 1.05rem; font-weight: 600; color: var(--color-text-secondary); margin: 0;">Interactive demo deploying to Vercel</p>
+            <p style="margin-top: 0.5rem; color: var(--color-text-muted); font-size: 0.9rem;">A no-sign-up demo workspace &mdash; seeded with a sample Zambian business &mdash; will be linked here once published.</p>
+          </div>
+        </div>
+        <!--
+          When deployed, delete the placeholder above and uncomment this block,
+          pasting the Vercel URL into the link:
+        <p style="margin-top: 1rem; color: var(--color-text-muted); font-size: 0.875rem; text-align: center;">
+          Explore the full working demo &mdash; no sign-up needed.
+          <a href="https://kwacha-books.vercel.app/dashboard" target="_blank" rel="noopener">Open Kwacha Books &rarr;</a>
+        </p>
+        -->
+      </div>
+    </section>
+
+    <section class="section section--alt" id="summary">
+      <div class="container container--narrow">
+        <h2 class="section__title">Summary Overview</h2>
+
+        <h3>The problem</h3>
+        <p>
+          Zambian small businesses run on mobile money &mdash; but most reconcile it by hand, copying
+          Airtel and MTN statements into notebooks or spreadsheets. Since <strong>July 2024</strong>,
+          ZRA Smart Invoice has been mandatory for VAT-registered businesses, raising the bookkeeping
+          bar further. Owners rarely know their true cashflow or tax position until it is too late.
+        </p>
+
+        <h3 style="margin-top: 2rem;">What it does</h3>
+        <ul class="skill-group" style="margin-top: 1rem;">
+          <li style="padding-left: 1.25rem; position: relative; color: var(--color-text-secondary);"><span style="position: absolute; left: 0; color: var(--color-accent);">&rarr;</span> <strong>Import a statement</strong> &mdash; upload an Airtel / MTN / Zamtel money export; columns are detected automatically whatever the format.</li>
+          <li style="padding-left: 1.25rem; position: relative; color: var(--color-text-secondary);"><span style="position: absolute; left: 0; color: var(--color-accent);">&rarr;</span> <strong>Auto-categorise</strong> &mdash; every transaction is split into income vs expense and tagged; you only review what the rules are unsure about.</li>
+          <li style="padding-left: 1.25rem; position: relative; color: var(--color-text-secondary);"><span style="position: absolute; left: 0; color: var(--color-accent);">&rarr;</span> <strong>Forecast cashflow</strong> &mdash; a 60-day projection of the cash balance from recent income and spending patterns, with a confidence band.</li>
+          <li style="padding-left: 1.25rem; position: relative; color: var(--color-text-secondary);"><span style="position: absolute; left: 0; color: var(--color-accent);">&rarr;</span> <strong>Track tax</strong> &mdash; a running VAT or turnover-tax estimate for the month.</li>
+          <li style="padding-left: 1.25rem; position: relative; color: var(--color-text-secondary);"><span style="position: absolute; left: 0; color: var(--color-accent);">&rarr;</span> <strong>Invoice &amp; get paid</strong> &mdash; create branded, ZRA-format invoices and bill plans in kwacha over mobile money.</li>
+        </ul>
+
+        <h3 style="margin-top: 2rem;">Built with</h3>
+        <p>
+          <strong>Next.js</strong> (App Router) and <strong>TypeScript</strong> on the front end,
+          <strong>Tailwind CSS</strong> for the design system, <strong>Recharts</strong> for the
+          dashboard and forecast visuals, and <strong>Supabase</strong> (Postgres + Auth +
+          Row-Level Security) as the multi-tenant backend. Deployed on <strong>Vercel</strong>.
+          The public demo runs entirely client-side on seeded sample data, so it works with no
+          sign-up &mdash; the same architecture then swaps a sandbox payment provider for live
+          mobile-money rails once the business is registered.
+        </p>
+
+        <h3 style="margin-top: 2rem;">Why it matters</h3>
+        <p>
+          Zambia moved <strong>nearly half a trillion kwacha</strong> through mobile money in a single
+          year, yet the tools that turn those flows into clear books, cashflow and tax answers are
+          thin on the ground. Kwacha Books targets that gap directly &mdash; a finance-grade data
+          product for the businesses that need it most, priced for the Zambian market.
+        </p>
+
+        <div style="margin-top: 3rem;">
+          <a href="projects.html" class="btn btn--secondary">&larr; All Projects</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__container">
+      <p class="footer__copyright">&copy; Built by Choolwe Cheelo 2026</p>
+      <ul class="footer__social">
+        <li><a href="https://github.com/CCheelo" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://www.linkedin.com/in/choolwe-cheelo" target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a href="mailto:choolwecheelo22@gmail.com">Email</a></li>
+      </ul>
+    </div>
+  </footer>
+  <script src="js/main.js" defer></script>
+</body>
+</html>
