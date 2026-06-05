@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Mobile Money &amp; Fintech Dashboard — Build Guide</title>
+<style>
+  @page { size: A4; margin: 18mm 16mm; }
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Segoe UI", Inter, system-ui, sans-serif;
+    color: #1a1a1a; line-height: 1.5; font-size: 11pt; margin: 0;
+  }
+  h1 { font-size: 24pt; color: #c2410c; margin: 0 0 4px; }
+  .sub { color: #555; font-size: 11pt; margin: 0 0 18px; }
+  h2 {
+    font-size: 15pt; color: #1a1a1a; margin: 26px 0 8px;
+    border-bottom: 2px solid #c2410c; padding-bottom: 4px;
+  }
+  h3 { font-size: 12pt; color: #c2410c; margin: 18px 0 4px; }
+  p, li { font-size: 10.5pt; }
+  a { color: #c2410c; text-decoration: none; word-break: break-all; }
+  code {
+    background: #f4f4f4; padding: 1px 4px; border-radius: 3px;
+    font-family: Consolas, monospace; font-size: 9.5pt; color: #b5390a;
+  }
+  pre {
+    background: #1a1a1a; color: #f1f1f1; padding: 10px 12px; border-radius: 6px;
+    font-family: Consolas, monospace; font-size: 9pt; line-height: 1.4;
+    overflow-x: auto; white-space: pre-wrap; page-break-inside: avoid;
+  }
+  pre code { background: none; color: inherit; padding: 0; }
+  table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 9.5pt; }
+  th, td { border: 1px solid #ddd; padding: 6px 8px; text-align: left; vertical-align: top; }
+  th { background: #c2410c; color: #fff; }
+  tr:nth-child(even) td { background: #faf6f3; }
+  .star { color: #c2410c; }
+  .box {
+    background: #faf6f3; border-left: 4px solid #c2410c; padding: 10px 14px;
+    border-radius: 4px; margin: 12px 0; font-size: 10pt; page-break-inside: avoid;
+  }
+  .src { font-size: 9pt; color: #555; word-break: break-all; }
+  ul { margin: 6px 0; padding-left: 20px; }
+  li { margin: 3px 0; }
+  .toc { background: #f8f8f8; border: 1px solid #eee; border-radius: 6px; padding: 10px 18px; }
+  .toc li { margin: 2px 0; }
+  footer { margin-top: 30px; padding-top: 10px; border-top: 1px solid #ddd; font-size: 9pt; color: #777; }
+  h2 { page-break-after: avoid; }
+  h3 { page-break-after: avoid; }
+</style>
+</head>
+<body>
+
+<h1>Mobile Money &amp; Fintech Dashboard</h1>
+<p class="sub">Power BI build guide &mdash; data sources, prep, build steps, and publishing. Prepared for Choolwe Cheelo.</p>
+
+<div class="toc">
+<strong>Contents</strong>
+<ol>
+  <li>The data (where to download)</li>
+  <li>Prep the Findex file</li>
+  <li>Build the Power BI report (step by step)</li>
+  <li>Publish &amp; wire it into the portfolio</li>
+  <li>What's already done vs. what's left</li>
+</ol>
+</div>
+
+<h2>1. The data &mdash; all free, no login</h2>
+<p>Use <strong>Global Findex</strong> as your backbone, <strong>GSMA</strong> for the growth/transaction story, and <strong>Bank of Zambia</strong> for the local deep-dive.</p>
+
+<h3>A. World Bank Global Findex 2025 &mdash; primary dataset <span class="star">&#9733;</span></h3>
+<p>The cleanest, most dashboard-ready source: one spreadsheet, ~300 indicators, 141 economies, survey waves 2011&rarr;2024.</p>
+<ul>
+  <li><strong>Download:</strong> <a href="https://www.worldbank.org/en/publication/globalfindex/download-data">worldbank.org/en/publication/globalfindex/download-data</a> &rarr; grab <code>GlobalFindexDatabase2025.xlsx</code> (also <code>.csv</code> / <code>.dta</code>).</li>
+  <li><strong>Contains:</strong> account ownership, mobile money account ownership, broken down by gender / income quintile / rural / age / education &mdash; covers your "inclusion gaps" and "benchmarking" questions. Includes a <em>Sub-Saharan Africa</em> aggregate row and a <em>Zambia</em> row, so benchmarking is just a filter, not a join.</li>
+  <li>This single file answers 3 of your 4 key questions on its own.</li>
+</ul>
+
+<h3>B. GSMA Mobile Money Metrics &mdash; time-series / transaction value</h3>
+<ul>
+  <li><strong>Page:</strong> <a href="https://www.gsma.com/mobile-money-metrics/">gsma.com/mobile-money-metrics</a> (interactive dashboard; JS-rendered, open in a browser). Export the country/region series to CSV from the dashboard.</li>
+  <li><strong>Contains:</strong> registered vs active accounts, transaction value &amp; volume, agents &mdash; annual, by country and region. This is your "adoption over time" and "transaction value" series.</li>
+  <li><strong>Headline context:</strong> global mobile-money transactions hit <strong>$2T in 2025</strong>, ~2B registered accounts, 500M+ monthly active users (GSMA SOTIR 2025).</li>
+</ul>
+
+<h3>C. Bank of Zambia &mdash; Zambia-specific numbers</h3>
+<ul>
+  <li><strong>Stats portal:</strong> <a href="https://www.boz.zm/payment-systems-statistics.htm">boz.zm/payment-systems-statistics.htm</a> (JS-rendered, open in a browser).</li>
+  <li><strong>Annual reports (direct PDFs, easiest):</strong> <a href="https://www.boz.zm/2023NPSAnnualReport.pdf">2023 NPS Annual Report</a>, <a href="https://www.boz.zm/2022NationalPaymentsSystemsAnnualReport_FINAL.pdf">2022 NPS Annual Report</a>.</li>
+  <li><strong>Anchor figures:</strong> 14.65M registered wallets, 12.33M active wallets (2024); ~4.07B transactions, +9.4% YoY.</li>
+</ul>
+
+<div class="box">
+<strong>Scope tip:</strong> If pulling all three feels heavy, ship <strong>v1 on Global Findex alone</strong> (clean, comparable, instant) and add the GSMA time-series and a BoZ Zambia tab as v2. Your project page already frames all four questions, so a Findex-only v1 still delivers a complete-looking dashboard.
+</div>
+
+<h2>2. Prep the Findex file (about 15 min)</h2>
+<p>The Findex Excel is wide (one column per indicator). Two options:</p>
+<ul>
+  <li><strong>Easiest:</strong> open the <code>Data</code> sheet, keep only the columns you need (<code>Country name</code>, <code>Country code</code>, <code>Region</code>, <code>Income group</code>, <code>Year</code>, plus the mobile-money / account-ownership indicators and their gender/rural/income breakdowns), save as <code>findex_clean.xlsx</code>.</li>
+  <li><strong>Better for charts:</strong> unpivot the indicator columns into long format (<code>Country | Year | Indicator | Value</code>) &mdash; do this <em>inside Power BI</em> with Power Query (next section), so you never hand-edit the data.</li>
+</ul>
+
+<h2>3. Build the Power BI report (step by step)</h2>
+
+<h3>Step 1 &mdash; Get data</h3>
+<p><strong>Home &rarr; Get data &rarr; Excel workbook</strong> &rarr; select <code>GlobalFindexDatabase2025.xlsx</code> &rarr; in the Navigator pick the <code>Data</code> sheet &rarr; <strong>Transform Data</strong> (opens Power Query).</p>
+
+<h3>Step 2 &mdash; Clean in Power Query</h3>
+<ul>
+  <li><strong>Use First Row as Headers</strong> if needed.</li>
+  <li>Keep relevant columns (right-click unneeded columns &rarr; Remove).</li>
+  <li>Select the indicator value columns &rarr; <strong>Transform &rarr; Unpivot Columns</strong> &rarr; rename the new columns to <code>Indicator</code> and <code>Value</code>.</li>
+  <li>Set types: <code>Value</code> = Decimal, <code>Year</code> = Whole number.</li>
+  <li>Repeat <strong>Get data</strong> for the GSMA CSV (a second query) &mdash; same long shape: <code>Country | Year | Metric | Value</code>.</li>
+  <li><strong>Close &amp; Apply.</strong></li>
+</ul>
+
+<h3>Step 3 &mdash; Model</h3>
+<ul>
+  <li>Build a small <strong><code>DimCountry</code></strong> table (Country, Region, Income group) and relate it to both the Findex and GSMA queries on <code>Country code</code>. This lets one slicer filter both sources.</li>
+  <li>Add a <code>DimYear</code> table if you want a clean time axis.</li>
+</ul>
+
+<h3>Step 4 &mdash; Core measures (DAX)</h3>
+<pre><code>Mobile Money Ownership % =
+    CALCULATE( AVERAGE('Findex'[Value]),
+        'Findex'[Indicator] = "Mobile money account (% age 15+)" )
+
+Account Ownership % =
+    CALCULATE( AVERAGE('Findex'[Value]),
+        'Findex'[Indicator] = "Account ownership (% age 15+)" )
+
+Gender Gap (pts) =
+    [Account Ownership % Male] - [Account Ownership % Female]</code></pre>
+<p>Swap the indicator strings to match the exact labels in your file.</p>
+
+<h3>Step 5 &mdash; Build pages, one per Key Question on the project page</h3>
+<table>
+<tr><th>Page</th><th>Visual</th><th>Answers</th></tr>
+<tr><td>1. Overview</td><td>KPI cards (Mobile money %, Account %, Gender gap) + a map</td><td>Headline snapshot</td></tr>
+<tr><td>2. Adoption over time</td><td>Line chart &mdash; Value by Year, legend = Country (Zambia vs SSA), from GSMA active/registered accounts</td><td>Adoption over time</td></tr>
+<tr><td>3. Transaction value</td><td>Column/area &mdash; transaction value by year; card for value &divide; GDP</td><td>Transaction value vs GDP</td></tr>
+<tr><td>4. Inclusion gaps</td><td>Clustered bar &mdash; ownership by gender / rural / income quintile</td><td>Inclusion gaps</td></tr>
+<tr><td>5. Benchmarking</td><td>Bar &mdash; Zambia vs SSA vs world; slicer to pick any country</td><td>Benchmarking</td></tr>
+</table>
+<p>Add a <strong>Region</strong> and <strong>Year</strong> slicer on every page. Match your portfolio accent (<code>#c2410c</code>) in <strong>View &rarr; Themes &rarr; Customize</strong> so the dashboard is on-brand with the rest of the site.</p>
+
+<h3>Step 6 &mdash; Polish</h3>
+<ul>
+  <li>Consistent titles, data labels on key visuals, a "Source: World Bank Global Findex 2025 / GSMA" footnote text box.</li>
+  <li>Test that the slicers cross-filter all pages.</li>
+</ul>
+
+<h2>4. Publish &amp; wire it into your portfolio</h2>
+<ul>
+  <li><strong>File &rarr; Publish &rarr; To Power BI (web)</strong> &rarr; pick a workspace.</li>
+  <li>In the service, open the report &rarr; <strong>File &rarr; Embed report &rarr; Website or portal</strong> &rarr; copy the <code>https://app.fabric.microsoft.com/view?r=&hellip;</code> URL.</li>
+  <li>In <code>project-fintech.html</code>: delete the "publishing soon" placeholder <code>&lt;div&gt;</code>, <strong>uncomment</strong> the prepared <code>&lt;iframe&gt;</code> block, and paste that URL into the <strong>two</strong> marked spots (the iframe <code>src</code> and the "Open in Power BI Service" link).</li>
+  <li>Optionally add the <strong>Full Report (PDF)</strong> and <strong>GitHub Code</strong> buttons from the commented stub in the hero (export the report to PDF; push the <code>.pbix</code> + cleaned data to a <code>mobile-money-fintech</code> repo).</li>
+  <li>Commit &amp; push &mdash; Vercel auto-deploys.</li>
+</ul>
+
+<h2>5. What's already done vs. what's left</h2>
+<table>
+<tr><th>Task</th><th>Status / who</th></tr>
+<tr><td>Project detail page (<code>project-fintech.html</code>) with embed placeholder</td><td>Done (Claude)</td></tr>
+<tr><td>Card on <code>projects.html</code> + themed SVG image</td><td>Done (Claude)</td></tr>
+<tr><td>This build guide</td><td>Done (Claude)</td></tr>
+<tr><td>Download the raw datasets</td><td>Either &mdash; Claude can fetch the Findex file; GSMA/BoZ need a browser</td></tr>
+<tr><td>Build the report in Power BI Desktop</td><td>You (GUI app Claude can't drive)</td></tr>
+<tr><td>Publish to your Power BI account &amp; get embed URL</td><td>You (needs your Microsoft login)</td></tr>
+<tr><td>Paste embed URL into the page, commit, push</td><td>Either</td></tr>
+<tr><td><em>Alternative:</em> a fully-coded interactive HTML dashboard (no Power BI)</td><td>Claude can build end-to-end</td></tr>
+</table>
+
+<footer>
+Sources: World Bank Global Findex 2025 &middot; GSMA Mobile Money Metrics &amp; SOTIR 2025 &middot; Bank of Zambia National Payment Systems statistics. Generated for the portfolio "Mobile Money &amp; Fintech Adoption" project.
+</footer>
+
+</body>
+</html>
