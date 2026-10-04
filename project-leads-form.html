@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Asset Financing Leads Form | Choolwe Cheelo</title>
+  <meta name="description" content="A mobile-friendly enquiry form for social-media campaigns with UTM tracking, saving each lead to a CSV the contact centre can open in Excel.">
+  <link rel="canonical" href="https://choolwecheelo.vercel.app/project-leads-form.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Choolwe Cheelo">
+  <meta property="og:title" content="Asset Financing Leads Form | Choolwe Cheelo">
+  <meta property="og:description" content="A mobile-friendly enquiry form for social-media campaigns with UTM tracking, saving each lead to a CSV the contact centre can open in Excel.">
+  <meta property="og:url" content="https://choolwecheelo.vercel.app/project-leads-form.html">
+  <meta property="og:image" content="https://choolwecheelo.vercel.app/assets/images/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container navbar__container">
+      <a href="index.html" class="navbar__brand">Choolwe Cheelo</a>
+      <button class="navbar__toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+        <span class="navbar__toggle-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span class="navbar__toggle-label">Menu</span>
+      </button>
+      <ul class="navbar__links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="resume.html">Resume</a></li>
+        <li><a href="skills.html">Skills &amp; Certifications</a></li>
+        <li><a href="projects.html" class="active">Projects</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <section class="project-detail__hero">
+      <div class="container">
+        <h1 class="project-detail__title">Asset Financing Leads Form</h1>
+        <div class="project-detail__meta">
+          <span>2026 &middot; AB Bank Zambia</span>
+          <span>Node.js &middot; HTML &middot; CSV</span>
+          <span>Built for a campaign launch</span>
+        </div>
+        <p class="project-detail__description">
+          A mobile-friendly enquiry form for social-media posts about the bank's asset-financing product. Each submission is saved to a CSV the contact centre can open in Excel, tagged with the post it came from.
+        </p>
+
+        <div class="project-detail__buttons">
+          <a href="leads-demo/index.html" class="btn btn--primary">Try the working demo</a>
+          <a href="#summary" class="btn btn--secondary">Summary Overview</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="summary">
+      <div class="container container--narrow prose">
+        <h2 class="section__title">Summary Overview</h2>
+        <div class="callout">This system belongs to AB Bank Zambia, so it is described here in words only &mdash;
+          no code, screenshots or data from the bank are published. The demo is my own rebuild for a fictional lender.</div>
+        <figure class="figure">
+          <img src="assets/images/project-leads-form.svg" alt="Illustration: a phone enquiry form, a link with UTM tags, and a CSV of leads by source" loading="lazy">
+          <figcaption>Illustration only &mdash; no customer data shown.</figcaption>
+        </figure>
+        <h3>What it does</h3>
+        <ul class="arrow-list">
+          <li>A single, fast mobile form &mdash; no framework, and Node 18 with no other dependencies on the server.</li>
+          <li><strong>Campaign tracking:</strong> each social post links to the form with UTM tags, which land in the Source, Campaign and Content columns, so marketing can see which post produced which lead.</li>
+          <li>Server-side validation and a hidden honeypot field against spam.</li>
+        </ul>
+
+        <h3>Built for compliance</h3>
+        <p>
+          The lead file holds personal data, so the hand-over notes are as important as the code: host it on the
+          bank's own infrastructure over HTTPS, restrict the file to authorised contact-centre staff, agree a
+          retention period, and have the consent wording reviewed by the Data Protection Officer before go-live.
+        </p>
+
+        <div style="margin-top: 3rem;">
+          <a href="projects.html" class="btn btn--secondary">&larr; All Projects</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__container">
+      <p class="footer__copyright">&copy; Built by Choolwe Cheelo 2026</p>
+      <ul class="footer__social">
+        <li><a href="https://github.com/CCheelo" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://www.linkedin.com/in/choolwe-cheelo" target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a href="mailto:choolwecheelo22@gmail.com">Email</a></li>
+      </ul>
+    </div>
+  </footer>
+  <script src="js/main.js" defer></script>
+  <script src="js/chat.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Freya — a SwiftUI app for couples | Choolwe Cheelo</title>
+  <meta name="description" content="A private iOS app for two people: games, a shared question of the day, a ranked date planner, memories and gamification, synced live. SwiftUI + Supabase, built without a Mac. Web demo with dummy data.">
+  <link rel="canonical" href="https://choolwecheelo.vercel.app/project-freya.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Choolwe Cheelo">
+  <meta property="og:title" content="Freya — a SwiftUI app for couples | Choolwe Cheelo">
+  <meta property="og:description" content="A private iOS app for two people: games, a shared question of the day, a ranked date planner, memories and gamification, synced live. SwiftUI + Supabase, built without a Mac. Web demo with dummy data.">
+  <meta property="og:url" content="https://choolwecheelo.vercel.app/project-freya.html">
+  <meta property="og:image" content="https://choolwecheelo.vercel.app/assets/images/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container navbar__container">
+      <a href="index.html" class="navbar__brand">Choolwe Cheelo</a>
+      <button class="navbar__toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+        <span class="navbar__toggle-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span class="navbar__toggle-label">Menu</span>
+      </button>
+      <ul class="navbar__links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="resume.html">Resume</a></li>
+        <li><a href="skills.html">Skills &amp; Certifications</a></li>
+        <li><a href="projects.html" class="active">Projects</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <section class="project-detail__hero">
+      <div class="container">
+        <h1 class="project-detail__title">Freya</h1>
+        <div class="project-detail__meta">
+          <span>2026 &middot; Personal project</span>
+          <span>SwiftUI &middot; Supabase &middot; GitHub Actions</span>
+          <span>Private app for two</span>
+        </div>
+        <p class="project-detail__description">
+          A private iOS app for two people &mdash; games, a shared question of the day, date planning, a memory scrapbook and gamification, all synced live between both partners' phones.
+        </p>
+
+        <div class="project-detail__buttons">
+          <a href="freya-demo/index.html" class="btn btn--primary">Try the web demo</a>
+          <a href="#summary" class="btn btn--secondary">Summary Overview</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="summary">
+      <div class="container container--narrow prose">
+        <h2 class="section__title">Summary Overview</h2>
+        <div class="callout">A personal project. The demo is a web recreation of the app's main screens for a made-up couple &mdash; no real messages, photos or answers are shown.</div>
+        <figure class="figure">
+          <img src="assets/images/shot-freya.webp" alt="Freya web demo: the home screen with the question of the day" loading="lazy">
+          <figcaption>Home: days together, the streak, and a blind-reveal question of the day.</figcaption>
+        </figure>
+        <h3>Features</h3>
+        <ul class="arrow-list">
+          <li><strong>Home</strong> &mdash; partner status, a days-together counter, a daily streak, a shared question of the day with a blind reveal, and quick sends.</li>
+          <li><strong>Games</strong> &mdash; Would You Rather, trivia about each other, a lucky wheel, custom and weekly challenges.</li>
+          <li><strong>Dates</strong> &mdash; a ranked Top 5 with drag-to-reorder, &ldquo;Surprise me&rdquo;, and a three-step rating that both partners complete, feeding a leaderboard of your best dates.</li>
+          <li><strong>Memories</strong> &mdash; a shared album, collections, a timeline and a polaroid scrapbook, with milestones linked automatically.</li>
+          <li><strong>Gamification</strong> &mdash; points, levels, streaks with repair, and badges.</li>
+        </ul>
+
+        <h3>Built without a Mac</h3>
+        <p>
+          Native SwiftUI for iOS 17 using <code>@Observable</code> and async/await, on Supabase for Postgres, Realtime,
+          Storage and Auth, with row-level security per couple. I don't own a Mac, so every build runs on a
+          GitHub Actions cloud Mac and ships a sideloadable app; notifications are local, so there is no paid push service.
+        </p>
+
+        <div style="margin-top: 3rem;">
+          <a href="projects.html" class="btn btn--secondary">&larr; All Projects</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__container">
+      <p class="footer__copyright">&copy; Built by Choolwe Cheelo 2026</p>
+      <ul class="footer__social">
+        <li><a href="https://github.com/CCheelo" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://www.linkedin.com/in/choolwe-cheelo" target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a href="mailto:choolwecheelo22@gmail.com">Email</a></li>
+      </ul>
+    </div>
+  </footer>
+  <script src="js/main.js" defer></script>
+  <script src="js/chat.js" defer></script>
+</body>
+</html>

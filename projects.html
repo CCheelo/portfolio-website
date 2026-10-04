@@ -4,7 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Projects — Choolwe Cheelo</title>
-  <meta name="description" content="Data analytics and development projects by Choolwe Cheelo: market efficiency, forecasting, Power BI dashboards, and more.">
+  <meta name="description" content="Projects by Choolwe Cheelo: banking AI and analytics systems, statistical research, Power BI dashboards, and apps and games built for fun.">
+  <link rel="canonical" href="https://choolwecheelo.vercel.app/projects.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Choolwe Cheelo">
+  <meta property="og:title" content="Projects — Choolwe Cheelo">
+  <meta property="og:description" content="Projects by Choolwe Cheelo: banking AI and analytics systems, statistical research, Power BI dashboards, and apps and games built for fun.">
+  <meta property="og:url" content="https://choolwecheelo.vercel.app/projects.html">
+  <meta property="og:image" content="https://choolwecheelo.vercel.app/assets/images/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -24,7 +34,6 @@
         <li><a href="resume.html">Resume</a></li>
         <li><a href="skills.html">Skills &amp; Certifications</a></li>
         <li><a href="projects.html" class="active">Projects</a></li>
-        <li><a href="testimonials.html">Testimonials</a></li>
         <li><a href="contact.html">Contact</a></li>
       </ul>
     </div>
@@ -34,72 +43,149 @@
     <section class="page-header">
       <div class="container">
         <h1 class="page-header__title">Projects</h1>
-        <p class="page-header__subtitle">A selection of data analytics, statistical research, and development work.</p>
+        <p class="page-header__subtitle">18 projects across banking systems, statistical research, dashboards and things built for fun. Most have a live demo.</p>
+        <nav class="jump-links" aria-label="Project groups">
+          <a href="#work">Work <span style="color:var(--color-text-muted)">· 6</span></a>
+          <a href="#research">Research &amp; analytics <span style="color:var(--color-text-muted)">· 7</span></a>
+          <a href="#side">Products &amp; side projects <span style="color:var(--color-text-muted)">· 5</span></a>
+        </nav>
       </div>
     </section>
 
     <section class="section">
       <div class="container">
-        <div class="projects-grid">
+        <section class="project-group" id="work" aria-labelledby="work-title">
+          <div class="project-group__head">
+            <h2 id="work-title">Work</h2>
+            <p>Systems built for employers and clients — bank projects are described in words only.</p>
+          </div>
+          <div class="projects-grid">
           <article class="project-card">
-            <div class="project-card__media"><img src="assets/images/project-emh.svg" alt="EMH Testing chart" loading="lazy"></div>
+            <div class="project-card__media"><img src="assets/images/shot-qa.webp" alt="Screenshot of the Account Opening QA simulation" width="1000" height="400" loading="lazy"></div>
             <div class="project-card__body">
-              <h3 class="project-card__title">EMH Testing &mdash; Lusaka Securities Exchange</h3>
-              <p class="project-card__description">
-                Final-year research project testing weak-form market efficiency on Zambia's
-                stock exchange using Runs Test, Ljung-Box, and Variance Ratio Test.
-              </p>
+              <h3 class="project-card__title">Account Opening QA Agent</h3>
+              <p class="project-card__description">An AI quality-assurance agent that checks scanned account-opening packs on locally run ML models — 96–100% document-check accuracy, 88% of handwriting verified without review.</p>
               <div class="project-card__tags">
-                <span class="tag">R</span>
-                <span class="tag">Statistics</span>
-                <span class="tag">Finance</span>
+                <span class="tag">Python</span>
+                <span class="tag">Machine Learning</span>
+                <span class="tag">OCR</span>
               </div>
-              <a href="project-emh.html" class="project-card__link">View Details &rarr;</a>
+              <span class="project-card__note">Simulation on invented forms</span>
+              <a href="project-account-opening-agent.html" class="project-card__link">View Details &rarr;</a>
             </div>
           </article>
-
           <article class="project-card">
-            <div class="project-card__media"><img src="assets/images/project-copper.svg" alt="Copper forecasting chart" loading="lazy"></div>
+            <div class="project-card__media"><img src="assets/images/shot-unisda.webp" alt="Screenshot of the UNISDA Strategic Planning demo dashboard" width="1000" height="400" loading="lazy"></div>
+            <div class="project-card__body">
+              <h3 class="project-card__title">UNISDA Strategic Planning &amp; Reporting</h3>
+              <p class="project-card__description">Planning, quarterly scorecards, budgets and a four-stage payment approval chain for a 2,000+ member church and its 36 departments.</p>
+              <div class="project-card__tags">
+                <span class="tag">Django</span>
+                <span class="tag">PostgreSQL</span>
+                <span class="tag">Tailwind</span>
+              </div>
+              <span class="project-card__note">Interactive demo</span>
+              <a href="project-unisda.html" class="project-card__link">View Details &rarr;</a>
+            </div>
+          </article>
+          <article class="project-card">
+            <div class="project-card__media"><img src="assets/images/shot-resource.webp" alt="Screenshot of the Resource Analytics demo overview" width="1000" height="400" loading="lazy"></div>
+            <div class="project-card__body">
+              <h3 class="project-card__title">Resource Analytics Web App</h3>
+              <p class="project-card__description">Fuel and paper use measured against business growth, every fuel purchase checked against ERB prices, and a year-end cost forecast.</p>
+              <div class="project-card__tags">
+                <span class="tag">Python</span>
+                <span class="tag">SQLite</span>
+                <span class="tag">Analytics</span>
+              </div>
+              <span class="project-card__note">Interactive demo · fictional bank</span>
+              <a href="project-resource-analytics.html" class="project-card__link">View Details &rarr;</a>
+            </div>
+          </article>
+          <article class="project-card">
+            <div class="project-card__media"><img src="assets/images/project-chatbot.svg" alt="Illustration of a chat window with masked personal data and intent confidence" loading="lazy"></div>
+            <div class="project-card__body">
+              <h3 class="project-card__title">Customer Chatbot</h3>
+              <p class="project-card__description">A deterministic bank chatbot: 28 intents, fraud, complaint and lead flows, personal-data masking, Jira hand-off and an analytics dashboard.</p>
+              <div class="project-card__tags">
+                <span class="tag">Python</span>
+                <span class="tag">FastAPI</span>
+                <span class="tag">NLP</span>
+              </div>
+              <span class="project-card__note">Try the demo on this site</span>
+              <a href="project-chatbot.html" class="project-card__link">View Details &rarr;</a>
+            </div>
+          </article>
+          <article class="project-card">
+            <div class="project-card__media"><img src="assets/images/shot-prc.webp" alt="Screenshot of the Zambezi Futures player registry demo" width="1000" height="400" loading="lazy"></div>
+            <div class="project-card__body">
+              <h3 class="project-card__title">Zambezi Futures — Player Registration Platform</h3>
+              <p class="project-card__description">Project-managed a cross-functional team to deliver a youth football platform for 300+ athletes — now live and run by its owners.</p>
+              <div class="project-card__tags">
+                <span class="tag">JavaScript</span>
+                <span class="tag">Firebase</span>
+                <span class="tag">Project Management</span>
+              </div>
+              <span class="project-card__note">Interactive demo</span>
+              <a href="project-prc.html" class="project-card__link">View Details &rarr;</a>
+            </div>
+          </article>
+          <article class="project-card">
+            <div class="project-card__media"><img src="assets/images/shot-leads.webp" alt="Screenshot of the leads form demo" width="1000" height="400" loading="lazy"></div>
+            <div class="project-card__body">
+              <h3 class="project-card__title">Asset Financing Leads Form</h3>
+              <p class="project-card__description">A mobile enquiry form for social campaigns, with UTM tracking so marketing can see which post produced which lead.</p>
+              <div class="project-card__tags">
+                <span class="tag">Node.js</span>
+                <span class="tag">UTM Tracking</span>
+                <span class="tag">Marketing</span>
+              </div>
+              <span class="project-card__note">Working demo</span>
+              <a href="project-leads-form.html" class="project-card__link">View Details &rarr;</a>
+            </div>
+          </article>
+          </div>
+        </section>
+
+        <section class="project-group" id="research" aria-labelledby="research-title">
+          <div class="project-group__head">
+            <h2 id="research-title">Research &amp; analytics</h2>
+            <p>Statistical research, dashboards and analysis — most with an interactive companion.</p>
+          </div>
+          <div class="projects-grid">
+          <article class="project-card">
+            <div class="project-card__media"><img src="assets/images/shot-copper.webp" alt="Screenshot of the Copper Forecast Lab interactive demo" width="1000" height="400" loading="lazy"></div>
             <div class="project-card__body">
               <h3 class="project-card__title">Copper Price Forecasting</h3>
-              <p class="project-card__description">
-                Time series ARMA models forecasting copper prices using weekly
-                Bank of Zambia data, with backtesting and accuracy evaluation.
-              </p>
+              <p class="project-card__description">Box&ndash;Jenkins AR(2) and GARCH(1,1) models on 6,298 daily copper prices (2000&ndash;2025): the price level behaves like a random walk, but the volatility is highly predictable.</p>
               <div class="project-card__tags">
                 <span class="tag">R</span>
                 <span class="tag">Time Series</span>
                 <span class="tag">Forecasting</span>
               </div>
+              <span class="project-card__note">Interactive demo</span>
               <a href="project-copper.html" class="project-card__link">View Details &rarr;</a>
             </div>
           </article>
-
           <article class="project-card">
-            <div class="project-card__media"><img src="assets/images/project-climate.svg" alt="Climate change chart" loading="lazy"></div>
+            <div class="project-card__media"><img src="assets/images/shot-emh.webp" alt="Screenshot of the LUSE Efficiency Lab interactive demo" width="1000" height="400" loading="lazy"></div>
             <div class="project-card__body">
-              <h3 class="project-card__title">Climate Change Impact Analysis</h3>
-              <p class="project-card__description">
-                Power BI dashboard analyzing CO&#8322; emissions, forest coverage,
-                and climate-related disasters affecting global populations.
-              </p>
+              <h3 class="project-card__title">EMH Testing &mdash; Lusaka Securities Exchange</h3>
+              <p class="project-card__description">Final-year research testing weak-form market efficiency on Zambia's stock exchange with runs, Ljung–Box and variance-ratio tests.</p>
               <div class="project-card__tags">
-                <span class="tag">Power BI</span>
-                <span class="tag">Excel</span>
-                <span class="tag">Visualization</span>
+                <span class="tag">R</span>
+                <span class="tag">Statistics</span>
+                <span class="tag">Finance</span>
               </div>
-              <a href="project-climate.html" class="project-card__link">View Details &rarr;</a>
+              <span class="project-card__note">Interactive demo</span>
+              <a href="project-emh.html" class="project-card__link">View Details &rarr;</a>
             </div>
           </article>
-
           <article class="project-card">
             <div class="project-card__media"><img src="assets/images/project-admissions.svg" alt="Admissions bias chart" loading="lazy"></div>
             <div class="project-card__body">
               <h3 class="project-card__title">Admissions Bias Audit</h3>
-              <p class="project-card__description">
-                Statistical audit of university admissions data revealing that apparent
-                gender bias was actually driven by major selection patterns.
-              </p>
+              <p class="project-card__description">A statistical audit of university admissions revealing that apparent gender bias was actually driven by which majors people applied to.</p>
               <div class="project-card__tags">
                 <span class="tag">Power BI</span>
                 <span class="tag">Hypothesis Testing</span>
@@ -108,32 +194,24 @@
               <a href="project-admissions.html" class="project-card__link">View Details &rarr;</a>
             </div>
           </article>
-
           <article class="project-card">
-            <div class="project-card__media"><img src="assets/images/project-prc.svg" alt="PRC football pitch" loading="lazy"></div>
+            <div class="project-card__media"><img src="assets/images/project-climate.svg" alt="Climate change chart" loading="lazy"></div>
             <div class="project-card__body">
-              <h3 class="project-card__title">PRC System &mdash; Player Registry Centre</h3>
-              <p class="project-card__description">
-                Web-based football league management system; led as Frontend Project Manager,
-                with academies registering and managing players via a Firebase-backed platform.
-              </p>
+              <h3 class="project-card__title">Climate Change Impact Analysis</h3>
+              <p class="project-card__description">A Power BI report bringing together CO&#8322; emissions, forest coverage and climate-related disasters into one visual story.</p>
               <div class="project-card__tags">
-                <span class="tag">JavaScript</span>
-                <span class="tag">Firebase</span>
-                <span class="tag">Bootstrap</span>
+                <span class="tag">Power BI</span>
+                <span class="tag">Excel</span>
+                <span class="tag">Visualization</span>
               </div>
-              <a href="project-prc.html" class="project-card__link">View Details &rarr;</a>
+              <a href="project-climate.html" class="project-card__link">View Details &rarr;</a>
             </div>
           </article>
-
           <article class="project-card">
-            <div class="project-card__media"><img src="assets/images/project-fintech.svg" alt="Mobile money dashboard" loading="lazy"></div>
+            <div class="project-card__media"><img src="assets/images/project-fintech.svg" alt="Mobile money adoption bars" loading="lazy"></div>
             <div class="project-card__body">
               <h3 class="project-card__title">Mobile Money &amp; Fintech Adoption</h3>
-              <p class="project-card__description">
-                A Power BI dashboard tracking mobile money growth, transaction value, and
-                financial inclusion across Africa, with a focus on Zambia.
-              </p>
+              <p class="project-card__description">A Power BI dashboard tracking mobile money growth, transaction value and financial inclusion across Africa, with a focus on Zambia.</p>
               <div class="project-card__tags">
                 <span class="tag">Power BI</span>
                 <span class="tag">Fintech</span>
@@ -142,16 +220,47 @@
               <a href="project-fintech.html" class="project-card__link">View Details &rarr;</a>
             </div>
           </article>
+          <article class="project-card">
+            <div class="project-card__media"><img src="assets/images/project-ab-testing.svg" alt="Two overlapping distributions with a p-value of 0.035" loading="lazy"></div>
+            <div class="project-card__body">
+              <h3 class="project-card__title">NorthWind A/B Testing Lab</h3>
+              <p class="project-card__description">Did personalised emails really raise order values? A Welch t-test on 120 orders: +11.8% lift, one-tail p = 0.035.</p>
+              <div class="project-card__tags">
+                <span class="tag">Excel</span>
+                <span class="tag">Hypothesis Testing</span>
+                <span class="tag">A/B Testing</span>
+              </div>
+              <a href="project-ab-testing.html" class="project-card__link">View Details &rarr;</a>
+            </div>
+          </article>
+          <article class="project-card">
+            <div class="project-card__media"><img src="assets/images/shot-northwind.webp" alt="Screenshot of the NorthWind live sales dashboard" width="1000" height="400" loading="lazy"></div>
+            <div class="project-card__body">
+              <h3 class="project-card__title">NorthWind Sales Dashboard</h3>
+              <p class="project-card__description">An Excel sales dashboard rebuilt live: January 6.5% under target, slicers, a lookup panel with wildcards, and the February data clean-up.</p>
+              <div class="project-card__tags">
+                <span class="tag">Excel</span>
+                <span class="tag">Dashboards</span>
+                <span class="tag">XLOOKUP</span>
+              </div>
+              <span class="project-card__note">Live dashboard</span>
+              <a href="project-northwind.html" class="project-card__link">View Details &rarr;</a>
+            </div>
+          </article>
+          </div>
+        </section>
 
+        <section class="project-group" id="side" aria-labelledby="side-title">
+          <div class="project-group__head">
+            <h2 id="side-title">Products &amp; side projects</h2>
+            <p>Things built for fun, for friends, or as products of my own — the personal apps run on made-up data.</p>
+          </div>
+          <div class="projects-grid">
           <article class="project-card">
             <div class="project-card__media"><img src="assets/images/project-kwachabooks.svg" alt="Kwacha Books mobile-money bookkeeping" loading="lazy"></div>
             <div class="project-card__body">
-              <h3 class="project-card__title">Kwacha Books &mdash; Mobile-Money Bookkeeping SaaS</h3>
-              <p class="project-card__description">
-                A full-stack SaaS for Zambian businesses: import Airtel/MTN/Zamtel money
-                statements, auto-categorise income and expenses, forecast cashflow, and
-                issue ZRA-ready invoices.
-              </p>
+              <h3 class="project-card__title">Kwacha Books</h3>
+              <p class="project-card__description">A bookkeeping SaaS for Zambian businesses: import mobile-money statements, auto-categorise income and expenses, forecast cashflow and issue invoices.</p>
               <div class="project-card__tags">
                 <span class="tag">Next.js</span>
                 <span class="tag">Supabase</span>
@@ -160,7 +269,64 @@
               <a href="project-kwachabooks.html" class="project-card__link">View Details &rarr;</a>
             </div>
           </article>
-        </div>
+          <article class="project-card">
+            <div class="project-card__media"><img src="assets/images/shot-noir.webp" alt="SQL Noir case file title screen" width="1000" height="400" loading="lazy"></div>
+            <div class="project-card__body">
+              <h3 class="project-card__title">SQL Noir</h3>
+              <p class="project-card__description">A 1974 Lusaka murder mystery you solve by writing real SQL against the precinct database — SQLite running entirely in your browser.</p>
+              <div class="project-card__tags">
+                <span class="tag">SQL</span>
+                <span class="tag">JavaScript</span>
+                <span class="tag">Game</span>
+              </div>
+              <span class="project-card__note">Playable</span>
+              <a href="project-sql-noir.html" class="project-card__link">View Details &rarr;</a>
+            </div>
+          </article>
+          <article class="project-card">
+            <div class="project-card__media"><img src="assets/images/project-mygm.svg" alt="Illustration of a basketball half court and roster ratings" loading="lazy"></div>
+            <div class="project-card__body">
+              <h3 class="project-card__title">MyGM</h3>
+              <p class="project-card__description">A basketball franchise management game: roster, trades, salary cap, arena prices, season simulation and analytics.</p>
+              <div class="project-card__tags">
+                <span class="tag">React</span>
+                <span class="tag">TypeScript</span>
+                <span class="tag">Simulation</span>
+              </div>
+              <span class="project-card__note">Playable</span>
+              <a href="project-mygm.html" class="project-card__link">View Details &rarr;</a>
+            </div>
+          </article>
+          <article class="project-card">
+            <div class="project-card__media"><img src="assets/images/shot-commutation.webp" alt="Screenshot of the Commutation party app demo" width="1000" height="400" loading="lazy"></div>
+            <div class="project-card__body">
+              <h3 class="project-card__title">Commutation</h3>
+              <p class="project-card__description">A personal real-time party app for six friends: a private survey before the day, then ~25 synced games on phones and a TV.</p>
+              <div class="project-card__tags">
+                <span class="tag">Next.js</span>
+                <span class="tag">Supabase</span>
+                <span class="tag">Realtime</span>
+              </div>
+              <span class="project-card__note">Personal app · playable demo</span>
+              <a href="project-commutation.html" class="project-card__link">View Details &rarr;</a>
+            </div>
+          </article>
+          <article class="project-card">
+            <div class="project-card__media"><img src="assets/images/shot-freya.webp" alt="Screenshot of the Freya web demo home screen" width="1000" height="400" loading="lazy"></div>
+            <div class="project-card__body">
+              <h3 class="project-card__title">Freya</h3>
+              <p class="project-card__description">A personal SwiftUI iOS app for two: games, a blind-reveal question of the day, a ranked date planner and a memory scrapbook.</p>
+              <div class="project-card__tags">
+                <span class="tag">SwiftUI</span>
+                <span class="tag">Supabase</span>
+                <span class="tag">iOS</span>
+              </div>
+              <span class="project-card__note">Personal app · web demo</span>
+              <a href="project-freya.html" class="project-card__link">View Details &rarr;</a>
+            </div>
+          </article>
+          </div>
+        </section>
       </div>
     </section>
   </main>
@@ -176,5 +342,6 @@
     </div>
   </footer>
   <script src="js/main.js" defer></script>
+  <script src="js/chat.js" defer></script>
 </body>
 </html>

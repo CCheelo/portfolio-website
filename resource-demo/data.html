@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data · Resource Analytics (demo)</title>
+  <meta name="description" content="Importing fuel-card, tracker and printer exports: header detection, preview and confirm. Fictional files.">
+  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600&family=Funnel+Display:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/ra.css">
+</head>
+<body data-page="data">
+  <main class="page">
+    <h1 class="title">Data</h1>
+    <p class="question">Drop in each month's exports. The app recognises the file from its headers, shows a preview, and only saves when you confirm.</p>
+
+    <div class="card pad" style="margin-top:1.25rem">
+      <div class="label">1 · Pick a sample export</div>
+      <p class="story" style="margin:.3rem 0 .8rem">These are made-up files in the same layouts as the real exports.</p>
+      <div class="files" id="files"></div>
+      <div id="preview"></div>
+    </div>
+
+    <div class="card table-wrap" style="margin-top:1rem">
+      <div class="chart-head" style="padding-bottom:.6rem"><div class="label">Import log</div></div>
+      <table class="t" id="log"></table>
+    </div>
+  </main>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    window.renderPage = function () {
+      var R = window.RA, D = window.RA_DATA;
+      var FILES = [
+        { name: 'card-transactions-oct.csv', source: 'Fuel card — transaction report', headers: ['Transaction Date', 'Card Number', 'Registration', 'Product', 'Quantity', 'Unit Price', 'Amount', 'Transaction Type'],
+          rows: [['2026-10-01 07:42', '**** 4417', 'DMB 1001', 'Unleaded', '38.20', '25.29', '966.08', 'Sale on Prepaid'], ['2026-10-01 09:15', '**** 4421', 'DMB 1007', 'Unleaded', '52.00', '25.29', '1315.08', 'Sale on Prepaid'], ['2026-10-01 09:31', '**** 4421', 'DMB 1007', 'Unleaded', '-52.00', '25.29', '-1315.08', 'Reversal'], ['2026-10-02 08:05', '**** 4430', 'DMB 2472', 'Diesel', '41.50', '26.86', '1114.69', 'Sale on Prepaid']],
+          notes: ['Card numbers kept to the last four digits.', 'Driver and attendant names are never imported.', '1 reversal row removed together with the sale it cancels.'], count: 688 },
+        { name: 'utilisation-oct.xlsx', source: 'Tracker — utilisation', headers: ['Asset', 'Distance (km)', 'Driving Time', 'Idle Time', 'Litres of Fuel Used'],
+          rows: [['DMB 1001', '2,104', '61:12', '7:40', '0'], ['DMB 1007', '1,986', '58:03', '11:22', '0'], ['SOLD DMB 1949', '0', '0:00', '0:00', '0']],
+          notes: ['“Litres of Fuel Used” is always 0 on this fleet (no fuel probes), so the fuel card is the record of fuel.', '“SOLD DMB 1949” is marked sold automatically.'], count: 14 },
+        { name: 'trip-summary-oct.csv', source: 'Tracker — trip summary', headers: ['Asset', 'Trip Start', 'Trip End', 'Distance'], rows: [], duplicate: true,
+          notes: ['Trip summaries repeat the trip-sheet data, so this file is turned away.'], count: 0 },
+        { name: 'print-usage-oct.xlsx', source: 'Printer log — staff usage', headers: ['User', 'Department', 'Pages B&W', 'Pages Colour', 'Device'],
+          rows: [['User 004', 'Cairo Road', '2,410', '0', 'MFP-CR-01'], ['User 019', 'Kitwe', '3,980', '0', 'MFP-KT-02'], ['(no login)', 'Kitwe', '1,204', '0', 'MFP-KT-02']],
+          notes: ['Pages with no login are kept and counted as untraceable.'], count: 192 }
+      ];
+      var chosen = null;
+      document.getElementById('files').innerHTML = FILES.map(function (f, i) { return '<button class="file" data-i="' + i + '"><b>' + f.source + '</b><small>' + f.name + '</small></button>'; }).join('');
+      document.getElementById('files').onclick = function (e) {
+        var b = e.target.closest('.file'); if (!b) return; chosen = FILES[+b.getAttribute('data-i')]; preview();
+      };
+      function preview() {
+        var f = chosen, html = '<div class="label" style="margin-top:1.2rem">2 · Preview</div>';
+        if (f.duplicate) html += '<div class="warn-box">Recognised as <b>' + f.source + '</b> — not imported. ' + f.notes[0] + '</div>';
+        else {
+          html += '<div class="detect">✓ Recognised as <b>' + f.source + '</b> from its headers · ' + f.count + ' rows</div>' +
+            '<div class="table-wrap"><table class="t"><thead><tr>' + f.headers.map(function (h) { return '<th>' + h + '</th>'; }).join('') + '</tr></thead><tbody>' +
+            f.rows.map(function (r) { return '<tr' + (r[7] === 'Reversal' ? ' style="opacity:.5;text-decoration:line-through"' : '') + '>' + r.map(function (c) { return '<td>' + c + '</td>'; }).join('') + '</tr>'; }).join('') + '<tr><td colspan="' + f.headers.length + '" style="color:var(--muted)">… ' + (f.count - f.rows.length) + ' more rows</td></tr></tbody></table></div>' +
+            '<ul class="explain" style="margin:.6rem 0">' + f.notes.map(function (n) { return '<li>' + n + '</li>'; }).join('') + '</ul>' +
+            '<button class="btn" id="confirm">Save ' + f.count + ' rows</button> <button class="btn btn--ghost" id="cancel">Cancel</button>';
+        }
+        document.getElementById('preview').innerHTML = html;
+        var c = document.getElementById('confirm');
+        if (c) c.onclick = function () {
+          var now = new Date();
+          D.imports.unshift({ at: now.toISOString().slice(0, 10) + ' ' + now.toTimeString().slice(0, 5), source: f.source, file: f.name, rows: f.count, note: f.notes[f.notes.length - 1] });
+          D.save(); document.getElementById('preview').innerHTML = ''; log(); R.toast('Saved. Overlapping re-imports are safe — rows already loaded are skipped.');
+        };
+        var x = document.getElementById('cancel'); if (x) x.onclick = function () { document.getElementById('preview').innerHTML = ''; };
+      }
+      function log() {
+        document.getElementById('log').innerHTML = '<thead><tr><th>When</th><th>Source</th><th>File</th><th class="r">Rows</th><th>Note</th></tr></thead><tbody>' +
+          D.imports.map(function (i) { return '<tr><td>' + i.at + '</td><td>' + i.source + '</td><td>' + i.file + '</td><td class="r">' + i.rows + '</td><td class="story" style="min-width:200px">' + (i.note || '') + '</td></tr>'; }).join('') + '</tbody>';
+      }
+      log();
+    };
+  </script>
+</body>
+</html>

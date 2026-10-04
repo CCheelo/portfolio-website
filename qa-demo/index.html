@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Account Opening QA — simulation · Choolwe Cheelo</title>
+  <meta name="description" content="A simulation of the account-opening QA agent Choolwe Cheelo designed: invented customers and forms, the checking pipeline step by step, evidenced findings and routing.">
+  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="qa.css">
+</head>
+<body>
+  <div class="ribbon">Simulation · invented customers, invented forms · it shows how the design works, not the bank's code or data · <a href="../project-account-opening-agent.html">About this project</a></div>
+
+  <header class="top">
+    <div class="brand"><span class="brand__mark">QA</span><div><b>Account Opening QA</b><small>first-pass checker · runs on local models</small></div></div>
+    <div class="top__actions">
+      <button class="btn btn--ghost" id="runAll">▶▶ Run the whole batch</button>
+      <button class="btn btn--ghost" id="reset">↺ Reset</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <aside class="queue">
+      <div class="queue__head"><b>Today's packs</b><small id="queueCount"></small></div>
+      <div id="queue"></div>
+      <div class="missing" id="missing"></div>
+    </aside>
+
+    <section class="viewer">
+      <div class="pipeline" id="pipeline"></div>
+      <div class="pages" id="pages"></div>
+      <div class="sheet-wrap"><div class="sheet" id="sheet"></div></div>
+    </section>
+
+    <aside class="findings">
+      <div class="route" id="route"></div>
+      <div class="three" id="three"></div>
+      <div id="findings"></div>
+    </aside>
+  </main>
+
+  <section class="summary" id="summary" hidden></section>
+
+  <footer class="foot"><a href="../project-account-opening-agent.html">← Back to the project</a> · Built by Choolwe Cheelo</footer>
+  <script src="qa.js"></script>
+</body>
+</html>

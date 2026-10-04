@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paper · Resource Analytics (demo)</title>
+  <meta name="description" content="Pages printed against accounts opened and loans registered, by branch. Fictional data.">
+  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600&family=Funnel+Display:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/ra.css">
+</head>
+<body data-page="paper">
+  <main class="page">
+    <div class="head">
+      <div>
+        <h1 class="title">Paper</h1>
+        <p class="question">Pages printed against accounts opened and loans registered.</p>
+      </div>
+      <label class="period">📅 <select id="periodSelect" aria-label="Period">
+        <option value="8">All data · Feb 26 – Sep 26</option><option value="6">Last 6 months</option><option value="3">Last 3 months</option>
+      </select></label>
+    </div>
+
+    <div id="verdict" style="margin-top:1.25rem"></div>
+
+    <div class="card" style="margin-top:1rem">
+      <div class="kpis" id="kpis" style="grid-template-columns:repeat(4,1fr)"></div>
+      <div class="chart-head"><div class="label">Paper vs business</div><div class="chart-title">Indexed</div><div class="chart-sub">Both at the start = 100</div></div>
+      <div class="chart-box"><canvas id="paperChart"></canvas></div>
+    </div>
+
+    <div class="card table-wrap" style="margin-top:1rem">
+      <table class="t" id="branchTable"></table>
+    </div>
+    <div class="grid-2" style="margin-top:1rem">
+      <div class="card pad"><div class="label">Heaviest users</div><p class="story" style="margin:.3rem 0 .6rem">Names are replaced with pseudonyms — the real app does the same after a demo, keeping every page count.</p><div class="rows" id="users" style="margin:0 -1.2rem"></div></div>
+      <div class="card pad"><div class="label">Unusual months</div><p class="story" style="margin:.3rem 0 .6rem">Months where a branch printed far more per event than its own usual.</p><div id="spikes"></div></div>
+    </div>
+    <p style="font-size:.78rem;color:var(--muted);margin-top:.6rem">Per-page costs (B&amp;W K0.35, colour K1.50) are placeholders in Settings until Procurement confirms them. Pages with no printer login can't be traced to a person.</p>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    var chart;
+    window.renderPage = function () {
+      var R = window.RA, D = window.RA_DATA, ix = R.idx(), c = R.colors();
+      var pages = R.series.pages(), ev = R.series.events(), cost = R.series.paperCost();
+      var gP = R.growth(pages), gE = R.growth(ev), v = R.verdict(gP, gE, 'Paper', 'business');
+      document.getElementById('verdict').innerHTML = '<div class="card verdict verdict--' + (v.good ? 'good' : 'bad') + ' fade-up"><span class="verdict__icon">' + (v.good ? '✓' : '!') + '</span><div><div class="label">Paper against accounts + loans</div><div class="verdict__head">' + v.head + '</div><p>' + v.text + '</p></div></div>';
+
+      var noLogin = 0, total = 0, colour = 0;
+      D.branches.forEach(function (b) { ix.forEach(function (m) { noLogin += D.paper[b][m].noLogin; total += D.paper[b][m].pages; colour += D.paper[b][m].colour; }); });
+      document.getElementById('kpis').innerHTML =
+        k('Pages printed', R.short(total), R.pill(gP, false), 'first vs last months of the period') +
+        k('No printer login', (noLogin / total * 100).toFixed(1) + '%', '', 'Can\'t be traced to a person') +
+        k('Estimated cost', R.zmw(R.sum(cost)), '', 'Per-page costs in Settings') +
+        k('Colour pages', R.short(colour), '', '≈ ' + R.short(total / 500) + ' reams in total');
+      function k(l, val, p, n) { return '<div class="kpi" style="cursor:default"><div class="label">' + l + '</div><div class="kpi__value">' + val + ' ' + p + '</div><div class="kpi__note">' + n + '</div></div>'; }
+
+      if (chart) chart.destroy();
+      chart = new Chart(document.getElementById('paperChart'), { type: 'line',
+        data: { labels: R.labels(), datasets: [R.lineDataset('Pages printed', R.indexed(pages), c[1]), R.lineDataset('Accounts + loans', R.indexed(ev), c[3])] },
+        options: { interaction: { mode: 'index', intersect: false }, plugins: { legend: { position: 'bottom' } }, scales: { x: { grid: { display: false } } } } });
+
+      var rows = D.branches.map(function (b) {
+        var p = 0, e = 0, nl = 0, col = 0, first = [], last;
+        ix.forEach(function (m) { var x = D.paper[b][m], bz = D.business[b][m]; p += x.pages; nl += x.noLogin; col += x.colour; e += bz.accounts + bz.loans; first.push(x.pages / (bz.accounts + bz.loans)); });
+        return { b: b, pages: p, ratio: p / e, latest: first[first.length - 1], change: R.growth(first), noLogin: nl / p, colour: col / p };
+      }).sort(function (a, b) { return b.ratio - a.ratio; });
+      var max = rows[0].ratio;
+      document.getElementById('branchTable').innerHTML = '<thead><tr><th>Branch</th><th style="width:30%">Pages / event</th><th class="r">Pages</th><th class="r">Latest month</th><th class="r">Ratio change</th><th class="r">No login</th><th class="r">Colour</th><th>Against benchmark</th></tr></thead><tbody>' +
+        rows.map(function (r) {
+          var above = r.ratio > D.settings.paperBenchmark;
+          return '<tr><td><b>' + r.b + '</b></td><td><div class="row" style="padding:.15rem .4rem"><i class="row__bar' + (above ? ' over' : '') + '" data-w="' + (r.ratio / max * 100).toFixed(0) + '" style="left:0"></i><span><b>' + r.ratio.toFixed(1) + '</b></span></div></td>' +
+            '<td class="r">' + r.pages.toLocaleString('en') + '</td><td class="r">' + r.latest.toFixed(1) + '</td><td class="r">' + (r.change >= 0 ? '+' : '−') + R.pct(r.change) + '</td>' +
+            '<td class="r"' + (r.noLogin > .1 ? ' style="color:var(--bad);font-weight:700"' : '') + '>' + (r.noLogin * 100).toFixed(1) + '%</td><td class="r">' + (r.colour * 100).toFixed(1) + '%</td>' +
+            '<td>' + (above ? '<span class="sev sev--Serious">Above benchmark</span>' : '<span class="sev sev--Informational">Within</span>') + '</td></tr>';
+        }).join('') + '</tbody>';
+      var us = D.users.slice(0, 8), umax = us[0].pages;
+      document.getElementById('users').innerHTML = us.map(function (u) { return '<div class="row"><i class="row__bar" data-w="' + (u.pages / umax * 100).toFixed(0) + '"></i><span><b>' + u.user + '</b> <span style="color:var(--muted)">' + u.branch + '</span></span><span>' + R.short(u.pages) + ' pages</span></div>'; }).join('');
+      var spikes = [];
+      D.branches.forEach(function (b) {
+        var ratios = ix.map(function (m) { var bz = D.business[b][m]; return D.paper[b][m].pages / (bz.accounts + bz.loans); });
+        var mean = R.avg(ratios);
+        ratios.forEach(function (r, i) { if (r > mean * 1.06) spikes.push({ b: b, m: D.labels[ix[i]], r: r, up: (r / mean - 1) }); });
+      });
+      spikes.sort(function (a, b) { return b.up - a.up; });
+      document.getElementById('spikes').innerHTML = spikes.slice(0, 6).map(function (x) { return '<div class="row" style="padding:.45rem 0"><span><b>' + x.b + '</b> · ' + x.m + '</span><span><span class="pill pill--up-bad">+' + R.pct(x.up) + '</span> ' + x.r.toFixed(1) + ' / event</span></div>'; }).join('') || '<p class="story">Nothing unusual in this period.</p>';
+      R.animateRows();
+    };
+  </script>
+</body>
+</html>

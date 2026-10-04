@@ -2,7 +2,7 @@
 
 Personal portfolio site showcasing data analytics, statistical research, and development work.
 
-**Live site:** [www.choolwecheelo.com](https://www.choolwecheelo.com)
+**Live site:** [choolwecheelo.vercel.app](https://choolwecheelo.vercel.app)
 
 ---
 
@@ -137,6 +137,10 @@ It is a **separate self-contained sub-app** — it does **not** use `css/main.cs
 The 15-person development team is featured as the 8 academy reps and 7 Hall-of-Fame legends; Choolwe Cheelo is the headline "GOAT" legend in the Historical Hub (clickable career dossier, uses the portfolio profile photo). **To edit players/academies, change `prc-demo/js/data.js` only** — every page reads from it.
 
 ---
+
+## Demos & chatbot
+
+Besides the original `prc-demo/`, `emh-demo/` and `copper-demo/`, the site hosts `unisda-demo/`, `resource-demo/` (fictional bank), `commutation-demo/`, `freya-demo/` and the `sql-noir/` game, plus an "Ask about me" chatbot (`js/chat.js`) on every page. All demo data is invented. See `CLAUDE.md` for how each is organised.
 
 ## Deployment
 

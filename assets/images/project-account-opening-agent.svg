@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 200">
+  <defs>
+    <linearGradient id="qa-bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0c1420"/>
+      <stop offset="100%" stop-color="#1a0f08"/>
+    </linearGradient>
+  </defs>
+  <rect width="500" height="200" fill="url(#qa-bg)"/>
+  <text x="32" y="34" font-family="system-ui, sans-serif" font-size="15" fill="#f1f5f9" font-weight="700">Account Opening QA Agent</text>
+  <text x="32" y="52" font-family="system-ui, sans-serif" font-size="10" fill="#64748b">Document checks · Handwriting verification · Local ML</text>
+
+  <rect x="40" y="68" width="150" height="112" rx="4" fill="#e7e1d6"/>
+  <rect x="52" y="80" width="70" height="7" rx="2" fill="#94a3b8"/>
+  <rect x="52" y="96" width="126" height="12" rx="2" fill="none" stroke="#16a34a" stroke-width="2"/>
+  <path d="M58 104 q8 -6 14 0 t14 0 t14 0" stroke="#1e3a8a" stroke-width="1.6" fill="none"/>
+  <rect x="52" y="116" width="126" height="12" rx="2" fill="none" stroke="#16a34a" stroke-width="2"/>
+  <path d="M58 124 q6 -5 12 0 t12 0" stroke="#1e3a8a" stroke-width="1.6" fill="none"/>
+  <rect x="52" y="136" width="126" height="12" rx="2" fill="none" stroke="#c2410c" stroke-width="2" stroke-dasharray="4 3"/>
+  <path d="M58 144 q5 -6 10 0 t10 0 t10 0 t10 0" stroke="#1e3a8a" stroke-width="1.6" fill="none"/>
+  <path d="M120 166 c10 -12 18 8 28 -4 s10 6 20 -2" stroke="#1e293b" stroke-width="1.8" fill="none"/>
+  <rect x="36" y="128" width="158" height="2" fill="#fb923c" opacity="0.8"/>
+  <path d="M206 124 H250" stroke="#334155" stroke-width="2"/>
+  <path d="M244 118 L252 124 L244 130" fill="none" stroke="#334155" stroke-width="2"/>
+  <g font-family="monospace" font-size="10" font-weight="700">
+    <rect x="266" y="74" width="122" height="24" rx="5" fill="#052e16" stroke="#16a34a"/>
+    <text x="278" y="90" fill="#4ade80">CLEAN</text>
+    <rect x="266" y="108" width="122" height="24" rx="5" fill="#2a1408" stroke="#c2410c"/>
+    <text x="278" y="124" fill="#fb923c">EXCEPTION</text>
+    <rect x="266" y="142" width="122" height="24" rx="5" fill="#111827" stroke="#475569"/>
+    <text x="278" y="158" fill="#94a3b8">NEEDS_HUMAN</text>
+  </g>
+  <text x="408" y="104" font-family="system-ui, sans-serif" font-size="26" font-weight="800" fill="#fb923c">96%</text>
+  <text x="408" y="118" font-family="monospace" font-size="8" fill="#64748b">DOC CHECKS</text>
+  <text x="408" y="148" font-family="system-ui, sans-serif" font-size="20" font-weight="800" fill="#f1f5f9">88%</text>
+  <text x="408" y="161" font-family="monospace" font-size="8" fill="#64748b">HANDWRITING</text>
+</svg>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NorthWind Outfitters — Sales Dashboard · Choolwe Cheelo</title>
+  <meta name="description" content="Interactive rebuild of Choolwe Cheelo's Excel sales dashboard for the fictional NorthWind Outfitters: actual vs target, slicers, a lookup panel and a data-cleaning walkthrough.">
+  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700;9..40,800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/northwind.css">
+</head>
+<body>
+  <div class="ribbon">Interactive rebuild of an Excel dashboard I built · NorthWind Outfitters is a fictional company from a course dataset · <a href="../project-northwind.html">About this project</a></div>
+
+  <header class="top">
+    <div class="brand">
+      <span class="brand__mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32" width="22" height="22"><path d="M4 26 L13 10 L18 18 L22 12 L28 26 Z" fill="#fff"/><circle cx="23" cy="7" r="2.5" fill="#f2a65a"/></svg>
+      </span>
+      <div><div class="brand__name">NorthWind Outfitters</div><div class="brand__sub">Sales Performance Dashboard · Q1 2025</div></div>
+    </div>
+    <nav class="tabs" role="tablist" aria-label="Dashboard views">
+      <button role="tab" class="active" data-view="dashboard" aria-selected="true">Dashboard</button>
+      <button role="tab" data-view="lookup" aria-selected="false">Lookup panel</button>
+      <button role="tab" data-view="quality" aria-selected="false">Data cleaning</button>
+      <button role="tab" data-view="orders" aria-selected="false">Orders</button>
+    </nav>
+  </header>
+
+  <main class="wrap">
+    <!-- ───────── Dashboard ───────── -->
+    <section id="view-dashboard" class="view">
+      <div class="slicers">
+        <div class="slicer"><span class="slicer__label">Month</span><div class="chips" id="sMonth"></div></div>
+        <div class="slicer"><span class="slicer__label">Region</span><div class="chips" id="sRegion"></div></div>
+        <div class="slicer"><span class="slicer__label">Category</span><div class="chips" id="sCategory"></div></div>
+        <button class="clear" id="clearSlicers">Clear filters</button>
+      </div>
+
+      <div class="kpis" id="kpis"></div>
+
+      <div class="grid">
+        <div class="panel panel--wide">
+          <div class="panel__head"><h2>Actual vs target by region</h2><span id="targetNote">January targets</span></div>
+          <div class="chart"><canvas id="cRegion"></canvas></div>
+        </div>
+        <div class="panel">
+          <div class="panel__head"><h2>Sales by category</h2></div>
+          <div class="chart"><canvas id="cCategory"></canvas></div>
+        </div>
+        <div class="panel">
+          <div class="panel__head"><h2>Salesperson leaderboard</h2><span>click a name to open the lookup</span></div>
+          <div id="reps"></div>
+        </div>
+        <div class="panel panel--wide">
+          <div class="panel__head"><h2>Product performance</h2><span>sales and gross margin from the product dimension</span></div>
+          <div class="chart chart--tall"><canvas id="cProduct"></canvas></div>
+        </div>
+        <div class="panel">
+          <div class="panel__head"><h2>Daily sales</h2></div>
+          <div class="chart"><canvas id="cDaily"></canvas></div>
+        </div>
+      </div>
+      <p class="insight" id="insight"></p>
+    </section>
+
+    <!-- ───────── Lookup panel ───────── -->
+    <section id="view-lookup" class="view" hidden>
+      <div class="lookup">
+        <div class="panel">
+          <div class="panel__head"><h2>Lookup panel</h2><span>the workbook's XLOOKUP panel, live</span></div>
+          <div class="form">
+            <label>Salesperson<select id="lRep"></select></label>
+            <label>Product ID <small>(wildcards work: <code>*4</code>, <code>PRD-00?</code>)</small><input id="lPid" value="PRD-010" autocomplete="off"></label>
+          </div>
+          <div class="results" id="lResults"></div>
+          <pre class="formula" id="lFormula"></pre>
+        </div>
+        <div class="panel">
+          <div class="panel__head"><h2 id="lRepTitle">Orders</h2></div>
+          <div class="table-wrap"><table class="t" id="lOrders"></table></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────── Data quality ───────── -->
+    <section id="view-quality" class="view" hidden>
+      <div class="panel">
+        <div class="panel__head"><h2>February arrived messy</h2><span>this is the sheet as it came in</span></div>
+        <p class="lede">Before February could join the dashboard it had to be cleaned. Each check below is a rule a formula or Power Query step can apply every month. Run it and watch the sheet change.</p>
+        <div class="checks" id="checks"></div>
+        <div class="actions"><button class="btn" id="runClean">▶ Run the cleaning steps</button><button class="btn btn--ghost" id="resetClean" hidden>↺ Show the raw sheet again</button></div>
+        <div class="table-wrap"><table class="t t--raw" id="rawTable"></table></div>
+      </div>
+    </section>
+
+    <!-- ───────── Orders ───────── -->
+    <section id="view-orders" class="view" hidden>
+      <div class="panel">
+        <div class="panel__head"><h2>All orders</h2><span id="ordersCount"></span></div>
+        <input class="search" id="oSearch" placeholder="Search customer, product, salesperson…" aria-label="Search orders">
+        <div class="table-wrap"><table class="t" id="oTable"></table></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot"><a href="../project-northwind.html">← Back to the project</a> · Built by Choolwe Cheelo</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

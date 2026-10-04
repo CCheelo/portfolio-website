@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 200">
+  <defs>
+    <linearGradient id="gm-bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0c1420"/>
+      <stop offset="100%" stop-color="#1a0f08"/>
+    </linearGradient>
+  </defs>
+  <rect width="500" height="200" fill="url(#gm-bg)"/>
+  <text x="32" y="34" font-family="system-ui, sans-serif" font-size="15" fill="#f1f5f9" font-weight="700">MyGM</text>
+  <text x="32" y="52" font-family="system-ui, sans-serif" font-size="10" fill="#64748b">Basketball franchise management · React + TypeScript</text>
+
+  <g stroke="#c2410c" stroke-width="2" fill="none">
+    <rect x="32" y="66" width="200" height="118" rx="4" stroke-opacity="0.5"/>
+    <rect x="96" y="66" width="72" height="62"/>
+    <circle cx="132" cy="128" r="24"/>
+    <path d="M48 66 V96 A86 86 0 0 0 216 96 V66"/>
+    <line x1="120" y1="72" x2="144" y2="72"/>
+    <circle cx="132" cy="80" r="6" stroke="#fb923c"/>
+  </g>
+  <circle cx="200" cy="160" r="13" fill="#ea580c"/>
+  <path d="M187 160 H213 M200 147 V173 M191 151 q9 9 0 18 M209 151 q-9 9 0 18" stroke="#1a0f08" stroke-width="1.4" fill="none"/>
+  <rect x="262" y="66" width="200" height="118" rx="8" fill="#0f172a" stroke="#1e293b"/>
+  <text x="276" y="84" font-family="monospace" font-size="8" fill="#64748b">ROSTER · OVR · SALARY</text>
+  <g font-family="system-ui, sans-serif" font-size="10" fill="#e2e8f0">
+    <text x="276" y="104">PG  T. Mwale</text><text x="398" y="104" fill="#fb923c" font-weight="700">88</text><text x="448" y="104" text-anchor="end" fill="#94a3b8">$31M</text>
+    <text x="276" y="122">SG  K. Banda</text><text x="398" y="122" fill="#fb923c" font-weight="700">84</text><text x="448" y="122" text-anchor="end" fill="#94a3b8">$24M</text>
+    <text x="276" y="140">SF  J. Phiri</text><text x="398" y="140" fill="#fb923c" font-weight="700">81</text><text x="448" y="140" text-anchor="end" fill="#94a3b8">$18M</text>
+    <text x="276" y="158">PF  D. Zulu</text><text x="398" y="158" fill="#fb923c" font-weight="700">79</text><text x="448" y="158" text-anchor="end" fill="#94a3b8">$12M</text>
+  </g>
+  <rect x="276" y="168" width="172" height="5" rx="2" fill="#1e293b"/><rect x="276" y="168" width="140" height="5" rx="2" fill="#16a34a"/>
+</svg>

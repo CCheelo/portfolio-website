@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#fff8f0">
+  <title>Freya — couples app demo · Choolwe Cheelo</title>
+  <meta name="description" content="Web demo of Freya, a SwiftUI + Supabase iOS app for two people that Choolwe Cheelo built. Made-up couple and content.">
+  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/freya.css">
+</head>
+<body>
+  <div class="outside">
+    <a href="../project-freya.html">← Back to the project</a>
+    <span>Personal project · web demo of an iOS app · the couple and their content are made up</span>
+  </div>
+
+  <div class="stage">
+    <aside class="aside">
+      <div class="k">Personal project</div>
+      <h2>A private iOS app for two people.</h2>
+      <p>Games, a shared question of the day, a ranked date planner, a memory scrapbook and gamification — synced live between both partners' phones.</p>
+      <ul>
+        <li>Answer the question of the day to unlock your partner's answer.</li>
+        <li>Drag your Top 5 dates into order, then rate one together.</li>
+        <li>Spin the Lucky Wheel and play Would You Rather.</li>
+      </ul>
+    </aside>
+
+    <div class="phone" role="application" aria-label="Freya app">
+      <div class="screen">
+        <div class="status" aria-hidden="true"><span id="clock">9:41</span><span>●●● 5G ▮</span></div>
+        <div class="scroll" id="scroll"></div>
+        <nav class="tabbar" aria-label="App sections">
+          <button data-tab="home"><span>🏠</span>Home</button>
+          <button data-tab="games"><span>🎮</span>Games</button>
+          <button data-tab="dates"><span>📅</span>Dates</button>
+          <button data-tab="memories"><span>📸</span>Memories</button>
+          <button data-tab="profile"><span>👤</span>Profile</button>
+        </nav>
+        <div class="toast" id="toast" role="status"></div>
+      </div>
+    </div>
+
+    <aside class="aside aside--right">
+      <div class="k">How it's built</div>
+      <h2>SwiftUI + Supabase, no Mac</h2>
+      <p>Native for iOS 17 with <code>@Observable</code> and async/await, backed by Supabase Postgres, Realtime, Storage and Auth, with row-level security per couple.</p>
+      <ul>
+        <li>Built without owning a Mac: every build runs on a GitHub Actions cloud Mac and ships a sideloadable app.</li>
+        <li>Offline last-state restore and free local notifications, no paid push service.</li>
+        <li>This page is a web reproduction for the portfolio; the real thing is SwiftUI.</li>
+      </ul>
+    </aside>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

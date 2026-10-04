@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yearly budget — UNISDA Strategic Planning (demo)</title>
+  <meta name="description" content="The 2027 budget round — ceilings from last year's grant and use, submissions and committee approval — in the UNISDA demo. Dummy data only.">
+  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/unisda.css">
+</head>
+<body data-page="budget">
+  <main class="page">
+    <div class="eyebrow">Money · budget round for 2027</div>
+    <h1 class="page-title">Yearly budget</h1>
+    <p class="lede">Ceilings are calculated, not typed: last year's grant, adjusted by how much of it the department actually used. Departments submit, the committee comments and approves, and departments trim to fit.</p>
+    <div class="notice" id="notice"></div>
+    <div class="stats" id="stats" style="margin-bottom:1.25rem"></div>
+    <div class="card table-wrap"><table class="sc" id="table" style="min-width:900px"></table></div>
+    <p style="font-size:.8rem;color:var(--muted);margin-top:.6rem">Ceiling = last year's grant × (0.9 + 0.2 × share used), rounded to K500. A department that used all of its grant gets up to 10% more; one that used little gets less.</p>
+  </main>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    window.renderPage = function () {
+      var D = window.UNISDA_DATA, U = window.UNISDA, me = U.persona();
+      var committee = me.finance || me.admin;
+      function ceiling(b) { return Math.round(b.lastGrant * (0.9 + 0.2 * b.used) / 500) * 500; }
+
+      function draw() {
+        document.getElementById('notice').innerHTML = '<span aria-hidden="true">🗓</span><div><strong>The 2027 round is open until 31 October.</strong> ' +
+          (committee ? 'You sit on the committee: approve each submission, or approve it at a different figure with a comment.' : 'You lead ' + D.dept(me.dept).name + ': submit your request against your ceiling. Going over is allowed — the committee sees it flagged.') + '</div>';
+        var tc = 0, ts = 0, ta = 0, nSub = 0;
+        D.budgets.forEach(function (b) { tc += ceiling(b); if (b.submitted != null) { ts += b.submitted; nSub++; } if (b.approved != null) ta += b.approved; });
+        document.getElementById('stats').innerHTML =
+          s('', 'Total of ceilings', U.money(tc), D.budgets.length + ' departments') +
+          s('stat--gold', 'Submitted', U.money(ts), nSub + ' of ' + D.budgets.length + ' departments') +
+          s('stat--green', 'Approved', U.money(ta), D.budgets.filter(function (b) { return b.approved != null; }).length + ' approved') +
+          s('stat--navy', 'Still to submit', D.budgets.length - nSub, 'departments');
+        function s(c, l, v, n) { return '<div class="stat ' + c + '"><div class="stat__label">' + l + '</div><div class="stat__value num">' + v + '</div><div class="stat__note">' + n + '</div></div>'; }
+
+        document.getElementById('table').innerHTML = '<thead><tr><th>Department</th><th style="text-align:right">2026 grant</th><th>Used</th><th style="text-align:right">2027 ceiling</th><th style="text-align:right">Submitted</th><th style="text-align:right">Approved</th><th>Action</th></tr></thead><tbody>' +
+          D.budgets.map(function (b) {
+            var d = D.dept(b.dept), c = ceiling(b), over = b.submitted != null && b.submitted > c, action = '';
+            if (!committee && me.dept === b.dept && b.approved == null) action = '<input class="inline-input" type="number" min="0" step="500" value="' + (b.submitted || c) + '" data-sub="' + b.dept + '" aria-label="Amount to submit"> <button class="btn btn--teal btn--sm" data-submit="' + b.dept + '">' + (b.submitted == null ? 'Submit' : 'Resubmit') + '</button>';
+            else if (committee && b.submitted != null && b.approved == null) action = '<input class="inline-input" type="number" min="0" step="500" value="' + Math.min(b.submitted, c) + '" data-app="' + b.dept + '" aria-label="Amount to approve"> <button class="btn btn--teal btn--sm" data-approve="' + b.dept + '">Approve</button>';
+            else if (b.approved != null) action = '<span class="status status--done">Approved</span>' + (b.comment ? '<br><small style="color:var(--muted)">' + b.comment + '</small>' : '');
+            else action = '<span class="status status--none">Awaiting submission</span>';
+            return '<tr' + (me.dept === b.dept ? ' style="background:var(--teal-50)"' : '') + '><td class="main ' + (b.approved != null ? 'done' : b.submitted != null ? 'prog' : 'none') + '">' + d.name + '</td>' +
+              '<td class="money num">' + D.fmt0(b.lastGrant) + '</td><td>' + Math.round(b.used * 100) + '%</td><td class="money num">' + D.fmt0(c) + '</td>' +
+              '<td class="money num">' + (b.submitted == null ? '—' : D.fmt0(b.submitted)) + (over ? '<span class="flag" style="display:block">over ceiling</span>' : '') + '</td>' +
+              '<td class="money num">' + (b.approved == null ? '—' : D.fmt0(b.approved)) + '</td><td style="min-width:230px">' + action + '</td></tr>';
+          }).join('') + '</tbody>';
+      }
+
+      document.getElementById('table').addEventListener('click', function (e) {
+        var sb = e.target.closest('[data-submit]'), ap = e.target.closest('[data-approve]');
+        if (sb) {
+          var b = D.budgets.filter(function (x) { return x.dept === sb.getAttribute('data-submit'); })[0];
+          b.submitted = +document.querySelector('[data-sub="' + b.dept + '"]').value || 0; D.save(); draw();
+          U.toast('Submitted. Switch to Treasury or SPEMC at the top right to approve it.');
+        }
+        if (ap) {
+          var a = D.budgets.filter(function (x) { return x.dept === ap.getAttribute('data-approve'); })[0];
+          var v = +document.querySelector('[data-app="' + a.dept + '"]').value || 0;
+          a.approved = v; a.comment = v < a.submitted ? 'Approved at K' + D.fmt0(v) + ' of K' + D.fmt0(a.submitted) + ' requested — please trim to fit.' : '';
+          D.save(); draw(); U.toast('Approved for 2027.');
+        }
+      });
+      draw();
+    };
+  </script>
+</body>
+</html>

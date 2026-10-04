@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — UNISDA Strategic Planning (demo)</title>
+  <meta name="description" content="Interactive demo of the UNISDA Strategic Planning & Reporting System, built by Choolwe Cheelo. Dummy data only.">
+  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/unisda.css">
+</head>
+<body data-page="dashboard">
+  <main class="page">
+    <section class="hero fade-up">
+      <div>
+        <div class="eyebrow" id="heroEyebrow"></div>
+        <h1 id="greeting"></h1>
+        <p id="heroSub"></p>
+        <div class="hero__actions">
+          <a class="btn btn--teal" href="scorecard.html">▦ My scorecard</a>
+          <a class="btn btn--white" href="requests.html">◎ Request funds</a>
+        </div>
+      </div>
+      <div class="hero-panel">
+        <div class="hero-panel__top"><span class="hero-panel__label">Of the year gone</span><span class="hero-panel__big" id="yearGone"></span></div>
+        <div class="hero-panel__note">How much of the year has elapsed, not how much has been done.</div>
+        <div class="bar" style="background:rgba(255,255,255,.12)"><i id="yearBar" style="background:var(--gold-500)"></i></div>
+        <div class="hero-panel__grid">
+          <div>Reported<strong id="reportedFig"></strong></div>
+          <div>Of budget used<strong id="usedFig"></strong></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-h"><h2>Needs you</h2><small id="needsNote"></small></div>
+    <div id="needs"></div>
+
+    <div class="stats" style="margin-top:1.25rem" id="stats"></div>
+
+    <div class="grid-2" style="margin-top:2rem">
+      <div>
+        <div class="section-h" style="margin-top:0"><h2>Reporting by theme</h2></div>
+        <p style="font-size:.8rem;color:var(--muted);margin:-.4rem 0 .7rem">How many of each theme's activities due so far have a report in — not how much of the work is done.</p>
+        <div class="card reveal" id="themes"></div>
+
+        <div class="card card__pad reveal" style="margin-top:1.25rem">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.9rem">
+            <strong class="jost">How the year is going</strong><small style="color:var(--muted)" id="splitNote"></small>
+          </div>
+          <div class="split" id="split"></div>
+          <div class="legend" id="splitLegend"></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-h" style="margin-top:0"><h2>Coming up</h2><small>Next 90 days</small></div>
+        <div class="card reveal" id="comingUp"></div>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    window.renderPage = function () {
+      var D = window.UNISDA_DATA, U = window.UNISDA, me = U.persona();
+      var scope = D.activities.filter(function (a) { return !me.dept || a.dept === me.dept; });
+      var deptName = me.dept ? D.dept(me.dept).name : 'The whole church';
+
+      var now = new Date('2026-10-04T08:00:00');
+      var hr = now.getHours();
+      var start = new Date('2026-01-01'), end = new Date('2027-01-01');
+      var gone = Math.round((now - start) / (end - start) * 100);
+
+      document.getElementById('heroEyebrow').textContent = 'Q' + D.currentQuarter + ' ' + D.year + ' · Plan cycle 2023–2027';
+      document.getElementById('greeting').textContent = (hr < 12 ? 'Good morning, ' : 'Good afternoon, ') + me.name.split(' ')[0];
+      document.getElementById('heroSub').textContent = me.dept ? deptName + ' department.' : me.office + ' — church-wide view.';
+      document.getElementById('yearGone').textContent = gone + '%';
+      document.getElementById('yearBar').setAttribute('data-w', gone);
+
+      var budget = 0, spent = 0, reported = 0;
+      scope.forEach(function (a) { budget += a.budget; spent += a.spent; if (a.band != null) reported++; });
+      document.getElementById('reportedFig').innerHTML = reported + '<span style="color:var(--navy-300)">/' + scope.length + '</span>';
+      document.getElementById('usedFig').textContent = Math.round(spent / budget * 100) + '%';
+
+      /* Needs you — depends on the offices held */
+      var need;
+      if (me.finance) {
+        var q = D.requests.filter(function (r) { return r.stage === 2; });
+        need = { icon: '⚖', title: 'Requests waiting for the October sitting', sub: 'The window closes on 10 Oct — then the queue is worked as one batch.', n: q.length, href: 'requests.html' };
+      } else if (me.admin) {
+        var due = D.departments.filter(function (d) {
+          return D.activities.some(function (a) { return a.dept === d.id && a.quarter <= 3 && a.band == null; });
+        });
+        need = { icon: '✎', title: 'Departments with a Q3 report outstanding', sub: 'Consolidation can be drafted from what is in; these are still to file.', n: due.length, href: 'board.html' };
+      } else {
+        var mine = D.requests.filter(function (r) { return r.dept === me.dept && r.stage < 3; });
+        need = { icon: '✍', title: 'Payment requests part-way through signing', sub: 'Waiting on the elder in charge or the committee.', n: mine.length, href: 'requests.html' };
+      }
+      document.getElementById('needs').innerHTML =
+        '<a class="card needs fade-up" href="' + need.href + '" style="color:inherit;text-decoration:none">' +
+        '<span class="needs__icon">' + need.icon + '</span><span><strong>' + need.title + '</strong><br>' +
+        '<small style="color:var(--muted)">' + need.sub + '</small></span><span class="needs__count">' + need.n + '</span></a>';
+
+      var done = scope.filter(function (a) { return a.band === 4; }).length;
+      var toReport = scope.filter(function (a) { return a.band == null; }).length;
+      document.getElementById('stats').innerHTML =
+        stat('', "This year's budget", D.fmt(budget), scope.length + ' activities planned', true) +
+        stat('stat--gold', 'Spent so far', D.fmt(spent), reported + ' reports filed', true) +
+        stat('stat--green', 'Completed', done, Math.round(done / scope.length * 100) + '% of this year\'s plan') +
+        stat('stat--red', 'Still to report', toReport, 'mostly Q4 work, not yet due');
+      function stat(cls, label, value, note, isMoney) {
+        return '<div class="stat ' + cls + ' fade-up"><div class="stat__label">' + label + '</div>' +
+          '<div class="stat__value num">' + (isMoney ? '<small>K</small>' : '') + value + '</div>' +
+          '<div class="stat__note">' + note + '</div></div>';
+      }
+
+      /* Reporting by theme — of what is due so far */
+      document.getElementById('themes').innerHTML = D.themes.map(function (t) {
+        var due = scope.filter(function (a) { return D.objective(a.objective).theme === t.id && a.quarter <= 3; });
+        var rep = due.filter(function (a) { return a.band != null; }).length;
+        var pct = due.length ? Math.round(rep / due.length * 100) : 0;
+        var cls = pct >= 80 ? '' : pct >= 40 ? 'mid' : 'low';
+        return '<div class="theme-row"><div class="theme-row__top"><strong>' + t.name + '</strong>' +
+          '<span>' + rep + ' of ' + due.length + ' reported &nbsp;<b style="color:var(--ink)">' + pct + '%</b></span></div>' +
+          '<div class="bar"><i class="' + cls + '" data-w="' + pct + '"></i></div></div>';
+      }).join('');
+
+      /* The year's split by derived status */
+      var c = { 4: 0, 3: 0, 2: 0, 1: 0 };
+      scope.forEach(function (a) { if (a.band != null) c[a.band]++; });
+      var parts = [[4, 'var(--st-done)', 'completed'], [3, 'var(--st-prog)', 'progressing'], [2, 'var(--gold-500)', 'early stage'], [1, 'var(--st-not)', 'not started']];
+      document.getElementById('split').innerHTML = parts.map(function (p) {
+        return c[p[0]] ? '<i style="background:' + p[1] + ';flex-grow:0" data-w="' + c[p[0]] + '" title="' + c[p[0]] + ' ' + p[2] + '"></i>' : '';
+      }).join('');
+      document.getElementById('splitLegend').innerHTML = parts.map(function (p) {
+        return '<span style="color:' + p[1] + '"><b style="color:var(--ink)">' + c[p[0]] + '</b> <span style="color:var(--ink-2)">' + p[2] + '</span></span>';
+      }).join('').replace(/<span style="color:var\(--ink-2\)">/g, '<span style="color:var(--ink-2)" class="nolegend">');
+      document.getElementById('splitNote').textContent = reported + ' reported';
+
+      document.getElementById('comingUp').innerHTML = D.comingUp.map(function (c) {
+        var d = U.dateParts(c.date), dept = c.dept ? D.dept(c.dept).name : 'Church-wide';
+        var yours = me.dept && c.dept === me.dept;
+        return '<div class="cu-item"><div class="cu-date"><small>' + d.mon + '</small><b>' + d.day + '</b></div>' +
+          '<div class="cu-item__body"><div class="cu-item__title">' + c.title + '</div><div class="cu-item__meta">' + dept + '</div></div>' +
+          (yours ? '<span class="pill">Yours</span>' : '') + '</div>';
+      }).join('');
+    };
+  </script>
+  <style>.nolegend::before { display: none !important; }</style>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Commutation — a real-time party game app | Choolwe Cheelo</title>
+  <meta name="description" content="A real-time party app for six friends: an info hub and private survey before the day, then a synced game console with about 25 games. Next.js + Supabase. Playable demo with dummy data.">
+  <link rel="canonical" href="https://choolwecheelo.vercel.app/project-commutation.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Choolwe Cheelo">
+  <meta property="og:title" content="Commutation — a real-time party game app | Choolwe Cheelo">
+  <meta property="og:description" content="A real-time party app for six friends: an info hub and private survey before the day, then a synced game console with about 25 games. Next.js + Supabase. Playable demo with dummy data.">
+  <meta property="og:url" content="https://choolwecheelo.vercel.app/project-commutation.html">
+  <meta property="og:image" content="https://choolwecheelo.vercel.app/assets/images/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container navbar__container">
+      <a href="index.html" class="navbar__brand">Choolwe Cheelo</a>
+      <button class="navbar__toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+        <span class="navbar__toggle-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span class="navbar__toggle-label">Menu</span>
+      </button>
+      <ul class="navbar__links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="resume.html">Resume</a></li>
+        <li><a href="skills.html">Skills &amp; Certifications</a></li>
+        <li><a href="projects.html" class="active">Projects</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <section class="project-detail__hero">
+      <div class="container">
+        <h1 class="project-detail__title">Commutation</h1>
+        <div class="project-detail__meta">
+          <span>2026 &middot; Personal project</span>
+          <span>Next.js &middot; Supabase Realtime &middot; Row-level security</span>
+          <span>Built for one Saturday</span>
+        </div>
+        <p class="project-detail__description">
+          A real-time party app for six people, built for one Saturday. Before the day it is an info hub and a private survey; on the day it becomes a synced multiplayer game console &mdash; about 25 games across three halls, on six phones and an optional TV.
+        </p>
+
+        <div class="project-detail__buttons">
+          <a href="commutation-demo/index.html" class="btn btn--primary">Play the demo</a>
+          <a href="#summary" class="btn btn--secondary">Summary Overview</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="summary">
+      <div class="container container--narrow prose">
+        <h2 class="section__title">Summary Overview</h2>
+        <div class="callout">A personal project. The demo uses a made-up crew and made-up answers &mdash; none of my friends' real answers appear anywhere.</div>
+        <figure class="figure">
+          <img src="assets/images/shot-commutation.webp" alt="Commutation demo: the hub with a countdown to game day" loading="lazy">
+          <figcaption>The hub, counting down to Saturday.</figcaption>
+        </figure>
+        <h3>The one rule</h3>
+        <p>
+          Survey answers are readable <strong>only by their author</strong> &mdash; not by the other players, not by the
+          host, not through the API. That is enforced by row-level security in Postgres, not by convention. The hub
+          shows everyone's answer <em>count</em> so people can chase each other, never the content, and answers are
+          released by the game engine only inside a live round. The reveals only work on the day if nobody has read
+          them first.
+        </p>
+
+        <h3>What's in it</h3>
+        <ul class="arrow-list">
+          <li><strong>The Vault</strong> runs on the survey answers (&ldquo;Who Wrote It?&rdquo;, &ldquo;Know Me Best&rdquo;); <strong>the Huddle</strong> is phones-as-buzzers; <strong>the Arena</strong> puts a game on the TV with phones as controllers.</li>
+          <li>Halls unlock automatically at the start time; a board keeps score all day and the awards close the night.</li>
+          <li>Original poster-style key art, and a hand-built SVG tile for every game.</li>
+        </ul>
+
+        <h3>Is a personal app worth a portfolio slot?</h3>
+        <p>
+          I think so: it is a complete product with real users, real-time sync across devices, and a privacy
+          rule that had to hold under a deadline. The demo recreates the hub, the survey, two playable games and
+          the board on one device.
+        </p>
+
+        <div style="margin-top: 3rem;">
+          <a href="projects.html" class="btn btn--secondary">&larr; All Projects</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__container">
+      <p class="footer__copyright">&copy; Built by Choolwe Cheelo 2026</p>
+      <ul class="footer__social">
+        <li><a href="https://github.com/CCheelo" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://www.linkedin.com/in/choolwe-cheelo" target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a href="mailto:choolwecheelo22@gmail.com">Email</a></li>
+      </ul>
+    </div>
+  </footer>
+  <script src="js/main.js" defer></script>
+  <script src="js/chat.js" defer></script>
+</body>
+</html>

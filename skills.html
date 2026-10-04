@@ -5,6 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Skills &amp; Certifications — Choolwe Cheelo</title>
   <meta name="description" content="Technical skills and certifications of Choolwe Cheelo: Power BI, R, SQL, statistical analysis, and more.">
+  <link rel="canonical" href="https://choolwecheelo.vercel.app/skills.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Choolwe Cheelo">
+  <meta property="og:title" content="Skills &amp; Certifications — Choolwe Cheelo">
+  <meta property="og:description" content="Technical skills and certifications of Choolwe Cheelo: Power BI, R, SQL, statistical analysis, and more.">
+  <meta property="og:url" content="https://choolwecheelo.vercel.app/skills.html">
+  <meta property="og:image" content="https://choolwecheelo.vercel.app/assets/images/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -24,7 +34,6 @@
         <li><a href="resume.html">Resume</a></li>
         <li><a href="skills.html" class="active">Skills &amp; Certifications</a></li>
         <li><a href="projects.html">Projects</a></li>
-        <li><a href="testimonials.html">Testimonials</a></li>
         <li><a href="contact.html">Contact</a></li>
       </ul>
     </div>
@@ -89,6 +98,18 @@
             <p class="cert-card__desc">Project planning, scoping, stakeholder management, and delivery frameworks applied to real-world institutional and digital projects.</p>
             <span class="cert-card__view">View certificate &rarr;</span>
           </a>
+
+          <!-- Qlik Sense for Business Intelligence — Coursera (no public certificate link yet) -->
+          <div class="cert-card">
+            <div class="cert-card__header">
+              <div class="cert-card__logo">
+                <img src="assets/icons/qlik.svg" alt="">
+              </div>
+              <span class="cert-card__issuer">Coursera &middot; 2026</span>
+            </div>
+            <h3 class="cert-card__title">Qlik Sense for Business Intelligence</h3>
+            <p class="cert-card__desc">Qlik Sense apps end to end — load scripting, data modelling and associative dashboards. Now used daily for the bank's nightly KYC dashboards.</p>
+          </div>
 
           <!-- ROW 2 -->
 
@@ -232,39 +253,60 @@
         <h2 class="section__title">Technical Skills</h2>
         <div class="skills-grid">
           <div class="skill-group">
-            <h3>Data Analysis &amp; Visualization</h3>
+            <h3>BI &amp; Analytics</h3>
             <ul>
-              <li>Power BI (PL-300 certified, 950/1000)</li>
-              <li>Excel &mdash; VBA, Power Pivot, Power Query</li>
-              <li>Data storytelling &amp; dashboard design</li>
+              <li>Power BI &mdash; DAX, Power Query (PL-300, 950/1000)</li>
+              <li>Qlik Sense &mdash; load scripting, incremental QVD loads</li>
+              <li>Star-schema data modelling</li>
+              <li>Dashboard design &amp; data storytelling, up to Board level</li>
             </ul>
           </div>
 
           <div class="skill-group">
-            <h3>Programming &amp; Statistics</h3>
+            <h3>Data Engineering &amp; SQL</h3>
             <ul>
-              <li>R &mdash; statistical modeling, time series</li>
-              <li>SQL &mdash; joins, aggregations, window functions</li>
-              <li>Python &mdash; data manipulation (basic)</li>
+              <li>T-SQL / SQL Server &mdash; complex queries, temporal tables, SQL Server Agent jobs</li>
+              <li>ETL pipelines and Power Automate flows</li>
+              <li>Excel &mdash; VBA, Power Pivot, Power Query, sensitivity analysis</li>
+              <li>Data quality, validation &amp; reconciliations</li>
             </ul>
           </div>
 
           <div class="skill-group">
             <h3>Financial &amp; Statistical Methods</h3>
             <ul>
-              <li>Financial modeling</li>
-              <li>Portfolio &amp; risk analysis</li>
-              <li>Time series forecasting (ARMA/ARIMA)</li>
-              <li>Hypothesis testing &amp; experimentation</li>
+              <li>R &mdash; time series (ARMA, GARCH), portfolio simulation</li>
+              <li>Hypothesis testing &amp; A/B testing</li>
+              <li>Financial reporting, risk assessment &amp; trend analysis</li>
+              <li>Statistical bias auditing</li>
             </ul>
           </div>
 
           <div class="skill-group">
-            <h3>Tools &amp; Workflow</h3>
+            <h3>AI &amp; Agentic Coding</h3>
             <ul>
-              <li>Git / GitHub for version control</li>
-              <li>Claude / Claude Code (AI-fluent)</li>
-              <li>Microsoft 365 ecosystem</li>
+              <li>AI-driven development of data systems &amp; applications &mdash; scoping, build, testing, deployment</li>
+              <li>Prompt and loop engineering; MCP (AI&ndash;data integration)</li>
+              <li>AI governance &amp; adoption &mdash; policy, audit framework, rollout</li>
+              <li>Built with: Python (FastAPI, Django), TypeScript (React, Next.js), SwiftUI</li>
+            </ul>
+          </div>
+
+          <div class="skill-group">
+            <h3>Tools &amp; Delivery</h3>
+            <ul>
+              <li>Git / GitHub, Claude Code</li>
+              <li>PostgreSQL, SQLite, Supabase</li>
+              <li>Project lifecycle management; Monitoring &amp; Evaluation</li>
+            </ul>
+          </div>
+
+          <div class="skill-group">
+            <h3>Working With People</h3>
+            <ul>
+              <li>Executive &amp; Board stakeholder reporting</li>
+              <li>Committee leadership</li>
+              <li>Training &amp; facilitation &mdash; 30+ staff, C-suite to departments</li>
             </ul>
           </div>
         </div>
@@ -283,5 +325,6 @@
     </div>
   </footer>
   <script src="js/main.js" defer></script>
+  <script src="js/chat.js" defer></script>
 </body>
 </html>

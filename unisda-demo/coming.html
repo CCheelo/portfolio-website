@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coming up — UNISDA Strategic Planning (demo)</title>
+  <meta name="description" content="The next 90 days across the church, in the UNISDA Strategic Planning demo. Dummy data only.">
+  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/unisda.css">
+</head>
+<body data-page="coming">
+  <main class="page">
+    <div class="eyebrow">The next 90 days</div>
+    <h1 class="page-title">Coming up</h1>
+    <p class="lede">Everything planned to happen soon — the forward-looking half that no hand-consolidated workbook produces. Activities without a fixed date sit on the first day of their quarter.</p>
+    <div class="toolbar">
+      <div class="tabs" role="tablist" style="margin:0;border:0">
+        <button class="tab active" data-scope="mine">My department</button>
+        <button class="tab" data-scope="church">Across the church</button>
+      </div>
+    </div>
+    <div id="list"></div>
+  </main>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    window.renderPage = function () {
+      var D = window.UNISDA_DATA, U = window.UNISDA, me = U.persona();
+      var scope = me.dept ? 'mine' : 'church';
+
+      /* Events: the dated list plus every unreported activity due this quarter or next */
+      function events() {
+        var ev = D.comingUp.map(function (c) { return { date: c.date, title: c.title, dept: c.dept, kind: 'Event' }; });
+        D.activities.forEach(function (a) {
+          if (a.band != null || a.quarter < D.currentQuarter) return;
+          ev.push({ date: '2026-' + ['01', '04', '07', '10'][a.quarter - 1] + '-01', title: a.name, dept: a.dept, kind: 'Activity · K' + D.fmt0(a.budget), id: a.id });
+        });
+        D.requests.forEach(function (r) { if (r.stage < 3) ev.push({ date: r.neededBy, title: 'Money needed — ' + r.lines[0].act, dept: r.dept, kind: r.id }); });
+        return ev.filter(function (e) { return scope === 'church' || e.dept === me.dept || !e.dept; }).sort(function (a, b) { return a.date < b.date ? -1 : 1; });
+      }
+
+      function draw() {
+        var ev = events(), html = '', month = '';
+        ev.forEach(function (e) {
+          var d = U.dateParts(e.date), m = d.full.split(' ').slice(1).join(' ');
+          if (m !== month) { if (month) html += '</div>'; month = m; html += '<div class="month-h">' + m + '</div><div class="card">'; }
+          var link = e.id ? 'scorecard.html?dept=' + e.dept + '#row-' + e.id : e.kind.indexOf('PR-') === 0 ? 'requests.html' : null;
+          html += '<div class="cu-item"><div class="cu-date"><small>' + d.mon + '</small><b>' + d.day + '</b></div><div class="cu-item__body"><div class="cu-item__title">' +
+            (link ? '<a href="' + link + '" style="color:inherit">' + e.title + '</a>' : e.title) + '</div><div class="cu-item__meta">' + (e.dept ? D.dept(e.dept).name : 'Church-wide') + ' · ' + e.kind + '</div></div>' +
+            (me.dept && e.dept === me.dept ? '<span class="pill">Yours</span>' : '') + '</div>';
+        });
+        document.getElementById('list').innerHTML = html ? html + '</div>' : '<div class="card card__pad">Nothing coming up.</div>';
+        document.querySelectorAll('[data-scope]').forEach(function (b) { b.classList.toggle('active', b.getAttribute('data-scope') === scope); });
+      }
+      document.querySelectorAll('[data-scope]').forEach(function (b) { b.addEventListener('click', function () { scope = b.getAttribute('data-scope'); draw(); }); });
+      draw();
+    };
+  </script>
+</body>
+</html>

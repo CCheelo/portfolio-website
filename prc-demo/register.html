@@ -161,6 +161,22 @@
       document.getElementById('btnBack').addEventListener('click', function () { showStep(step - 1); });
       document.getElementById('regForm').addEventListener('submit', function (e) {
         e.preventDefault(); if (!validate(3)) return;
+        var v = function (id) { return document.getElementById(id).value.trim(); };
+        var first = v('firstName'), last = v('lastName');
+        var player = {
+          id: Math.max.apply(null, d.players.map(function (p) { return p.id; })) + 1,
+          prcId: 'ZF-2026-' + String(Math.floor(1000 + Math.random() * 9000)) + '-' + (first[0] + last[0]).toUpperCase(),
+          firstName: first, lastName: last, dob: v('dob'), gender: v('gender'), division: v('division'), academyId: Number(v('academy')),
+          position: v('position'), status: 'Pending', nationality: v('nationality') || 'Zambian', seasonRating: null,
+          appearances: 0, goals: 0, assists: 0, tackles: 0, registeredDate: new Date().toISOString().slice(0, 10)
+        };
+        try {
+          var saved = JSON.parse(localStorage.getItem('prc-demo-registered') || '[]');
+          saved.push(player); localStorage.setItem('prc-demo-registered', JSON.stringify(saved));
+        } catch (err) { /* private mode: the confirmation still shows */ }
+        document.getElementById('successMsg').querySelector('p').innerHTML = '<b>' + first + ' ' + last + '</b> is in the pending queue as <code>' + player.prcId + '</code> and now appears in the registry for an admin to review. (Saved in your browser only.)';
+        document.getElementById('successMsg').querySelector('a').href = 'player.html?id=' + player.id;
+        document.getElementById('successMsg').querySelector('a').textContent = 'View their profile';
         document.getElementById('regForm').style.display = 'none';
         document.getElementById('stepBar').style.display = 'none';
         document.getElementById('successMsg').style.display = 'block';

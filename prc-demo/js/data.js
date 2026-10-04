@@ -163,6 +163,11 @@ window.PRC_DATA = (function () {
 
   /* ── Helpers ── */
   function getAcademy(id)  { return academies.find(function (a) { return a.id === id; }); }
+  /* Players registered through the demo form, saved in this browser only */
+  try {
+    JSON.parse(window.localStorage.getItem('prc-demo-registered') || '[]').forEach(function (p) { players.push(p); });
+  } catch (e) { /* storage blocked: the registry shows the built-in players */ }
+
   function getPlayer(id)   { return players.find(function (p) { return p.id === Number(id); }); }
   function fullName(p)     { return p.firstName + ' ' + p.lastName; }
 

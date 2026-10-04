@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SQL Noir — a murder mystery solved with SQL | Choolwe Cheelo</title>
+  <meta name="description" content="A browser game: a 1974 Lusaka murder case you solve by writing real SQL queries against the precinct database. Runs entirely in the browser with sql.js.">
+  <link rel="canonical" href="https://choolwecheelo.vercel.app/project-sql-noir.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Choolwe Cheelo">
+  <meta property="og:title" content="SQL Noir — a murder mystery solved with SQL | Choolwe Cheelo">
+  <meta property="og:description" content="A browser game: a 1974 Lusaka murder case you solve by writing real SQL queries against the precinct database. Runs entirely in the browser with sql.js.">
+  <meta property="og:url" content="https://choolwecheelo.vercel.app/project-sql-noir.html">
+  <meta property="og:image" content="https://choolwecheelo.vercel.app/assets/images/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container navbar__container">
+      <a href="index.html" class="navbar__brand">Choolwe Cheelo</a>
+      <button class="navbar__toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+        <span class="navbar__toggle-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span class="navbar__toggle-label">Menu</span>
+      </button>
+      <ul class="navbar__links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="resume.html">Resume</a></li>
+        <li><a href="skills.html">Skills &amp; Certifications</a></li>
+        <li><a href="projects.html" class="active">Projects</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <section class="project-detail__hero">
+      <div class="container">
+        <h1 class="project-detail__title">SQL Noir</h1>
+        <div class="project-detail__meta">
+          <span>2026 &middot; Personal project</span>
+          <span>JavaScript &middot; sql.js (SQLite in WebAssembly) &middot; CodeMirror</span>
+          <span>Playable</span>
+        </div>
+        <p class="project-detail__description">
+          Lusaka, 1974. Victor Kasonde, lead guitarist of Broken String, is found strangled in an alley. You are a CID detective and the precinct database is yours &mdash; write SQL, follow the evidence, and file an accusation.
+        </p>
+
+        <div class="project-detail__buttons">
+          <a href="sql-noir/index.html" class="btn btn--primary">Play the game</a>
+          <a href="https://github.com/CCheelo/sql-noir" class="btn btn--secondary" target="_blank" rel="noopener">GitHub Code</a>
+          <a href="#summary" class="btn btn--secondary">Summary Overview</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="summary">
+      <div class="container container--narrow prose">
+        <h2 class="section__title">Summary Overview</h2>
+        <figure class="figure">
+          <img src="assets/images/shot-noir.webp" alt="SQL Noir title screen: Case File 74/LKS/1147" loading="lazy">
+          <figcaption>The case file opens while the database loads in your browser.</figcaption>
+        </figure>
+        <h3>How it plays</h3>
+        <ul class="arrow-list">
+          <li>A real SQLite database runs in your browser (sql.js, compiled to WebAssembly) &mdash; no server, and after the first load it works offline.</li>
+          <li>You discover the columns by querying; leads open as you uncover evidence, and a detective's notebook records what you have found.</li>
+          <li>A syntax-highlighting SQL editor (CodeMirror), hints when you are stuck, and progress saved in the browser.</li>
+        </ul>
+
+        <h3>Why I built it</h3>
+        <p>
+          SQL is the skill I use most and the one people find most intimidating to start. A mystery gives every
+          query a reason to exist: you write a JOIN because you need to know who was at the club that night, not
+          because an exercise told you to.
+        </p>
+        <p>
+          The case lives in two JSON files and a build script that regenerates the seed data, so a new suspect or
+          clue is an edit, not a rewrite.
+        </p>
+
+        <div style="margin-top: 3rem;">
+          <a href="projects.html" class="btn btn--secondary">&larr; All Projects</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__container">
+      <p class="footer__copyright">&copy; Built by Choolwe Cheelo 2026</p>
+      <ul class="footer__social">
+        <li><a href="https://github.com/CCheelo" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://www.linkedin.com/in/choolwe-cheelo" target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a href="mailto:choolwecheelo22@gmail.com">Email</a></li>
+      </ul>
+    </div>
+  </footer>
+  <script src="js/main.js" defer></script>
+  <script src="js/chat.js" defer></script>
+</body>
+</html>

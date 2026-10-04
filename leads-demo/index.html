@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Asset Financing Leads Form — demo · Choolwe Cheelo</title>
+  <meta name="description" content="Working demo of a mobile leads form with UTM campaign tracking, built by Choolwe Cheelo. Fictional lender, invented leads, nothing is sent anywhere.">
+  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="leads.css">
+</head>
+<body>
+  <div class="ribbon">Working demo · “Kafue Asset Finance” is fictional · nothing you type leaves this page · <a href="../project-leads-form.html">About this project</a></div>
+
+  <main class="stage">
+    <!-- 1 · The campaign -->
+    <section class="col">
+      <div class="step"><span>1</span> Pick a social post</div>
+      <p class="hint">Each post links to the same form with different UTM tags, so the contact centre can see which post produced each lead.</p>
+      <div class="posts" id="posts"></div>
+      <div class="url"><span class="url__label">Link opened</span><code id="url"></code></div>
+    </section>
+
+    <!-- 2 · The form, on a phone -->
+    <section class="col col--phone">
+      <div class="step"><span>2</span> Fill in the form</div>
+      <div class="phone">
+        <div class="screen">
+          <header class="brandbar"><span class="logo">K</span><div><b>Kafue Asset Finance</b><small>Own it sooner</small></div></header>
+          <div class="hero" id="hero"></div>
+          <form id="form" novalidate>
+            <label>Full name<input name="name" autocomplete="off" required placeholder="e.g. Natasha Banda"></label>
+            <label>Phone<input name="phone" inputmode="tel" autocomplete="off" required placeholder="09XX XXX XXX"></label>
+            <label>What do you want to finance?
+              <select name="product" required>
+                <option value="">Choose one</option><option>Motorbike</option><option>Vehicle</option><option>Business equipment</option><option>Farm machinery</option>
+              </select></label>
+            <label>Roughly how much?
+              <select name="amount" required>
+                <option value="">Choose a range</option><option>Under K20,000</option><option>K20,000 – K75,000</option><option>K75,000 – K200,000</option><option>Over K200,000</option>
+              </select></label>
+            <label>Town<input name="town" autocomplete="off" placeholder="e.g. Kitwe"></label>
+            <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+            <label class="consent"><input type="checkbox" name="consent" required> I agree to be contacted about my enquiry. My details are used only for this and kept for 90 days.</label>
+            <p class="error" id="error" role="alert"></p>
+            <button class="submit" type="submit">Request a call back</button>
+          </form>
+          <div class="thanks" id="thanks" hidden role="status">
+            <div class="tick">✓</div>
+            <h3>Thanks — we'll call you</h3>
+            <p>A finance officer will call within one working day.</p>
+            <button class="again" id="again">Submit another</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3 · What the contact centre sees -->
+    <section class="col col--wide">
+      <div class="step"><span>3</span> What the contact centre gets</div>
+      <div class="card">
+        <div class="card__head"><b>Leads by post</b><small id="leadCount"></small></div>
+        <div class="bars" id="bars"></div>
+      </div>
+      <div class="card">
+        <div class="card__head"><b>leads.csv</b><button class="dl" id="download">⤓ Download CSV</button></div>
+        <div class="table-wrap"><table id="table"></table></div>
+      </div>
+      <div class="card notes">
+        <b>Before go-live</b>
+        <ul>
+          <li>Host on the lender's own server, on its domain, over HTTPS.</li>
+          <li>Only authorised contact-centre staff can open the CSV; agree a retention period.</li>
+          <li>The Data Protection Officer reviews the consent wording.</li>
+          <li>Rate-limit at the proxy; spam protection here is a hidden honeypot field.</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot"><a href="../project-leads-form.html">← Back to the project</a> · Built by Choolwe Cheelo</footer>
+  <script src="leads.js"></script>
+</body>
+</html>

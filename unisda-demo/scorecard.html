@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scorecard — UNISDA Strategic Planning (demo)</title>
+  <meta name="description" content="A department's strategy scorecard in the UNISDA Strategic Planning demo. Dummy data only.">
+  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/unisda.css">
+</head>
+<body data-page="scorecard">
+  <main class="page">
+    <div class="eyebrow">Strategy scorecard · 2026</div>
+    <h1 class="page-title" id="deptTitle"></h1>
+    <p class="lede">The plan for the year, laid out the way the church's scorecard lays it out — theme, objective, KPI, main activity, then the sub-activities delivered and reported against.</p>
+
+    <div class="toolbar">
+      <select class="select" id="deptSelect" aria-label="Department"></select>
+      <select class="select" aria-label="Year" disabled><option>2026</option></select>
+      <button class="btn btn--ghost btn--sm" data-export="Excel">⤓ Excel</button>
+      <button class="btn btn--ghost btn--sm" data-export="PDF">⤓ PDF</button>
+    </div>
+
+    <div class="notice" id="notice"></div>
+
+    <div class="stats" id="stats"></div>
+
+    <div id="objectives"></div>
+  </main>
+
+  <dialog class="modal" id="reportModal" aria-labelledby="rmTitle">
+    <form method="dialog" id="reportForm">
+      <div class="modal__head"><div class="eyebrow" id="rmQuarter"></div><h3 id="rmTitle"></h3></div>
+      <div class="modal__body">
+        <div class="field">
+          <label for="rmBand">Achievement against target</label>
+          <select id="rmBand" required>
+            <option value="4">100%</option>
+            <option value="3">50 – 99%</option>
+            <option value="2">1 – 49%</option>
+            <option value="1">0%</option>
+          </select>
+          <div class="hint">Status is derived from this — <span id="rmStatus"></span>. Letting people pick a colour separately is how the two drift apart.</div>
+        </div>
+        <div class="field">
+          <label for="rmSpent">Actually spent (K)</label>
+          <input id="rmSpent" type="number" min="0" step="0.01" required>
+          <div class="hint" id="rmBudgetHint"></div>
+        </div>
+        <div class="field"><label for="rmAch">Achievements</label><textarea id="rmAch" rows="2" placeholder="What was done"></textarea></div>
+        <div class="field"><label for="rmChal">Challenges and gaps</label><textarea id="rmChal" rows="2"></textarea></div>
+        <div class="field"><label for="rmRec">Recommendations</label><textarea id="rmRec" rows="2"></textarea></div>
+      </div>
+      <div class="modal__foot">
+        <button type="button" class="btn btn--ghost" id="rmCancel">Cancel</button>
+        <button type="submit" class="btn btn--teal" value="save">File report</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    window.renderPage = function () {
+      var D = window.UNISDA_DATA, U = window.UNISDA, me = U.persona();
+      var sel = document.getElementById('deptSelect');
+      var deptId = (new URLSearchParams(location.search)).get('dept') || me.dept || 'yth';
+
+      sel.innerHTML = D.departments.map(function (d) {
+        return '<option value="' + d.id + '"' + (d.id === deptId ? ' selected' : '') + '>' + d.name + '</option>';
+      }).join('');
+      if (me.dept) { sel.disabled = true; sel.title = 'A department leader sees their own department'; }
+      sel.addEventListener('change', function () { deptId = sel.value; history.replaceState(null, '', '?dept=' + deptId); draw(); });
+
+      /* Excel: the scorecard as a CSV in the template's column order. PDF: the browser's print-to-PDF with print styles. */
+      document.querySelectorAll('[data-export]').forEach(function (b) {
+        b.addEventListener('click', function () {
+          if (b.getAttribute('data-export') === 'PDF') { window.print(); return; }
+          var rows = [['Theme', 'Strategic objective', 'KPI', 'Main activity', 'Sub-activity', 'Timing', 'Budgeted (K)', 'Spent (K)', 'Achievement', 'Status']];
+          D.activities.filter(function (a) { return a.dept === deptId; }).forEach(function (a) {
+            var o = D.objective(a.objective), st = U.statusOf(a);
+            rows.push([D.theme(o.theme).name, o.name, o.kpi, a.main, a.name, U.qLabel(a.quarter), a.budget, a.band == null ? 0 : a.spent, st.band || '', st.label]);
+          });
+          U.downloadCSV('Scorecard-' + D.dept(deptId).name.replace(/[^A-Za-z]+/g, '-') + '-2026.csv', rows);
+        });
+      });
+
+      /* The department's own people file reports; SPEMC can file for anyone; Treasury only reads */
+      var mayAuthor = function () { return me.dept === deptId || !!me.admin; };
+
+      function draw() {
+        var dept = D.dept(deptId);
+        var acts = D.activities.filter(function (a) { return a.dept === deptId; });
+        document.getElementById('deptTitle').textContent = dept.name;
+
+        var placed = me.dept === deptId
+          ? 'You are down as <em>the leader of</em> ' + dept.name + ' in 2026.'
+          : me.admin ? 'SPEMC runs the system, so you can file on any department\'s behalf.'
+          : 'Treasury reads every department\'s scorecard; filing is for the department itself.';
+        document.getElementById('notice').innerHTML = '<span aria-hidden="true">⇆</span><div><strong>You are looking at 2026 — the year being delivered and reported on.</strong> ' + placed + '</div>';
+
+        var budget = 0, spent = 0, moved = 0, rep = 0;
+        acts.forEach(function (a) { budget += a.budget; if (a.band != null) { spent += a.spent; rep++; } if (a.movedFrom) moved++; });
+        var variance = budget - spent;
+        document.getElementById('stats').innerHTML =
+          s('', 'Budgeted', U.money(budget), acts.length + ' sub-activities') +
+          s('stat--gold', 'Spent', U.money(spent), rep + ' reported') +
+          s('stat--green', 'Variance', '<span style="color:var(--st-done)">' + U.money(variance) + '</span>', Math.round(variance / budget * 100) + '% of the budget unspent') +
+          s('stat--navy', 'Moved quarters', moved, 'Work now due in a different quarter from the one it was committed to.');
+        function s(c, l, v, n) { return '<div class="stat ' + c + '"><div class="stat__label">' + l + '</div><div class="stat__value num">' + v + '</div><div class="stat__note">' + n + '</div></div>'; }
+
+        var byObj = {};
+        acts.forEach(function (a) { (byObj[a.objective] = byObj[a.objective] || []).push(a); });
+        var order = D.objectives.filter(function (o) { return byObj[o.id]; });
+
+        document.getElementById('objectives').innerHTML = order.map(function (o) {
+          var rows = byObj[o.id].sort(function (x, y) { return x.main.localeCompare(y.main) || x.quarter - y.quarter; });
+          var lastMain = null;
+          var body = rows.map(function (a) {
+            var st = U.statusOf(a), showMain = a.main !== lastMain; lastMain = a.main;
+            var can = a.band == null && a.quarter <= D.currentQuarter && mayAuthor();
+            return '<tr id="row-' + a.id + '">' +
+              '<td class="main ' + st.cls + '">' + (showMain ? a.main : '') + '</td>' +
+              '<td>' + a.name + (a.tag ? '<br><span class="pill" style="margin-top:.3rem">' + a.tag + '</span>' : '') + '</td>' +
+              '<td>' + U.qLabel(a.quarter) + (a.movedFrom ? '<span class="moved">moved from Q' + a.movedFrom + '</span>' : '') + '</td>' +
+              '<td class="money num">' + D.fmt(a.budget) + '</td>' +
+              '<td class="money num">' + D.fmt(a.band == null ? 0 : a.spent) + '</td>' +
+              '<td>' + (st.band || '—') + '</td>' +
+              '<td>' + U.statusHTML(a) + '</td>' +
+              '<td>' + (can ? '<button class="btn btn--teal btn--sm" data-report="' + a.id + '">File report</button>' : '') + '</td></tr>';
+          }).join('');
+          return '<section class="objective reveal is-visible"><div class="eyebrow">' + D.theme(o.theme).name + '</div><h3>' + o.name + '</h3>' +
+            '<div class="kpi">' + o.kpi + '</div><div class="card table-wrap"><table class="sc"><thead><tr>' +
+            '<th>Main activity</th><th>Sub-activity</th><th>Timing</th><th style="text-align:right">Budgeted</th><th style="text-align:right">Spent</th><th>Achievement</th><th>Status</th><th><span class="visually-hidden">Action</span></th>' +
+            '</tr></thead><tbody>' + body + '</tbody></table></div></section>';
+        }).join('');
+      }
+
+      /* ───── File a report ───── */
+      var modal = document.getElementById('reportModal'), current = null;
+      var band = document.getElementById('rmBand');
+      function showStatus() {
+        var b = D.bands[band.value];
+        document.getElementById('rmStatus').innerHTML = 'this will read <span class="status status--' + b.cls + '">' + b.status + '</span>';
+      }
+      band.addEventListener('change', showStatus);
+      document.getElementById('objectives').addEventListener('click', function (e) {
+        var btn = e.target.closest('[data-report]');
+        if (!btn) return;
+        current = D.activities.filter(function (a) { return a.id === +btn.getAttribute('data-report'); })[0];
+        document.getElementById('rmTitle').textContent = current.name;
+        document.getElementById('rmQuarter').textContent = U.qLabel(current.quarter) + ' report';
+        document.getElementById('rmSpent').value = Math.round(current.budget * 0.92);
+        document.getElementById('rmBudgetHint').textContent = 'Budgeted K' + D.fmt(current.budget) + '. Going over is flagged for the committee, never blocked.';
+        band.value = 4; showStatus();
+        modal.showModal();
+      });
+      document.getElementById('rmCancel').addEventListener('click', function () { modal.close(); });
+      modal.addEventListener('click', function (e) { if (e.target === modal) modal.close(); });
+      document.getElementById('reportForm').addEventListener('submit', function () {
+        current.band = +band.value;
+        current.spent = +document.getElementById('rmSpent').value || 0;
+        D.save();
+        draw();
+        var row = document.getElementById('row-' + current.id);
+        if (row) { row.classList.add('flash'); row.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+        U.toast('Report filed — the status, totals and dashboard figures follow from it.');
+      });
+
+      draw();
+      if (location.hash) { var target = document.querySelector(location.hash); if (target) { target.classList.add('flash'); target.scrollIntoView({ block: 'center' }); } }
+    };
+  </script>
+  <style>.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }</style>
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fleet fuel · Resource Analytics (demo)</title>
+  <meta name="description" content="Fuel-card fills matched to tracker distance, with fuel checks and ERB price checks. Fictional data.">
+  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600&family=Funnel+Display:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/ra.css">
+</head>
+<body data-page="fleet">
+  <main class="page">
+    <div class="head">
+      <div>
+        <h1 class="title">Fleet fuel</h1>
+        <p class="question">Fuel-card fills matched to tracker distance by number plate.</p>
+      </div>
+      <label class="period">📅 <select id="periodSelect" aria-label="Period">
+        <option value="8">All data · Feb 26 – Sep 26</option><option value="6">Last 6 months</option><option value="3">Last 3 months</option>
+      </select></label>
+    </div>
+
+    <div class="tabs" role="tablist" id="tabs" style="margin-top:1.25rem">
+      <button class="active" data-t="summary">Summary</button>
+      <button data-t="vehicles">Vehicles <span class="n">13</span></button>
+      <button data-t="checks">Checks <span class="n" id="nChecks"></span></button>
+      <button data-t="prices">Fuel prices</button>
+      <button data-t="safety">Safety</button>
+      <button data-t="generators">Generators</button>
+    </div>
+
+    <div id="panel"></div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    var tab = 'summary', charts = [];
+    document.getElementById('tabs').addEventListener('click', function (e) {
+      var b = e.target.closest('button'); if (!b) return;
+      tab = b.getAttribute('data-t');
+      this.querySelectorAll('button').forEach(function (x) { x.classList.toggle('active', x === b); });
+      window.renderPage();
+    });
+
+    window.renderPage = function () {
+      var R = window.RA, D = window.RA_DATA, ix = R.idx(), L = R.labels(), c = R.colors();
+      charts.forEach(function (ch) { ch.destroy(); }); charts = [];
+      document.getElementById('nChecks').textContent = D.checks.length;
+      var P = document.getElementById('panel');
+
+      var cars = D.active().filter(function (v) { return v.type === 'Car' && v.kmPerL; });
+      var kmls = cars.map(function (v) { return v.kmPerL; }).sort(function (a, b) { return a - b; });
+      var medianKml = kmls[Math.floor(kmls.length / 2)];
+
+      if (tab === 'summary') {
+        var spend = R.series.fuelSpend(), litres = R.series.litres(), km = R.series.km();
+        var priceEffect = 0;
+        ix.forEach(function (m) {
+          D.active().forEach(function (v) { priceEffect += v.months[m].litres * (D.erb[v.fuel][m] - D.erb[v.fuel][ix[0]]); });
+        });
+        var worst = cars.slice().sort(function (a, b) { return a.kmPerL - b.kmPerL; })[0];
+        P.innerHTML =
+          '<div class="card fade-up"><div class="kpis" style="grid-template-columns:repeat(4,1fr)">' +
+          kpi('Fuel spend', R.zmw(R.sum(spend)), R.pill(R.growth(spend), false), 'first vs last months of the period') +
+          kpi('Litres', R.short(R.sum(litres)), R.pill(R.growth(litres), false), 'Petrol and diesel') +
+          kpi('Km per litre', R.avg(R.series.kmPerL()).toFixed(1), '', 'Cars · median ' + medianKml.toFixed(1)) +
+          kpi('Km tracked', R.short(R.sum(km)), '', '13 vehicles · 1 not in the tracker') +
+          '</div><div class="chart-box"><canvas id="spendChart"></canvas></div><p style="padding:0 1.2rem 1rem;font-size:.78rem;color:var(--muted)">Sold vehicles are imported and kept for the record, but left out of every total.</p></div>' +
+          '<div class="mini-cards">' +
+          mini('Fuel checks', D.checks.filter(function (x) { return x.sev === 'Serious'; }).length + ' serious', 'Card fills the tracker can\'t explain.') +
+          mini('Fuel prices', (priceEffect < 0 ? '−' : '+') + R.zmw(Math.abs(priceEffect)), 'What ERB price changes ' + (priceEffect < 0 ? 'saved' : 'added') + ' on spend since ' + L[0] + '.') +
+          mini('Vehicles', worst.plate, 'Well below the fleet\'s km per litre (' + worst.kmPerL + ' vs ' + medianKml.toFixed(1) + ').') +
+          mini('Generators & branch cards', R.short(R.sum(ix.map(function (m) { return D.generators[m].litres; }))) + ' L', 'Diesel outside the vehicle fleet.') + '</div>';
+        charts.push(new Chart(document.getElementById('spendChart'), { type: 'line',
+          data: { labels: L, datasets: [R.lineDataset('Fuel spend (ZMW)', spend, c[0], true)] },
+          options: { plugins: { legend: { display: false } }, scales: { y: { ticks: { callback: function (v) { return R.short(v); } } }, x: { grid: { display: false } } } } }));
+      }
+
+      if (tab === 'vehicles') {
+        var max = Math.max.apply(null, D.vehicles.map(function (v) { return v.totalSpend; }));
+        P.innerHTML = '<div class="card table-wrap fade-up"><table class="t"><thead><tr><th>Plate</th><th>Type</th><th>Branch</th><th class="r">Km</th><th class="r">Litres</th><th class="r">Km/L</th><th class="r">Spend</th><th>Note</th></tr></thead><tbody>' +
+          D.vehicles.slice().sort(function (a, b) { return b.totalSpend - a.totalSpend; }).map(function (v) {
+            var low = v.type === 'Car' && v.kmPerL && v.kmPerL < medianKml * 0.8;
+            return '<tr><td><b>' + v.plate + '</b></td><td>' + v.type + '</td><td>' + v.branch + '</td><td class="r">' + (v.totalKm ? R.short(v.totalKm) : '—') + '</td><td class="r">' + R.short(v.totalLitres) + '</td>' +
+              '<td class="r"' + (low ? ' style="color:var(--bad);font-weight:700"' : '') + '>' + (v.kmPerL || '—') + '</td><td class="r">' + R.zmw(v.totalSpend) + '</td>' +
+              '<td class="story" style="min-width:200px">' + (v.status === 'Sold' ? 'Sold — kept for the record, left out of every total' : v.noTracker ? 'No tracker — did you mean ' + v.suggest + '?' : low ? 'Well below the fleet median' : '') + '</td></tr>';
+          }).join('') + '</tbody></table></div>';
+      }
+
+      if (tab === 'checks') {
+        var serious = D.checks.filter(function (x) { return x.sev === 'Serious'; }).length;
+        P.innerHTML = '<div class="grid-3 fade-up">' +
+          '<div class="card pad"><div class="label">Issues to look at</div><div class="big">' + D.checks.length + '</div><div class="mini__note">grouped by vehicle and kind of check</div></div>' +
+          '<div class="card pad"><div class="label">Serious</div><div class="big" style="color:var(--bad)">' + serious + '</div><div class="mini__note">Fills the tracker or ERB can\'t explain</div></div>' +
+          '<div class="card pad"><div class="label">Informational</div><div class="big">' + (D.checks.length - serious) + '</div><div class="mini__note">e.g. card plates with no tracker</div></div></div>' +
+          '<p class="story" style="margin:1rem 0">Card fills compared with what the tracker saw and with the ERB price. Each row is one vehicle and one kind of check. <b>A flag is a question to ask, not proof of misuse.</b></p>' +
+          '<div class="card table-wrap"><table class="t"><thead><tr><th></th><th>Vehicle</th><th>Check</th><th class="r">Fills</th><th class="r">Litres</th><th class="r">Amount</th><th>What we saw</th></tr></thead><tbody>' +
+          D.checks.map(function (k) {
+            return '<tr><td><span class="sev sev--' + k.sev + '">' + k.sev + '</span></td><td><b>' + k.plate + '</b></td><td>' + k.check + '</td><td class="r">' + k.fills + '</td><td class="r">' + k.litres.toLocaleString('en') + '</td><td class="r">K' + k.amount.toLocaleString('en') + '</td><td class="story">' + k.saw + '</td></tr>';
+          }).join('') + '</tbody></table></div>';
+      }
+
+      if (tab === 'prices') {
+        P.innerHTML = '<div class="card fade-up"><div class="chart-head"><div class="label">Energy Regulation Board</div><div class="chart-title">Pump prices</div><div class="chart-sub">ZMW per litre, announced at the end of each month. They drive the price check, the spend explanation and the year-end forecast.</div></div>' +
+          '<div class="chart-box"><canvas id="priceChart"></canvas></div></div>' +
+          '<p class="story" style="margin-top:1rem">Every card fill is checked against the official price for its month. In this sample the card provider charges a flat few ngwee under the ERB price, so every vehicle shows the same small difference — the kind of pattern that is worth one phone call rather than an investigation.</p>';
+        charts.push(new Chart(document.getElementById('priceChart'), { type: 'line',
+          data: { labels: L, datasets: [R.lineDataset('Petrol', ix.map(function (m) { return D.erb.petrol[m]; }), c[0]), R.lineDataset('Diesel', ix.map(function (m) { return D.erb.diesel[m]; }), c[1])] },
+          options: { plugins: { legend: { position: 'bottom' } }, scales: { x: { grid: { display: false } } } } }));
+      }
+
+      if (tab === 'safety') {
+        var vs = D.active().filter(function (v) { return v.trips; }).sort(function (a, b) { return b.overspeed - a.overspeed; });
+        var ev = vs.reduce(function (s, v) { return s + v.overspeed; }, 0), tr = vs.reduce(function (s, v) { return s + v.trips; }, 0), ah = vs.reduce(function (s, v) { return s + v.afterHours; }, 0);
+        var top = Math.max.apply(null, vs.map(function (v) { return v.topSpeed; }));
+        P.innerHTML = '<div class="grid-3 fade-up">' +
+          '<div class="card pad"><div class="label">Over-speed events</div><div class="big">' + ev + '</div><div class="mini__note">in ' + tr + ' tracked trips</div></div>' +
+          '<div class="card pad"><div class="label">Top speed</div><div class="big" style="color:var(--bad)">' + top + ' km/h</div><div class="mini__note">limit set at 100 km/h for cars</div></div>' +
+          '<div class="card pad"><div class="label">After-hours trips</div><div class="big">' + ah + '</div><div class="mini__note">outside working hours in Settings (Sunday is not a working day)</div></div></div>' +
+          '<div class="card" style="margin-top:1rem"><div class="chart-head"><div class="label">By vehicle</div><div class="chart-title">Over-speed events</div></div><div class="chart-box chart-box--sm"><canvas id="safeChart"></canvas></div></div>' +
+          '<div class="card table-wrap" style="margin-top:1rem"><table class="t"><thead><tr><th>Vehicle</th><th>Branch</th><th class="r">Trips</th><th class="r">Over-speed</th><th class="r">Top speed</th><th class="r">After hours</th></tr></thead><tbody>' +
+          vs.map(function (v) { return '<tr><td><b>' + v.plate + '</b></td><td>' + v.branch + '</td><td class="r">' + v.trips + '</td><td class="r"' + (v.overspeed > 40 ? ' style="color:var(--bad);font-weight:700"' : '') + '>' + v.overspeed + '</td><td class="r">' + v.topSpeed + '</td><td class="r">' + v.afterHours + '</td></tr>'; }).join('') + '</tbody></table></div>';
+        charts.push(new Chart(document.getElementById('safeChart'), { type: 'bar', data: { labels: vs.map(function (v) { return v.plate; }), datasets: [{ label: 'Over-speed events', data: vs.map(function (v) { return v.overspeed; }), backgroundColor: vs.map(function (v) { return v.overspeed > 40 ? R.css('--bad') : c[1]; }), borderRadius: 4 }] },
+          options: { plugins: { legend: { display: false } }, scales: { x: { grid: { display: false } } } } }));
+      }
+
+      if (tab === 'generators') {
+        var gl = ix.map(function (m) { return D.generators[m].litres; }), gs = ix.map(function (m) { return D.generators[m].spend; });
+        P.innerHTML = '<div class="grid-3 fade-up">' +
+          '<div class="card pad"><div class="label">Generator diesel</div><div class="big">' + R.short(R.sum(gl)) + ' L</div><div class="mini__note">branch cards, outside the vehicle fleet</div></div>' +
+          '<div class="card pad"><div class="label">Spend</div><div class="big">' + R.zmw(R.sum(gs)) + '</div><div class="mini__note">at the ERB diesel price each month</div></div>' +
+          '<div class="card pad"><div class="label">Average a month</div><div class="big">' + Math.round(R.avg(gl)) + ' L</div><div class="mini__note">kept out of vehicle km/L</div></div></div>' +
+          '<div class="card" style="margin-top:1rem"><div class="chart-head"><div class="label">Load-shedding shows up here</div><div class="chart-title">Generator diesel by month</div></div><div class="chart-box chart-box--sm"><canvas id="genChart"></canvas></div></div>' +
+          '<p class="story" style="margin-top:1rem">Generator and branch-card fills have no tracker to compare against, so they are kept apart from vehicle km/L — otherwise a power cut would make every car look thirsty.</p>';
+        charts.push(new Chart(document.getElementById('genChart'), { type: 'bar', data: { labels: L, datasets: [{ label: 'Litres', data: gl, backgroundColor: c[2], borderRadius: 4 }] },
+          options: { plugins: { legend: { display: false } }, scales: { x: { grid: { display: false } } } } }));
+      }
+
+      function kpi(l, v, p, n) { return '<div class="kpi" style="cursor:default"><div class="label">' + l + '</div><div class="kpi__value">' + v + ' ' + p + '</div><div class="kpi__note">' + n + '</div></div>'; }
+      function mini(l, v, n) { return '<div class="card mini"><div class="label">' + l + '</div><div class="mini__value">' + v + '</div><div class="mini__note">' + n + '</div></div>'; }
+    };
+  </script>
+</body>
+</html>

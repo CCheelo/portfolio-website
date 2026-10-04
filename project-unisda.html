@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UNISDA Strategic Planning &amp; Reporting System | Choolwe Cheelo</title>
+  <meta name="description" content="A Django planning, reporting and finance system for University SDA Church: 36 departments, quarterly scorecards, budgets and a four-stage payment approval chain. Interactive demo included.">
+  <link rel="canonical" href="https://choolwecheelo.vercel.app/project-unisda.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Choolwe Cheelo">
+  <meta property="og:title" content="UNISDA Strategic Planning &amp; Reporting System | Choolwe Cheelo">
+  <meta property="og:description" content="A Django planning, reporting and finance system for University SDA Church: 36 departments, quarterly scorecards, budgets and a four-stage payment approval chain. Interactive demo included.">
+  <meta property="og:url" content="https://choolwecheelo.vercel.app/project-unisda.html">
+  <meta property="og:image" content="https://choolwecheelo.vercel.app/assets/images/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container navbar__container">
+      <a href="index.html" class="navbar__brand">Choolwe Cheelo</a>
+      <button class="navbar__toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+        <span class="navbar__toggle-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span class="navbar__toggle-label">Menu</span>
+      </button>
+      <ul class="navbar__links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="resume.html">Resume</a></li>
+        <li><a href="skills.html">Skills &amp; Certifications</a></li>
+        <li><a href="projects.html" class="active">Projects</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <section class="project-detail__hero">
+      <div class="container">
+        <h1 class="project-detail__title">UNISDA Strategic Planning &amp; Reporting System</h1>
+        <div class="project-detail__meta">
+          <span>2026 &middot; Built for University SDA Church</span>
+          <span>Django &middot; PostgreSQL &middot; Tailwind</span>
+          <span>Rolling out &middot; users in training</span>
+        </div>
+        <p class="project-detail__description">
+          A planning and reporting platform for one of Zambia's largest Adventist congregations (2,000+ members), where all 36 departments plan activities against strategic KPIs, report with quarterly scoring, and take their budgets and payment requests through approval &mdash; replacing paper forms and a stack of Excel workbooks.
+        </p>
+
+        <div class="project-detail__buttons">
+          <a href="unisda-demo/index.html" class="btn btn--primary">Interactive Demo</a>
+          <a href="#summary" class="btn btn--secondary">Summary Overview</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="summary">
+      <div class="container container--narrow prose">
+        <h2 class="section__title">Summary Overview</h2>
+        <div class="stat-row">
+          <div><b>36</b><span>departments planning and reporting</span></div>
+          <div><b>2,000+</b><span>members in the congregation</span></div>
+          <div><b>3</b><span>rounds of user testing before rollout</span></div>
+        </div>
+
+        <h3>The problem</h3>
+        <p>
+          The church ran its strategic plan on Excel: each department filled in a scorecard template, and the
+          planning committee consolidated them every quarter by pasting between workbooks. Money moved on a
+          paper Payment Request form with four signatures. Nobody could easily see who had reported, what had
+          slipped, or how much of a budget was really left.
+        </p>
+
+        <h3>What it does</h3>
+        <ul class="arrow-list">
+          <li><strong>The scorecard</strong> &mdash; theme &rarr; objective &rarr; KPI &rarr; main activity &rarr; sub-activity, with budgeted beside spent, exported to Excel and PDF in the church's own template layout.</li>
+          <li><strong>Quarterly reporting</strong> &mdash; each report records achievement, actual spend and three narratives (achievements, challenges, recommendations). Status is <em>derived</em> from achievement rather than chosen, so the two can never drift apart.</li>
+          <li><strong>Money</strong> &mdash; the annual budget round, payment requests with line items and the four-stage signing chain, a monthly committee sitting that approves, reduces, varies or declines each line, trust funds, disbursements and receipts.</li>
+          <li><strong>Oversight</strong> &mdash; a one-page board view, the quarterly consolidation that used to be pasted together by hand, delivery against planned timing, submission tracking, and a drafted committee commentary.</li>
+          <li><strong>Workbook upload</strong> &mdash; departments that still prefer Excel upload the template; every row is previewed before anything changes, and a load can be taken back out.</li>
+          <li><strong>Access</strong> &mdash; what a person sees is the union of the offices they hold and the departments they serve, both recorded per year, so a request endorsed in 2026 still names the elder who endorsed it after the rotation.</li>
+        </ul>
+
+        <h3>Decisions it is built on</h3>
+        <ul class="arrow-list">
+          <li><strong>Nothing is enforced that the committee should decide.</strong> A request over budget or outside its planned quarter is flagged with the figures beside it &mdash; and submitted anyway.</li>
+          <li><strong>Receipts are chased, never blocking.</strong> As the church put it: &ldquo;This is still church after all, we can't be business strict.&rdquo;</li>
+          <li><strong>The church year turns over in November, not January</strong>, so for two months a department runs two years at once &mdash; the old team reporting while the new team plans.</li>
+        </ul>
+
+        <h3>Tech</h3>
+        <ul class="arrow-list">
+          <li>Django 5.1 with a composed permission model (predicates, not role names), PostgreSQL in production and SQLite for development.</li>
+          <li>A Tailwind-built design system in the church's colours, phone-first for the three screens departments use, checked at 375px.</li>
+          <li>Google sign-in, object storage for quotations and receipts, Excel/PDF exports, and a fast parallel test suite covering access control on every route.</li>
+        </ul>
+
+        <h3>Status</h3>
+        <p>
+          Deployed and rolling out: department users are in training after three rounds of user testing.
+          The interactive demo above recreates the main screens on invented data &mdash; switch between a
+          department leader, SPEMC and Treasury at the top right to see how access changes what each person
+          can do.
+        </p>
+
+        <div style="margin-top: 3rem;">
+          <a href="projects.html" class="btn btn--secondary">&larr; All Projects</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__container">
+      <p class="footer__copyright">&copy; Built by Choolwe Cheelo 2026</p>
+      <ul class="footer__social">
+        <li><a href="https://github.com/CCheelo" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://www.linkedin.com/in/choolwe-cheelo" target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a href="mailto:choolwecheelo22@gmail.com">Email</a></li>
+      </ul>
+    </div>
+  </footer>
+  <script src="js/main.js" defer></script>
+  <script src="js/chat.js" defer></script>
+</body>
+</html>

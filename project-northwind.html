@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NorthWind Sales Dashboard | Choolwe Cheelo</title>
+  <meta name="description" content="An Excel sales performance dashboard for the fictional NorthWind Outfitters: actual vs target, sales by category and salesperson, and a lookup panel.">
+  <link rel="canonical" href="https://choolwecheelo.vercel.app/project-northwind.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Choolwe Cheelo">
+  <meta property="og:title" content="NorthWind Sales Dashboard | Choolwe Cheelo">
+  <meta property="og:description" content="An Excel sales performance dashboard for the fictional NorthWind Outfitters: actual vs target, sales by category and salesperson, and a lookup panel.">
+  <meta property="og:url" content="https://choolwecheelo.vercel.app/project-northwind.html">
+  <meta property="og:image" content="https://choolwecheelo.vercel.app/assets/images/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container navbar__container">
+      <a href="index.html" class="navbar__brand">Choolwe Cheelo</a>
+      <button class="navbar__toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+        <span class="navbar__toggle-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span class="navbar__toggle-label">Menu</span>
+      </button>
+      <ul class="navbar__links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="resume.html">Resume</a></li>
+        <li><a href="skills.html">Skills &amp; Certifications</a></li>
+        <li><a href="projects.html" class="active">Projects</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <section class="project-detail__hero">
+      <div class="container">
+        <h1 class="project-detail__title">NorthWind Sales Dashboard</h1>
+        <div class="project-detail__meta">
+          <span>2026 &middot; FSI Outsourcing training</span>
+          <span>Excel &middot; XLOOKUP &middot; Charts</span>
+          <span>Complete</span>
+        </div>
+        <p class="project-detail__description">
+          A sales performance dashboard in Excel for the fictional NorthWind Outfitters: actual sales against target, breakdowns by category and salesperson, and a lookup panel that answers &ldquo;how is this person or product doing?&rdquo; in one click. Rebuilt here as a live dashboard from the workbook's own data.
+        </p>
+
+        <div class="project-detail__buttons">
+          <a href="northwind-demo/index.html" class="btn btn--primary">Open the live dashboard</a>
+          <a href="#summary" class="btn btn--secondary">Summary Overview</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="summary">
+      <div class="container container--narrow prose">
+        <h2 class="section__title">Summary Overview</h2>
+        <div class="stat-row">
+          <div><b>9,822</b><span>January sales against a target of 10,505.8</span></div>
+          <div><b>&minus;6.5%</b><span>under target &mdash; only the East beat its number</span></div>
+          <div><b>40</b><span>bad cells caught when February arrived messy</span></div>
+        </div>
+        <figure class="figure">
+          <img src="assets/images/project-northwind.svg" alt="Illustration: KPI tiles, sales by category and a lookup panel" loading="lazy">
+          <figcaption>Illustration of the dashboard layout.</figcaption>
+        </figure>
+        <h3>What's in it</h3>
+        <ul class="arrow-list">
+          <li>A single-screen <strong>Dashboard</strong>: January sales of 9,822 against a target of 10,505.8, with month, region and category slicers, sales by category, product margins from the product dimension, and a salesperson leaderboard.</li>
+          <li>A <strong>Lookup Panel</strong> &mdash; pick a salesperson and a product, and XLOOKUP returns their sales, category and performance against target.</li>
+          <li>A tidy model underneath: monthly sales sheets combined into one table, a product dimension and a targets table, so new months drop in without rewiring the charts.</li>
+          <li><strong>Data cleaning</strong> &mdash; February arrived with lower-case product IDs, misspelt customers and salespeople, a duplicate order ID, impossible dates, a blank customer and a product missing from the product list. The live version shows every one being caught and fixed.</li>
+        </ul>
+
+        <h3>What it practised</h3>
+        <p>
+          Building for the person who will read it: one screen, the headline number first, and a way to answer
+          the obvious follow-up question without opening another sheet. It is the same habit behind the
+          executive and board packs I now produce at AB Bank.
+        </p>
+
+        <div style="margin-top: 3rem;">
+          <a href="projects.html" class="btn btn--secondary">&larr; All Projects</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__container">
+      <p class="footer__copyright">&copy; Built by Choolwe Cheelo 2026</p>
+      <ul class="footer__social">
+        <li><a href="https://github.com/CCheelo" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://www.linkedin.com/in/choolwe-cheelo" target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a href="mailto:choolwecheelo22@gmail.com">Email</a></li>
+      </ul>
+    </div>
+  </footer>
+  <script src="js/main.js" defer></script>
+  <script src="js/chat.js" defer></script>
+</body>
+</html>

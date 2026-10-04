@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Departments — UNISDA Strategic Planning (demo)</title>
+  <meta name="description" content="Every department's plan, spend and reporting record in the UNISDA Strategic Planning demo. Dummy data only.">
+  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/unisda.css">
+</head>
+<body data-page="departments">
+  <main class="page">
+    <div class="eyebrow">The board · 2026</div>
+    <h1 class="page-title">Departments</h1>
+    <p class="lede">Each department's year: what it planned, what it has spent, how much it has reported, and who leads it. The real system holds all 36; the demo shows twelve.</p>
+    <div class="toolbar">
+      <select class="select" id="sort" aria-label="Sort departments">
+        <option value="name">Sort: A–Z</option><option value="budget">Sort: largest budget</option><option value="reported">Sort: least reported</option>
+      </select>
+      <button class="btn btn--ghost btn--sm" id="export">⤓ Excel</button>
+    </div>
+    <div class="card table-wrap"><table class="sc" id="table" style="min-width:820px"></table></div>
+  </main>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    window.renderPage = function () {
+      var D = window.UNISDA_DATA, U = window.UNISDA;
+      function rows() {
+        return D.departments.map(function (d) {
+          var acts = D.activities.filter(function (a) { return a.dept === d.id; });
+          var due = acts.filter(function (a) { return a.quarter < D.currentQuarter; });
+          var budget = acts.reduce(function (s, a) { return s + a.budget; }, 0), spent = acts.reduce(function (s, a) { return s + (a.band != null ? a.spent : 0); }, 0);
+          var rep = due.filter(function (a) { return a.band != null; }).length;
+          return { d: d, n: acts.length, budget: budget, spent: spent, rep: rep, due: due.length, pct: due.length ? rep / due.length : 1 };
+        });
+      }
+      function draw() {
+        var r = rows(), by = document.getElementById('sort').value;
+        r.sort(by === 'budget' ? function (a, b) { return b.budget - a.budget; } : by === 'reported' ? function (a, b) { return a.pct - b.pct; } : function (a, b) { return a.d.name.localeCompare(b.d.name); });
+        document.getElementById('table').innerHTML = '<thead><tr><th>Department</th><th>Leader</th><th>Elder in charge</th><th>Activities</th><th style="text-align:right">Budget</th><th style="text-align:right">Spent</th><th>Q1–Q3 reported</th><th></th></tr></thead><tbody>' +
+          r.map(function (x) {
+            var cls = x.pct === 1 ? 'done' : x.pct >= .7 ? 'prog' : 'not';
+            return '<tr><td class="main ' + cls + '">' + x.d.name + '</td><td>' + x.d.leader + '</td><td>' + x.d.elder + '</td><td>' + x.n + '</td>' +
+              '<td class="money num">' + D.fmt(x.budget) + '</td><td class="money num">' + D.fmt(x.spent) + '</td>' +
+              '<td><div class="bar" style="width:110px;display:inline-block;vertical-align:middle"><i class="' + (cls === 'done' ? '' : cls === 'prog' ? 'mid' : 'low') + '" data-w="' + Math.round(x.pct * 100) + '"></i></div> <small>' + x.rep + '/' + x.due + '</small></td>' +
+              '<td><a class="btn btn--ghost btn--sm" href="scorecard.html?dept=' + x.d.id + '">Scorecard →</a></td></tr>';
+          }).join('') + '</tbody>';
+        U.animateBars(document.getElementById('table'));
+      }
+      document.getElementById('sort').addEventListener('change', draw);
+      document.getElementById('export').addEventListener('click', function () {
+        U.downloadCSV('Departments-2026.csv', [['Department', 'Leader', 'Elder in charge', 'Activities', 'Budget (K)', 'Spent (K)', 'Reported', 'Due']].concat(rows().map(function (x) { return [x.d.name, x.d.leader, x.d.elder, x.n, x.budget, x.spent, x.rep, x.due]; })));
+      });
+      draw();
+    };
+  </script>
+</body>
+</html>

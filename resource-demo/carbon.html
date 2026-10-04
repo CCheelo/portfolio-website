@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carbon · Resource Analytics (demo)</title>
+  <meta name="description" content="Scope 1 fuel and scope 3 paper emissions in the Resource Analytics demo. Fictional data.">
+  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600&family=Funnel+Display:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/ra.css">
+</head>
+<body data-page="carbon">
+  <main class="page">
+    <div class="head">
+      <div><h1 class="title">Carbon</h1><p class="question">What do our fuel and paper add up to in emissions?</p></div>
+      <label class="period">📅 <select id="periodSelect" aria-label="Period"><option value="8">All data · Feb 26 – Sep 26</option><option value="6">Last 6 months</option><option value="3">Last 3 months</option></select></label>
+    </div>
+    <div class="card" style="margin-top:1.25rem"><div class="kpis" id="kpis" style="grid-template-columns:repeat(4,1fr)"></div>
+      <div class="chart-head"><div class="label">By month</div><div class="chart-title">Tonnes CO₂e</div><div class="chart-sub">Scope 1: fleet and generator fuel · Scope 3: paper</div></div>
+      <div class="chart-box"><canvas id="cChart"></canvas></div></div>
+    <div class="grid-2" style="margin-top:1rem">
+      <div class="card pad"><div class="label">Paper by branch</div><div class="rows" id="branches" style="margin:0 -1.2rem"></div></div>
+      <div class="card pad"><div class="label">Factors in use</div><div id="factors"></div><p style="font-size:.78rem;color:var(--muted);margin-top:.6rem">UK DESNZ values. Check them against the current workbook before any external (IFRS S2) reporting — change them in <a href="settings.html">Settings</a>.</p></div>
+    </div>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    var chart;
+    window.renderPage = function () {
+      var R = window.RA, D = window.RA_DATA, S = D.settings, ix = R.idx(), c = R.colors();
+      var fuelT = ix.map(function (m) {
+        var kg = 0; D.active().forEach(function (v) { kg += v.months[m].litres * (v.fuel === 'petrol' ? S.petrolCO2 : S.dieselCO2); });
+        return (kg + D.generators[m].litres * S.dieselCO2) / 1000;
+      });
+      var paperT = ix.map(function (m) { return R.sum(D.branches.map(function (b) { return D.paper[b][m].pages; })) * S.pageCO2 / 1000; });
+      var total = R.sum(fuelT) + R.sum(paperT), ev = R.sum(R.series.events());
+      document.getElementById('kpis').innerHTML = k('Total', total.toFixed(1) + ' t', 'CO₂e in the period') + k('Scope 1 · fuel', R.sum(fuelT).toFixed(1) + ' t', Math.round(R.sum(fuelT) / total * 100) + '% of the total') +
+        k('Scope 3 · paper', R.sum(paperT).toFixed(1) + ' t', Math.round(R.sum(paperT) / total * 100) + '% of the total') + k('Per business event', (total * 1000 / ev).toFixed(2) + ' kg', 'per account opened or loan registered');
+      function k(l, v, n) { return '<div class="kpi" style="cursor:default"><div class="label">' + l + '</div><div class="kpi__value">' + v + '</div><div class="kpi__note">' + n + '</div></div>'; }
+      if (chart) chart.destroy();
+      chart = new Chart(document.getElementById('cChart'), { type: 'bar', data: { labels: R.labels(), datasets: [
+        { label: 'Scope 1 · fuel', data: fuelT, backgroundColor: c[0], borderRadius: 4, stack: 's' },
+        { label: 'Scope 3 · paper', data: paperT, backgroundColor: c[1], borderRadius: 4, stack: 's' } ] },
+        options: { plugins: { legend: { position: 'bottom' } }, scales: { x: { stacked: true, grid: { display: false } }, y: { stacked: true } } } });
+      var rows = D.branches.map(function (b) { return { b: b, t: ix.reduce(function (s, m) { return s + D.paper[b][m].pages; }, 0) * S.pageCO2 / 1000 }; }).sort(function (a, b) { return b.t - a.t; });
+      document.getElementById('branches').innerHTML = rows.map(function (r) { return '<div class="row"><i class="row__bar" data-w="' + (r.t / rows[0].t * 100).toFixed(0) + '"></i><span>' + r.b + '</span><span><b>' + (r.t * 1000).toFixed(0) + ' kg</b></span></div>'; }).join('');
+      document.getElementById('factors').innerHTML = [['Petrol', S.petrolCO2 + ' kg CO₂e / L'], ['Diesel', S.dieselCO2 + ' kg CO₂e / L'], ['A4 page', S.pageCO2 + ' kg CO₂e']].map(function (f) { return '<div class="row" style="padding:.45rem 0"><span>' + f[0] + '</span><span><b>' + f[1] + '</b></span></div>'; }).join('');
+      R.animateRows();
+    };
+  </script>
+</body>
+</html>

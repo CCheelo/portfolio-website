@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monthly pack · Resource Analytics (demo)</title>
+  <meta name="description" content="The monthly fuel and paper pack for management, downloadable as Excel or PDF. Fictional data.">
+  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600&family=Funnel+Display:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/ra.css">
+</head>
+<body data-page="pack">
+  <main class="page">
+    <div class="head no-print">
+      <div><h1 class="title">Monthly pack</h1><p class="question">One page for management, every month.</p></div>
+      <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
+        <select class="input" id="month" aria-label="Month"></select>
+        <button class="btn" id="xls">⤓ Download Excel</button>
+        <button class="btn btn--ghost" onclick="window.print()">⎙ Print / save as PDF</button>
+      </div>
+    </div>
+    <article class="pack-sheet" id="sheet" style="margin-top:1.25rem"></article>
+  </main>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    window.renderPage = function () {
+      var R = window.RA, D = window.RA_DATA, S = D.settings;
+      var sel = document.getElementById('month');
+      if (!sel.options.length) { sel.innerHTML = D.labels.map(function (l, i) { return '<option value="' + i + '"' + (i === D.labels.length - 1 ? ' selected' : '') + '>' + l + '</option>'; }).join(''); sel.onchange = window.renderPage; }
+      var m = +sel.value, p = m - 1;
+      function fuel(i) { return R.sum(D.active().map(function (v) { return v.months[i].spend; })) + D.generators[i].spend; }
+      function litres(i) { return R.sum(D.active().map(function (v) { return v.months[i].litres; })); }
+      function pages(i) { return R.sum(D.branches.map(function (b) { return D.paper[b][i].pages; })); }
+      function events(i) { return R.sum(D.branches.map(function (b) { return D.business[b][i].accounts + D.business[b][i].loans; })); }
+      function cost(i) { return R.sum(D.branches.map(function (b) { var x = D.paper[b][i]; return (x.pages - x.colour) * S.costBW + x.colour * S.costColour; })); }
+      function ch(a, b) { if (p < 0) return '—'; var g = (a - b) / b; return (g >= 0 ? '+' : '−') + R.pct(g); }
+      var rows = [
+        ['Fuel spend', R.zmw(fuel(m)), ch(fuel(m), p >= 0 ? fuel(p) : 1)],
+        ['Fuel litres', R.short(litres(m)), ch(litres(m), p >= 0 ? litres(p) : 1)],
+        ['Pages printed', R.short(pages(m)), ch(pages(m), p >= 0 ? pages(p) : 1)],
+        ['Paper cost (estimated)', R.zmw(cost(m)), ch(cost(m), p >= 0 ? cost(p) : 1)],
+        ['Accounts opened + loans', R.short(events(m)), ch(events(m), p >= 0 ? events(p) : 1)],
+        ['Pages per business event', (pages(m) / events(m)).toFixed(1), ch(pages(m) / events(m), p >= 0 ? pages(p) / events(p) : 1)]
+      ];
+      var worst = D.active().filter(function (v) { return v.months[m].km; }).map(function (v) { return { plate: v.plate, kml: v.months[m].km / v.months[m].litres }; }).sort(function (a, b) { return a.kml - b.kml; })[0];
+      var serious = D.checks.filter(function (k) { return k.sev === 'Serious'; }).length;
+      document.getElementById('sheet').innerHTML =
+        '<div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:.5rem"><h2>Resources pack · ' + D.labels[m] + '</h2><span style="color:var(--muted);font-size:.85rem">Demo Bank · Admin department</span></div>' +
+        '<p class="story" style="margin:.5rem 0 1rem">Fuel spend ' + (p >= 0 && fuel(m) < fuel(p) ? 'fell' : 'rose') + ' on the month while business ' + (p >= 0 && events(m) > events(p) ? 'grew' : 'slowed') + '. ' + serious + ' fuel checks need a question asked, and ' + (worst ? worst.plate + ' ran at ' + worst.kml.toFixed(1) + ' km/L, the lowest in the fleet.' : '') + '</p>' +
+        '<div class="table-wrap"><table class="t"><thead><tr><th>Measure</th><th class="r">' + D.labels[m] + '</th><th class="r">vs previous month</th></tr></thead><tbody>' +
+        rows.map(function (r) { return '<tr><td>' + r[0] + '</td><td class="r"><b>' + r[1] + '</b></td><td class="r">' + r[2] + '</td></tr>'; }).join('') + '</tbody></table></div>' +
+        '<h3 style="margin:1.4rem 0 .5rem;font-family:var(--font-display)">Actions for the month</h3><ul class="explain">' +
+        '<li>Ask the branch about ' + (worst ? worst.plate : 'the lowest km/L vehicle') + '\'s fuel economy.</li><li>Follow up the ' + serious + ' serious fuel checks with the card provider and drivers.</li><li>Kitwe prints well above the 50-pages-per-event benchmark; a third of its pages have no printer login.</li></ul>';
+      document.getElementById('xls').onclick = function () { R.downloadCSV('Resources-pack-' + D.labels[m].replace(' ', '-') + '.csv', [['Measure', D.labels[m], 'vs previous month']].concat(rows)); };
+    };
+  </script>
+</body>
+</html>

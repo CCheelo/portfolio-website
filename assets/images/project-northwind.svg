@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 200">
+  <defs>
+    <linearGradient id="nw-bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0c1420"/>
+      <stop offset="100%" stop-color="#1a0f08"/>
+    </linearGradient>
+  </defs>
+  <rect width="500" height="200" fill="url(#nw-bg)"/>
+  <text x="32" y="34" font-family="system-ui, sans-serif" font-size="15" fill="#f1f5f9" font-weight="700">NorthWind Sales Dashboard</text>
+  <text x="32" y="52" font-family="system-ui, sans-serif" font-size="10" fill="#64748b">Excel · Lookup panel · Actual vs target</text>
+
+  <g font-family="system-ui, sans-serif">
+    <rect x="32" y="66" width="96" height="48" rx="6" fill="#0f172a" stroke="#1e293b"/>
+    <text x="42" y="82" font-family="monospace" font-size="7" fill="#64748b">ACTUAL SALES</text>
+    <text x="42" y="104" font-size="18" font-weight="800" fill="#fb923c">9,822</text>
+    <rect x="136" y="66" width="96" height="48" rx="6" fill="#0f172a" stroke="#1e293b"/>
+    <text x="146" y="82" font-family="monospace" font-size="7" fill="#64748b">VS JAN TARGET</text>
+    <text x="146" y="104" font-size="18" font-weight="800" fill="#f87171">−6.5%</text>
+  </g>
+  <line x1="32" y1="176" x2="232" y2="176" stroke="#1e293b"/>
+  <rect x="44" y="140" width="22" height="36" rx="2" fill="#c2410c"/>
+  <rect x="84" y="128" width="22" height="48" rx="2" fill="#c2410c" opacity="0.85"/>
+  <rect x="124" y="150" width="22" height="26" rx="2" fill="#c2410c" opacity="0.7"/>
+  <rect x="164" y="134" width="22" height="42" rx="2" fill="#c2410c" opacity="0.55"/>
+  <path d="M40 146 H190" stroke="#f1f5f9" stroke-dasharray="3 3" opacity="0.5"/>
+  <rect x="262" y="66" width="206" height="114" rx="8" fill="#0f172a" stroke="#1e293b"/>
+  <text x="276" y="84" font-family="monospace" font-size="8" fill="#64748b">LOOKUP PANEL</text>
+  <g font-family="monospace" font-size="9">
+    <rect x="276" y="92" width="178" height="18" rx="3" fill="#111827" stroke="#334155"/>
+    <text x="284" y="105" fill="#94a3b8">Salesperson</text><text x="446" y="105" fill="#e2e8f0" text-anchor="end">John King ▾</text>
+    <rect x="276" y="116" width="178" height="18" rx="3" fill="#111827" stroke="#334155"/>
+    <text x="284" y="129" fill="#94a3b8">Product</text><text x="446" y="129" fill="#e2e8f0" text-anchor="end">PRD-010 ▾</text>
+    <text x="284" y="158" fill="#fb923c">=XLOOKUP(…) → 2,179</text>
+  </g>
+</svg>

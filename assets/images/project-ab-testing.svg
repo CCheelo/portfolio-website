@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 200">
+  <defs>
+    <linearGradient id="ab-bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0c1420"/>
+      <stop offset="100%" stop-color="#1a0f08"/>
+    </linearGradient>
+  </defs>
+  <rect width="500" height="200" fill="url(#ab-bg)"/>
+  <text x="32" y="34" font-family="system-ui, sans-serif" font-size="15" fill="#f1f5f9" font-weight="700">NorthWind A/B Testing Lab</text>
+  <text x="32" y="52" font-family="system-ui, sans-serif" font-size="10" fill="#64748b">Welch t-test · 120 orders · Personalised vs standard email</text>
+
+  <line x1="32" y1="170" x2="290" y2="170" stroke="#1e293b"/>
+  <path d="M40 170 C80 170 90 92 130 92 C170 92 180 170 220 170" fill="#64748b" fill-opacity="0.25" stroke="#94a3b8" stroke-width="2"/>
+  <path d="M70 170 C110 170 122 76 162 76 C202 76 214 170 254 170" fill="#c2410c" fill-opacity="0.25" stroke="#fb923c" stroke-width="2.5"/>
+  <line x1="130" y1="92" x2="130" y2="170" stroke="#94a3b8" stroke-dasharray="3 3"/>
+  <line x1="162" y1="76" x2="162" y2="170" stroke="#fb923c" stroke-dasharray="3 3"/>
+  <text x="122" y="184" font-family="monospace" font-size="8" fill="#94a3b8" text-anchor="middle">A 333</text>
+  <text x="170" y="184" font-family="monospace" font-size="8" fill="#fb923c" text-anchor="middle">B 373</text>
+  <rect x="318" y="70" width="150" height="110" rx="8" fill="#0f172a" stroke="#1e293b"/>
+  <text x="332" y="92" font-family="monospace" font-size="8" fill="#64748b">ONE-TAIL P-VALUE</text>
+  <text x="332" y="118" font-family="system-ui, sans-serif" font-size="26" font-weight="800" fill="#fb923c">0.035</text>
+  <text x="332" y="140" font-family="monospace" font-size="8" fill="#64748b">LIFT OF B OVER A</text>
+  <text x="332" y="162" font-family="system-ui, sans-serif" font-size="20" font-weight="800" fill="#4ade80">+11.8%</text>
+</svg>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register · Resource Analytics (demo)</title>
+  <meta name="description" content="The vehicle and card register: type, branch, tank size and sold status. Fictional fleet.">
+  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600&family=Funnel+Display:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/ra.css">
+</head>
+<body data-page="register">
+  <main class="page">
+    <h1 class="title">Register</h1>
+    <p class="question">When a new plate or card appears, say what it is. Mark sold vehicles as Sold and they drop out of every total.</p>
+    <div class="card table-wrap" style="margin-top:1.25rem"><table class="t" id="reg"></table></div>
+    <p style="font-size:.78rem;color:var(--muted);margin-top:.6rem">Changes are saved in your browser and feed straight into Overview, Fleet fuel and the savings calculator. Tank size drives the “bigger than tank” check.</p>
+  </main>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    window.renderPage = function () {
+      var R = window.RA, D = window.RA_DATA;
+      var TYPES = ['Car', 'Motorbike', 'Generator', 'Branch card'];
+      function draw() {
+        document.getElementById('reg').innerHTML = '<thead><tr><th>Plate / card</th><th>Type</th><th>Branch</th><th class="r">Tank (L)</th><th>Status</th><th class="r">Spend in period</th></tr></thead><tbody>' +
+          D.vehicles.map(function (v, i) {
+            return '<tr' + (v.status === 'Sold' ? ' style="opacity:.55"' : '') + '><td><b>' + v.plate + '</b>' + (v.noTracker ? '<br><small style="color:var(--warn)">no tracker</small>' : '') + '</td>' +
+              '<td><select data-i="' + i + '" data-f="type" aria-label="Type of ' + v.plate + '">' + TYPES.map(function (t) { return '<option' + (t === v.type ? ' selected' : '') + '>' + t + '</option>'; }).join('') + '</select></td>' +
+              '<td><select data-i="' + i + '" data-f="branch" aria-label="Branch of ' + v.plate + '">' + D.branches.map(function (b) { return '<option' + (b === v.branch ? ' selected' : '') + '>' + b + '</option>'; }).join('') + '</select></td>' +
+              '<td class="r"><input type="number" min="5" max="400" style="width:80px" value="' + v.tank + '" data-i="' + i + '" data-f="tank" aria-label="Tank size of ' + v.plate + '"></td>' +
+              '<td><select data-i="' + i + '" data-f="status" aria-label="Status of ' + v.plate + '"><option' + (v.status !== 'Sold' ? ' selected' : '') + '>Active</option><option' + (v.status === 'Sold' ? ' selected' : '') + '>Sold</option></select></td>' +
+              '<td class="r">' + R.zmw(v.totalSpend) + '</td></tr>';
+          }).join('') + '</tbody>';
+      }
+      document.getElementById('reg').addEventListener('change', function (e) {
+        var el = e.target, v = D.vehicles[+el.getAttribute('data-i')], f = el.getAttribute('data-f');
+        v[f] = f === 'tank' ? +el.value : el.value; D.save(); draw();
+        R.toast(f === 'status' ? (v.status === 'Sold' ? v.plate + ' is out of every total from now on.' : v.plate + ' counts again.') : 'Saved.');
+      });
+      draw();
+    };
+  </script>
+</body>
+</html>

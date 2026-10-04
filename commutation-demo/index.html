@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#08070c">
+  <title>Commutation — party app demo · Choolwe Cheelo</title>
+  <meta name="description" content="Playable demo of Commutation, a real-time party game app Choolwe Cheelo built for one Saturday. Dummy crew and answers.">
+  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Archivo+Black&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/commutation.css">
+</head>
+<body>
+  <div class="outside">
+    <a href="../project-commutation.html">← Back to the project</a>
+    <span>Personal project · playable demo · the crew and every answer are made up</span>
+  </div>
+
+  <div class="stage">
+    <aside class="aside">
+      <div class="k">Personal project</div>
+      <h2>A party app for six people, built for one Saturday.</h2>
+      <p>Before the day it is an info hub and a private survey. On the day it turns into a synced game console — about 25 games across three halls, on six phones and an optional TV.</p>
+      <ul>
+        <li>Answer the survey, then skip to Saturday — your confession joins the Vault deck.</li>
+        <li>All ten games play: Who Wrote It?, Know Me Best, Paranoia and The Deep End in the Vault; Name That Tune, Clap Circle and Hot Seat in the Huddle; Spyfall, Drawful and the Quick-fire Quiz in the Arena.</li>
+        <li>Then run the awards from the Board. The rest of the crew is simulated; the real app syncs every phone live.</li>
+      </ul>
+    </aside>
+
+    <div class="phone" role="application" aria-label="Commutation app">
+      <div class="screen">
+        <div class="scroll" id="scroll"></div>
+        <nav class="tabbar" id="tabbar" hidden aria-label="Halls">
+          <button data-hall="huddle"><span>🫂</span>HUDDLE</button>
+          <button data-hall="arena"><span>📺</span>ARENA</button>
+          <button data-hall="vault"><span>🔒</span>VAULT</button>
+          <button data-hall="board"><span>🏆</span>BOARD</button>
+        </nav>
+        <div class="toast" id="toast" role="status"></div>
+      </div>
+    </div>
+
+    <aside class="aside aside--right">
+      <div class="k">How it's built</div>
+      <h2>Next.js + Supabase</h2>
+      <p>Postgres, Realtime channels for the game engine, and <b>row-level security</b> so survey answers are readable only by their author — not by the other players, not by the host, not through the API.</p>
+      <ul>
+        <li>The hub shows answer <em>counts</em> so people can chase each other — never content.</li>
+        <li>Answers are released by the game engine, inside a live round, on the day.</li>
+        <li>Art: original poster illustrations; every game tile is hand-built SVG.</li>
+      </ul>
+    </aside>
+  </div>
+
+  <script src="js/games.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

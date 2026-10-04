@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings · Resource Analytics (demo)</title>
+  <meta name="description" content="The assumptions behind the numbers: per-page costs, emission factors and the paper benchmark.">
+  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600&family=Funnel+Display:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/ra.css">
+</head>
+<body data-page="settings">
+  <main class="page">
+    <h1 class="title">Settings</h1>
+    <p class="question">Some numbers are assumptions until someone confirms them. They live here, in one place, and every page uses them.</p>
+    <form class="card pad" id="form" style="margin-top:1.25rem;max-width:760px"></form>
+  </main>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    window.renderPage = function () {
+      var R = window.RA, D = window.RA_DATA, S = D.settings;
+      var FIELDS = [
+        ['costBW', 'Cost per black & white page (ZMW)', 'Drives paper cost, paper budget actuals and savings. Placeholder until Procurement confirms it.', 0.01],
+        ['costColour', 'Cost per colour page (ZMW)', 'Colour moved to black & white in the savings calculator uses the gap between the two.', 0.01],
+        ['paperBenchmark', 'Paper benchmark (pages per business event)', 'Branches above it are flagged on the Paper page.', 1],
+        ['petrolCO2', 'Petrol (kg CO₂e per litre)', 'UK DESNZ, 100% mineral petrol.', 0.01],
+        ['dieselCO2', 'Diesel (kg CO₂e per litre)', 'UK DESNZ, 100% mineral diesel.', 0.01],
+        ['pageCO2', 'Paper (kg CO₂e per A4 page)', 'Approximate; check before external reporting.', 0.0001]
+      ];
+      var form = document.getElementById('form');
+      form.innerHTML = FIELDS.map(function (f) {
+        return '<div class="form-row"><label for="' + f[0] + '"><b>' + f[1] + '</b><small>' + f[2] + '</small></label><input class="input" type="number" id="' + f[0] + '" step="' + f[3] + '" min="0" value="' + S[f[0]] + '"></div>';
+      }).join('') + '<div style="display:flex;gap:.5rem;margin-top:1rem"><button class="btn" type="submit">Save settings</button><a class="btn btn--ghost" href="budget.html">See the effect on Budget &amp; savings →</a></div>';
+      form.onsubmit = function (e) {
+        e.preventDefault();
+        FIELDS.forEach(function (f) { var v = parseFloat(document.getElementById(f[0]).value); if (!isNaN(v)) S[f[0]] = v; });
+        D.save(); R.toast('Saved — paper cost, carbon and savings now use these figures.');
+      };
+    };
+  </script>
+</body>
+</html>

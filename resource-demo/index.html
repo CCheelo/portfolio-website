@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Overview · Resource Analytics (demo)</title>
+  <meta name="description" content="Interactive demo of a resource analytics app built by Choolwe Cheelo: fuel and paper use measured against business growth. Fictional data.">
+  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600&family=Funnel+Display:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/ra.css">
+</head>
+<body data-page="overview">
+  <main class="page">
+    <div class="head">
+      <div>
+        <h1 class="title">Overview</h1>
+        <p class="question">Is business growth explaining our fuel and paper use?</p>
+      </div>
+      <label class="period">📅 <select id="periodSelect" aria-label="Period">
+        <option value="8">All data · Feb 26 – Sep 26</option><option value="6">Last 6 months</option><option value="3">Last 3 months</option>
+      </select></label>
+    </div>
+    <p class="freshness">Latest data — Fuel card Sep 26 · Tracker utilisation Sep 26 · Tracker trips Sep 26 · Printer logs Sep 26 · Business figures Sep 26</p>
+
+    <div class="grid-2" id="verdicts"></div>
+
+    <div class="card" style="margin-top:1rem">
+      <div class="kpis" id="kpis" role="tablist" aria-label="Choose what the chart shows"></div>
+      <div class="chart-head"><div class="label" id="chartEyebrow">Side by side</div><div class="chart-title" id="chartTitle">Indexed</div><div class="chart-sub" id="chartSub">All three at the start = 100</div></div>
+      <div class="chart-box"><canvas id="mainChart" aria-label="Main chart"></canvas></div>
+    </div>
+
+    <div class="grid-2" style="margin-top:1rem">
+      <div class="card pad">
+        <div class="label">Why fuel spend changed</div>
+        <p class="story" style="margin:.3rem 0 .6rem">Each month's change split into <b>buying more or less fuel</b> and <b>the ERB moving the pump price</b>.</p>
+        <ul class="explain" id="explain"></ul>
+      </div>
+      <div class="card pad">
+        <div class="label">Where it stands</div>
+        <div class="rows" id="league" style="margin:0 -1.2rem"></div>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    var chart, current = 'indexed';
+    window.renderPage = function () {
+      var R = window.RA, D = window.RA_DATA, L = R.labels();
+      var ev = R.series.events(), loans = R.series.loans(), pages = R.series.pages(), spend = R.series.fuelSpend(), litres = R.series.litres(), kml = R.series.kmPerL();
+      var gEv = R.growth(ev), gLoans = R.growth(loans), gPages = R.growth(pages), gLitres = R.growth(litres), gSpend = R.growth(spend);
+
+      var vf = R.verdict(gLitres, gLoans, 'Fuel', 'loans'), vp = R.verdict(gPages, gEv, 'Paper', 'business');
+      document.getElementById('verdicts').innerHTML = [['Fuel against loans', vf], ['Paper against accounts + loans', vp]].map(function (x) {
+        return '<div class="card verdict verdict--' + (x[1].good ? 'good' : 'bad') + ' fade-up"><span class="verdict__icon">' + (x[1].good ? '✓' : '!') + '</span><div><div class="label">' + x[0] + '</div>' +
+          '<div class="verdict__head">' + x[1].head + '</div><p>' + x[1].text + '</p></div></div>';
+      }).join('');
+
+      /* Pages per event — median branch */
+      var ratios = D.branches.map(function (b) {
+        var p = 0, e = 0; R.idx().forEach(function (m) { p += D.paper[b][m].pages; e += D.business[b][m].accounts + D.business[b][m].loans; }); return p / e;
+      }).sort(function (a, b) { return a - b; });
+      var median = ratios[Math.floor(ratios.length / 2)];
+      var pageCost = R.sum(R.series.paperCost());
+
+      var K = {
+        spend:  { label: 'Fuel spend', value: R.zmw(R.sum(spend)), pill: R.pill(gSpend, false), note: 'first vs last months of the period', data: spend, title: 'Fuel spend', sub: 'ZMW a month, fleet + generators' },
+        litres: { label: 'Fuel litres', value: R.short(R.sum(litres)), pill: R.pill(gLitres, false), note: 'Fleet cards', data: litres, title: 'Fuel litres', sub: 'Litres a month on fleet cards' },
+        kml:    { label: 'Km per litre', value: (R.avg(kml)).toFixed(1), pill: R.pill(R.growth(kml), true), note: 'Cars · card L ÷ tracker km', data: kml, title: 'Km per litre', sub: 'Cars only, months with both card and tracker data' },
+        pages:  { label: 'Pages printed', value: R.short(R.sum(pages)), pill: R.pill(gPages, false), note: '≈ ' + R.zmw(pageCost), data: pages, title: 'Pages printed', sub: 'Printer logs, all branches' },
+        ppe:    { label: 'Pages per event', value: median.toFixed(1), pill: '', note: 'Median branch · benchmark 50', data: pages.map(function (p, i) { return p / ev[i]; }), title: 'Pages per event', sub: 'Pages ÷ (accounts opened + loans registered)' },
+        events: { label: 'Accounts + loans', value: R.short(R.sum(ev)), pill: R.pill(gEv, true), note: 'Business events', data: ev, title: 'Accounts + loans', sub: 'The business the resources should be tracking' }
+      };
+      var keys = ['spend', 'litres', 'kml', 'pages', 'ppe', 'events'];
+      var strip = document.getElementById('kpis');
+      strip.innerHTML = keys.map(function (k) {
+        return '<button class="kpi' + (current === k ? ' active' : '') + '" role="tab" aria-selected="' + (current === k) + '" data-k="' + k + '"><div class="label">' + K[k].label + '</div>' +
+          '<div class="kpi__value">' + K[k].value + ' ' + K[k].pill + '</div><div class="kpi__note">' + K[k].note + '</div></button>';
+      }).join('');
+      strip.onclick = function (e) {
+        var b = e.target.closest('.kpi'); if (!b) return;
+        current = current === b.getAttribute('data-k') ? 'indexed' : b.getAttribute('data-k');
+        window.renderPage();
+      };
+
+      var c = R.colors(), ds, title, sub, eyebrow;
+      if (current === 'indexed') {
+        ds = [R.lineDataset('Fuel spend', R.indexed(spend), c[0]), R.lineDataset('Pages printed', R.indexed(pages), c[1]), R.lineDataset('Accounts + loans', R.indexed(ev), c[3])];
+        eyebrow = 'Side by side'; title = 'Indexed'; sub = 'All three at the start = 100 · click a figure above to see it alone';
+      } else {
+        ds = [R.lineDataset(K[current].title, K[current].data, c[0], true)];
+        eyebrow = 'Click it again for side by side'; title = K[current].title; sub = K[current].sub;
+      }
+      document.getElementById('chartEyebrow').textContent = eyebrow;
+      document.getElementById('chartTitle').textContent = title;
+      document.getElementById('chartSub').textContent = sub;
+      if (chart) chart.destroy();
+      chart = new Chart(document.getElementById('mainChart'), {
+        type: 'line', data: { labels: L, datasets: ds },
+        options: { interaction: { mode: 'index', intersect: false }, plugins: { legend: { display: current === 'indexed', position: 'bottom' } },
+          scales: { y: { grid: { color: R.css('--line') }, ticks: { callback: function (v) { return R.short(v); } } }, x: { grid: { display: false } } } }
+      });
+
+      /* Volume vs price decomposition, month on month */
+      var ix = R.idx(), lines = [];
+      for (var j = 1; j < ix.length; j++) {
+        var m0 = ix[j - 1], m1 = ix[j];
+        var l0 = 0, l1 = 0, p0 = 0, p1 = 0;
+        D.active().forEach(function (v) { l0 += v.months[m0].litres; l1 += v.months[m1].litres; p0 += v.months[m0].spend; p1 += v.months[m1].spend; });
+        var price0 = p0 / l0, price1 = p1 / l1;
+        var vol = (l1 - l0) * price0, pr = (price1 - price0) * l1, total = p1 - p0;
+        lines.push('<li><b>' + D.labels[m1] + '</b> — spend ' + (total >= 0 ? 'up ' : 'down ') + R.zmw(Math.abs(total)) + ': ' +
+          (Math.abs(vol) > Math.abs(pr) ? (vol > 0 ? 'mostly buying more fuel' : 'mostly buying less fuel') : (pr > 0 ? 'mostly the ERB raising the price' : 'mostly the ERB cutting the price')) +
+          ' <span style="color:var(--muted);font-family:var(--font-ui);font-size:.78rem">(volume ' + (vol >= 0 ? '+' : '−') + R.short(Math.abs(vol)) + ', price ' + (pr >= 0 ? '+' : '−') + R.short(Math.abs(pr)) + ')</span></li>');
+      }
+      document.getElementById('explain').innerHTML = lines.reverse().slice(0, 5).join('');
+
+      /* Branch league on pages per event */
+      var rows = D.branches.map(function (b) {
+        var p = 0, e = 0; R.idx().forEach(function (m) { p += D.paper[b][m].pages; e += D.business[b][m].accounts + D.business[b][m].loans; });
+        return { b: b, v: p / e };
+      }).sort(function (a, b) { return b.v - a.v; });
+      var max = rows[0].v;
+      document.getElementById('league').innerHTML = '<div class="row" style="font-size:.7rem;color:var(--muted);font-weight:700;letter-spacing:.08em;text-transform:uppercase"><span>Branch</span><span>Pages / event</span></div>' +
+        rows.slice(0, 7).map(function (r) {
+          return '<div class="row"><i class="row__bar' + (r.v > 50 ? ' over' : '') + '" data-w="' + (r.v / max * 100).toFixed(0) + '"></i><span>' + r.b + '</span><span><b>' + r.v.toFixed(1) + '</b></span></div>';
+        }).join('');
+      R.animateRows();
+    };
+  </script>
+</body>
+</html>

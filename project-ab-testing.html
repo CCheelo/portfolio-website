@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NorthWind A/B Testing Lab | Choolwe Cheelo</title>
+  <meta name="description" content="A Welch two-sample t-test on a personalised vs standard email campaign: personalised emails lifted average order value by 11.8% (one-tail p = 0.035).">
+  <link rel="canonical" href="https://choolwecheelo.vercel.app/project-ab-testing.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Choolwe Cheelo">
+  <meta property="og:title" content="NorthWind A/B Testing Lab | Choolwe Cheelo">
+  <meta property="og:description" content="A Welch two-sample t-test on a personalised vs standard email campaign: personalised emails lifted average order value by 11.8% (one-tail p = 0.035).">
+  <meta property="og:url" content="https://choolwecheelo.vercel.app/project-ab-testing.html">
+  <meta property="og:image" content="https://choolwecheelo.vercel.app/assets/images/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container navbar__container">
+      <a href="index.html" class="navbar__brand">Choolwe Cheelo</a>
+      <button class="navbar__toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+        <span class="navbar__toggle-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span class="navbar__toggle-label">Menu</span>
+      </button>
+      <ul class="navbar__links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="resume.html">Resume</a></li>
+        <li><a href="skills.html">Skills &amp; Certifications</a></li>
+        <li><a href="projects.html" class="active">Projects</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <section class="project-detail__hero">
+      <div class="container">
+        <h1 class="project-detail__title">NorthWind A/B Testing Lab</h1>
+        <div class="project-detail__meta">
+          <span>2026 &middot; FSI Outsourcing training</span>
+          <span>Excel &middot; Hypothesis testing</span>
+          <span>Complete</span>
+        </div>
+        <p class="project-detail__description">
+          Did a personalised email campaign really raise order values, or was it chance? A two-sample t-test on 120 orders for the fictional NorthWind Outfitters &mdash; with the business reading as well as the statistics.
+        </p>
+
+        <div class="project-detail__buttons">
+          <a href="#summary" class="btn btn--primary">Summary Overview</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="summary">
+      <div class="container container--narrow prose">
+        <h2 class="section__title">Summary Overview</h2>
+        <div class="stat-row">
+          <div><b>372.77</b><span>average order &mdash; personalised email (n = 60)</span></div>
+          <div><b>333.36</b><span>average order &mdash; standard email (n = 60)</span></div>
+          <div><b>+11.8%</b><span>lift, one-tail p = 0.035</span></div>
+        </div>
+
+        <h3>The test</h3>
+        <p>
+          H<sub>0</sub>: personalised emails do not raise average order value. Because the two groups had different
+          variances, I used Welch's t-test (two samples, unequal variances): t = 1.83 on 114 degrees of freedom,
+          against a one-tail critical value of 1.66. The one-tail p-value is <strong>0.035</strong>, so at
+          &alpha; = 0.05 we reject H<sub>0</sub> &mdash; the lift is unlikely to be random.
+        </p>
+
+        <h3>Average order value by region</h3>
+        <div class="figure" style="padding:1rem"><canvas id="abChart" height="220" aria-label="Average order value by region for personalised and standard emails"></canvas></div>
+        <p>
+          The lift holds in the North, East and West, but the South went the other way (345.67 personalised
+          vs 359.74 standard). With only a handful of orders per region, that is a reason to look closer before
+          rolling out everywhere, not a reason to ignore the overall result.
+        </p>
+
+        <h3>Statistical vs practical significance</h3>
+        <p>
+          The two-tail p-value is 0.07, so the conclusion depends on having decided in advance that we only care
+          whether personalisation <em>helps</em>. The practical case is the 11.8% lift in order value &mdash; large
+          enough to matter if personalisation is cheap to run.
+        </p>
+
+        <div style="margin-top: 3rem;">
+          <a href="projects.html" class="btn btn--secondary">&larr; All Projects</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__container">
+      <p class="footer__copyright">&copy; Built by Choolwe Cheelo 2026</p>
+      <ul class="footer__social">
+        <li><a href="https://github.com/CCheelo" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://www.linkedin.com/in/choolwe-cheelo" target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a href="mailto:choolwecheelo22@gmail.com">Email</a></li>
+      </ul>
+    </div>
+  </footer>
+  <script src="js/main.js" defer></script>
+  <script src="js/chat.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script>
+    (function () {
+      var el = document.getElementById('abChart');
+      if (!el || !window.Chart) return;
+      var css = getComputedStyle(document.documentElement);
+      new Chart(el, {
+        type: 'bar',
+        data: {
+          labels: ['North', 'East', 'West', 'South', 'All'],
+          datasets: [
+            { label: 'Personalised', data: [400.23, 386.57, 367.31, 345.67, 372.77], backgroundColor: css.getPropertyValue('--color-accent').trim() },
+            { label: 'Standard', data: [329.43, 336.10, 308.09, 359.74, 333.36], backgroundColor: '#94a3b8' }
+          ]
+        },
+        options: { responsive: true, plugins: { legend: { position: 'bottom' } }, scales: { y: { beginAtZero: false, min: 250, ticks: { callback: function (v) { return v; } } } } }
+      });
+    })();
+  </script>
+</body>
+</html>

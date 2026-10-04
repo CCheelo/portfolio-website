@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Church at a glance — UNISDA Strategic Planning (demo)</title>
+  <meta name="description" content="The board's one page and the quarterly consolidation, in the UNISDA Strategic Planning demo. Dummy data only.">
+  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/unisda.css">
+</head>
+<body data-page="board">
+  <main class="page">
+    <div class="eyebrow">The board · 2026</div>
+    <h1 class="page-title">Church at a glance</h1>
+    <p class="lede">The church in four figures, what needs the board, then every department — the quarterly consolidation SPEMC used to assemble by pasting between workbooks.</p>
+    <div class="toolbar"><button class="btn btn--ghost btn--sm" id="xls">⤓ Excel</button><button class="btn btn--ghost btn--sm" onclick="window.print()">⤓ PDF</button></div>
+
+    <div class="stats" style="margin-top:1.25rem" id="stats"></div>
+
+    <div class="section-h"><h2>What needs the board</h2></div>
+    <div class="card" id="needsBoard"></div>
+
+    <div class="section-h"><h2>Every department, quarter by quarter</h2><small>Colour is derived from each quarter's reports</small></div>
+    <div class="card table-wrap reveal">
+      <div class="rag-grid" id="rag" style="min-width:560px"></div>
+    </div>
+    <div class="legend" style="margin-top:.7rem">
+      <span style="color:var(--st-done)">Completed</span><span style="color:var(--st-prog)">Progressing</span>
+      <span style="color:var(--gold-500)">Early stage</span><span style="color:var(--st-not)">Not started</span>
+      <span style="color:var(--navy-200)">Not reported / not yet due</span>
+    </div>
+
+    <div class="grid-2" style="margin-top:2rem">
+      <div class="card card__pad reveal">
+        <strong class="jost">Delivery against planned timing</strong>
+        <p style="font-size:.8rem;color:var(--muted);margin:.2rem 0 1rem">Counted from the quarter each activity was first committed to — the split the master workbook's Summary sheet used to report by hand.</p>
+        <div class="split" id="timing"></div>
+        <div class="legend" id="timingLegend"></div>
+      </div>
+      <div class="card card__pad reveal">
+        <strong class="jost">By theme</strong>
+        <div id="themeMoney" style="margin-top:.8rem"></div>
+      </div>
+    </div>
+
+    <div class="section-h"><h2>Committee commentary · Q3</h2><button class="btn btn--teal btn--sm" id="draft">✎ Draft it from the reports</button></div>
+    <div class="card card__pad" id="commentary" style="color:var(--ink-2)">
+      <em>Empty. SPEMC can have this drafted from the quarter's own reports — figures, a highlight per department and what slipped — then edit and save it as its own.</em>
+    </div>
+  </main>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    window.renderPage = function () {
+      var D = window.UNISDA_DATA, U = window.UNISDA, me = U.persona();
+      var acts = D.activities;
+      var budget = 0, spent = 0;
+      acts.forEach(function (a) { budget += a.budget; if (a.band != null) spent += a.spent; });
+      var due = acts.filter(function (a) { return a.quarter <= 3; });
+      var dueRep = due.filter(function (a) { return a.band != null; });
+
+      document.getElementById('stats').innerHTML =
+        s('', 'Departments planning', D.departments.length, 'of 36 on the church\'s master list') +
+        s('stat--gold', 'Budget agreed', U.money(budget), acts.length + ' activities') +
+        s('stat--green', 'Spent so far', U.money(spent), Math.round(spent / budget * 100) + '% of the year\'s budget') +
+        s('stat--navy', 'Reports in (Q1–Q3)', Math.round(dueRep.length / due.length * 100) + '%', dueRep.length + ' of ' + due.length + ' due');
+      function s(c, l, v, n) { return '<div class="stat ' + c + ' fade-up"><div class="stat__label">' + l + '</div><div class="stat__value num">' + v + '</div><div class="stat__note">' + n + '</div></div>'; }
+
+      var over = [];
+      D.requests.forEach(function (r) { r.lines.forEach(function (l) { if (l.amount > l.remaining) over.push(D.dept(r.dept).name + ' — ' + l.act + ' (K' + D.fmt(l.amount - l.remaining) + ' over)'); }); });
+      var late = D.departments.filter(function (d) { return acts.some(function (a) { return a.dept === d.id && a.quarter <= 3 && a.band == null; }); });
+      var stalled = due.filter(function (a) { return a.band === 1; });
+      var items = [
+        ['⚠', over.length + ' request' + (over.length === 1 ? '' : 's') + ' above the scorecard figure', over.join(' · ') || 'None'],
+        ['✎', late.length + ' department' + (late.length === 1 ? '' : 's') + ' with a Q3 report outstanding', late.map(function (d) { return d.name; }).join(', ') || 'None'],
+        ['■', stalled.length + ' activities reported as not started', stalled.map(function (a) { return a.name + ' (' + D.dept(a.dept).name + ')'; }).join(' · ') || 'None']
+      ];
+      document.getElementById('needsBoard').innerHTML = items.map(function (i) {
+        return '<div class="cu-item"><span class="needs__icon" style="width:36px;height:36px;font-size:1rem">' + i[0] + '</span><div class="cu-item__body"><div style="font-weight:700">' + i[1] + '</div><div class="cu-item__meta" style="white-space:normal">' + i[2] + '</div></div></div>';
+      }).join('');
+
+      /* Worst-of status per department per quarter */
+      var rank = { not: 0, early: 1, prog: 2, done: 3 };
+      var html = '<div class="h">Department</div><div class="h rag-cell">Q1</div><div class="h rag-cell">Q2</div><div class="h rag-cell">Q3</div><div class="h rag-cell">Q4</div>';
+      D.departments.forEach(function (d) {
+        html += '<div class="dept"><a href="scorecard.html?dept=' + d.id + '" style="color:inherit">' + d.name + '</a></div>';
+        for (var q = 1; q <= 4; q++) {
+          var qa = acts.filter(function (a) { return a.dept === d.id && a.quarter === q; });
+          var cls, title;
+          if (!qa.length) { cls = 'future'; title = 'Nothing planned'; }
+          else if (qa.every(function (a) { return a.band == null; })) { cls = q >= D.currentQuarter ? 'future' : 'none'; title = q >= D.currentQuarter ? 'Not yet due' : 'Not reported'; }
+          else {
+            var worst = qa.filter(function (a) { return a.band != null; }).map(function (a) { return D.bands[a.band].cls; })
+              .sort(function (x, y) { return rank[x] - rank[y]; })[0];
+            cls = worst; title = qa.length + ' activities';
+          }
+          html += '<div class="rag-cell" title="' + d.name + ' Q' + q + ': ' + title + '"><i class="' + cls + '"></i></div>';
+        }
+      });
+      document.getElementById('rag').innerHTML = html;
+
+      var planned = 0, earlier = 0, later = 0;
+      acts.forEach(function (a) { if (!a.movedFrom) planned++; else if (a.quarter < a.movedFrom) earlier++; else later++; });
+      document.getElementById('timing').innerHTML =
+        '<i style="background:var(--st-done)" data-w="' + planned + '"></i><i style="background:var(--teal-500)" data-w="' + earlier + '"></i><i style="background:var(--gold-500)" data-w="' + later + '"></i>';
+      document.getElementById('timingLegend').innerHTML =
+        '<span style="color:var(--st-done)">' + planned + ' in the planned quarter</span><span style="color:var(--teal-500)">' + earlier + ' moved earlier</span><span style="color:var(--gold-500)">' + later + ' moved later</span>';
+
+      document.getElementById('themeMoney').innerHTML = D.themes.map(function (t) {
+        var ta = acts.filter(function (a) { return D.objective(a.objective).theme === t.id; });
+        var b = ta.reduce(function (x, a) { return x + a.budget; }, 0), sp = ta.reduce(function (x, a) { return x + (a.band != null ? a.spent : 0); }, 0);
+        var pct = b ? Math.round(sp / b * 100) : 0;
+        return '<div style="margin-bottom:.9rem"><div class="theme-row__top" style="margin-bottom:.35rem"><strong>' + t.name + '</strong><span class="num">K' + D.fmt0(sp) + ' of K' + D.fmt0(b) + '</span></div>' +
+          '<div class="bar"><i class="' + (pct > 60 ? '' : 'mid') + '" data-w="' + pct + '"></i></div></div>';
+      }).join('');
+
+      document.getElementById('draft').addEventListener('click', function () {
+        if (!me.admin) { U.toast('Drafting the commentary is SPEMC\'s job — switch to Daniel Kapembwa (SPEMC) to try it.'); return; }
+        var q3 = acts.filter(function (a) { return a.quarter === 3; });
+        var rep = q3.filter(function (a) { return a.band != null; });
+        var done = rep.filter(function (a) { return a.band === 4; });
+        var b = q3.reduce(function (x, a) { return x + a.budget; }, 0), sp = rep.reduce(function (x, a) { return x + a.spent; }, 0);
+        var best = done.slice(0, 3).map(function (a) { return a.name.toLowerCase() + ' (' + D.dept(a.dept).name + ')'; });
+        var slipped = rep.filter(function (a) { return a.band <= 2; }).map(function (a) { return a.name.toLowerCase() + ' (' + D.dept(a.dept).name + ')'; });
+        var text = '<p><strong>Achievements.</strong> ' + rep.length + ' of ' + q3.length + ' third-quarter activities have reported, ' + done.length + ' of them complete. K' + D.fmt0(sp) + ' was spent against K' + D.fmt0(b) + ' budgeted for the quarter. Highlights include ' + best.join(', ') + '.</p>' +
+          '<p style="margin-top:.6rem"><strong>Challenges and gaps.</strong> ' + (slipped.length ? 'Work that slipped: ' + slipped.join(', ') + '.' : 'Nothing slipped.') + ' ' + late.length + ' departments still owe a Q3 return.</p>' +
+          '<p style="margin-top:.6rem"><strong>Recommendations.</strong> Follow up outstanding returns before the October sitting, and carry slipped work into Q4 with a stated reason rather than dropping it.</p>' +
+          '<p style="margin-top:.8rem;font-size:.8rem;color:var(--muted)">Drafted from the reports — edit before saving it as the committee\'s own.</p>';
+        var box = document.getElementById('commentary');
+        box.innerHTML = text; box.setAttribute('contenteditable', 'true'); box.style.color = 'var(--ink)';
+        box.classList.add('fade-up');
+        if (!document.getElementById('saveC')) box.insertAdjacentHTML('afterend', '<button class="btn btn--teal btn--sm" id="saveC" style="margin-top:.8rem">Save as the committee's commentary</button>');
+        document.getElementById('saveC').onclick = function () {
+          try { localStorage.setItem('unisda-demo-commentary', box.innerHTML); } catch (e) {}
+          box.removeAttribute('contenteditable'); this.remove(); U.toast('Saved — it now appears in the Q3 consolidation.');
+        };
+      });
+      try { var savedC = localStorage.getItem('unisda-demo-commentary'); if (savedC) document.getElementById('commentary').innerHTML = savedC; } catch (e) {}
+
+      document.getElementById('xls').addEventListener('click', function () {
+        var rows = [['Department', 'Q1', 'Q2', 'Q3', 'Q4']];
+        D.departments.forEach(function (d) {
+          var r = [d.name];
+          for (var q = 1; q <= 4; q++) {
+            var qa = acts.filter(function (a) { return a.dept === d.id && a.quarter === q; });
+            var rep = qa.filter(function (a) { return a.band != null; });
+            r.push(!qa.length ? '' : rep.length ? rep.map(function (a) { return D.bands[a.band].status; }).join(' / ') : 'Not reported');
+          }
+          rows.push(r);
+        });
+        U.downloadCSV('Consolidation-2026.csv', rows);
+      });
+    };
+  </script>
+</body>
+</html>

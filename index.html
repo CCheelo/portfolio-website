@@ -4,7 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Choolwe Cheelo — Data Analyst</title>
-  <meta name="description" content="Portfolio of Choolwe Cheelo, data analyst specializing in Power BI dashboards, statistical analysis, and financial modeling.">
+  <meta name="description" content="Choolwe Cheelo is the Data Analyst at AB Bank Zambia and chair of its AI Committee: Power BI, Qlik and SQL reporting, AI systems built with agentic coding, and statistical research.">
+  <link rel="canonical" href="https://choolwecheelo.vercel.app/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Choolwe Cheelo">
+  <meta property="og:title" content="Choolwe Cheelo — Data Analyst">
+  <meta property="og:description" content="Choolwe Cheelo is the Data Analyst at AB Bank Zambia and chair of its AI Committee: Power BI, Qlik and SQL reporting, AI systems built with agentic coding, and statistical research.">
+  <meta property="og:url" content="https://choolwecheelo.vercel.app/">
+  <meta property="og:image" content="https://choolwecheelo.vercel.app/assets/images/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -24,7 +34,6 @@
         <li><a href="resume.html">Resume</a></li>
         <li><a href="skills.html">Skills &amp; Certifications</a></li>
         <li><a href="projects.html">Projects</a></li>
-        <li><a href="testimonials.html">Testimonials</a></li>
         <li><a href="contact.html">Contact</a></li>
       </ul>
     </div>
@@ -63,20 +72,88 @@
         <div class="hero__content">
           <p class="hero__greeting">Hi, I'm</p>
           <h1 class="hero__name">Choolwe Cheelo<span class="accent">.</span></h1>
-          <p class="hero__role">Data Analyst &middot; Actuarial Science Graduate</p>
+          <p class="hero__role">Data Analyst &middot; AB Bank Zambia</p>
           <p class="hero__description">
-            I turn complex datasets into clear, actionable insights. Based in Lusaka, Zambia,
-            currently a Data Analyst Trainee at FSI Outsourcing, building expertise in
-            statistical modeling, Power BI dashboards, and financial forecasting.
+            I turn complex datasets into decisions people can act on. I'm the bank's sole analyst &mdash;
+            building the dashboards and automated pipelines behind its Executive and Board reporting &mdash;
+            and the founding chair of its AI Committee. Based in Lusaka, Zambia.
           </p>
           <div class="hero__cta">
             <a href="projects.html" class="btn btn--primary">View My Work</a>
-            <a href="contact.html" class="btn btn--secondary">Get In Touch</a>
+            <a href="reports/choolwe-cheelo-cv.pdf" class="btn btn--secondary" target="_blank" rel="noopener">Download CV</a>
           </div>
-          <p class="hero__credentials">Microsoft PL-300 (950&thinsp;/&thinsp;1000) &middot; BSc Actuarial Science, UNZA</p>
+          <p class="hero__credentials">Microsoft PL-300 (950&thinsp;/&thinsp;1000) &middot; BSc Actuarial Science, UNZA &middot; Building with agentic AI</p>
         </div>
         <div class="hero__photo">
-          <img src="assets/images/profile.jpg" alt="Choolwe Cheelo" loading="eager">
+          <picture>
+            <source srcset="assets/images/profile.webp" type="image/webp">
+            <img src="assets/images/profile.jpg" alt="Choolwe Cheelo" width="800" height="1200" loading="eager" fetchpriority="high">
+          </picture>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--alt">
+      <div class="container">
+        <div class="section__header">
+          <div>
+            <h2 class="section__title">Featured Projects</h2>
+            <p class="section__subtitle">An AI system at the bank, a platform in daily use, and research you can explore in the browser.</p>
+          </div>
+          <a href="projects.html" class="section__header-link">All projects &rarr;</a>
+        </div>
+
+        <div class="projects-grid">
+          <article class="project-card">
+            <div class="project-card__media"><img src="assets/images/shot-qa.webp" alt="Screenshot of the Account Opening QA simulation" width="1000" height="400" loading="lazy"></div>
+            <div class="project-card__body">
+              <h3 class="project-card__title">Account Opening QA Agent</h3>
+              <p class="project-card__description">
+                An AI agent that checks scanned account-opening packs on locally run ML models &mdash;
+                96&ndash;100% document-check accuracy, and no client data leaves the bank.
+              </p>
+              <div class="project-card__tags">
+                <span class="tag">Python</span>
+                <span class="tag">Machine Learning</span>
+                <span class="tag">OCR</span>
+              </div>
+              <a href="project-account-opening-agent.html" class="project-card__link">View Details &rarr;</a>
+            </div>
+          </article>
+
+          <article class="project-card">
+            <div class="project-card__media"><img src="assets/images/shot-unisda.webp" alt="Screenshot of the UNISDA Strategic Planning demo dashboard" width="1000" height="400" loading="lazy"></div>
+            <div class="project-card__body">
+              <h3 class="project-card__title">UNISDA Strategic Planning &amp; Reporting</h3>
+              <p class="project-card__description">
+                Planning, quarterly scorecards and a four-stage payment approval chain for a
+                2,000+ member church and its 36 departments.
+              </p>
+              <div class="project-card__tags">
+                <span class="tag">Django</span>
+                <span class="tag">PostgreSQL</span>
+                <span class="tag">Tailwind</span>
+              </div>
+              <a href="project-unisda.html" class="project-card__link">View Details &rarr;</a>
+            </div>
+          </article>
+
+          <article class="project-card">
+            <div class="project-card__media"><img src="assets/images/shot-copper.webp" alt="Screenshot of the Copper Forecast Lab interactive demo" width="1000" height="400" loading="lazy"></div>
+            <div class="project-card__body">
+              <h3 class="project-card__title">Copper Price Forecasting</h3>
+              <p class="project-card__description">
+                AR(2) and GARCH(1,1) models on 25 years of daily copper prices &mdash; the
+                level is a random walk, but the risk is predictable.
+              </p>
+              <div class="project-card__tags">
+                <span class="tag">R</span>
+                <span class="tag">Time Series</span>
+                <span class="tag">Forecasting</span>
+              </div>
+              <a href="project-copper.html" class="project-card__link">View Details &rarr;</a>
+            </div>
+          </article>
         </div>
       </div>
     </section>
@@ -188,5 +265,6 @@
   </footer>
 
   <script src="js/main.js" defer></script>
+  <script src="js/chat.js" defer></script>
 </body>
 </html>

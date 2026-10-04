@@ -23,3 +23,5 @@ node_modules/
 
 # Fintech project raw data (large datasets kept local, not committed)
 fintech/data/
+scripts/chat-phrases/*.json
+scripts/chat-phrases/*.tsv

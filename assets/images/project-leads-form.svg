@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 200">
+  <defs>
+    <linearGradient id="lf-bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0c1420"/>
+      <stop offset="100%" stop-color="#1a0f08"/>
+    </linearGradient>
+  </defs>
+  <rect width="500" height="200" fill="url(#lf-bg)"/>
+  <text x="32" y="34" font-family="system-ui, sans-serif" font-size="15" fill="#f1f5f9" font-weight="700">Asset Financing Leads Form</text>
+  <text x="32" y="52" font-family="system-ui, sans-serif" font-size="10" fill="#64748b">Mobile form · UTM tracking · Contact-centre CSV</text>
+
+  <rect x="40" y="62" width="96" height="128" rx="14" fill="#0f1a10" stroke="#2d6a4f" stroke-width="2"/>
+  <rect x="50" y="78" width="76" height="102" rx="6" fill="#0b1118"/>
+  <rect x="58" y="88" width="60" height="9" rx="2" fill="#1e293b"/>
+  <rect x="58" y="102" width="60" height="9" rx="2" fill="#1e293b"/>
+  <rect x="58" y="116" width="60" height="9" rx="2" fill="#1e293b"/>
+  <rect x="58" y="132" width="60" height="14" rx="4" fill="#c2410c"/>
+  <text x="88" y="142" font-family="system-ui, sans-serif" font-size="7" fill="#ffffff" text-anchor="middle" font-weight="700">ENQUIRE</text>
+  <text x="160" y="84" font-family="monospace" font-size="8" fill="#64748b">POST LINK</text>
+  <text x="160" y="100" font-family="monospace" font-size="9" fill="#94a3b8">?utm_source=<tspan fill="#fb923c">facebook</tspan></text>
+  <text x="160" y="114" font-family="monospace" font-size="9" fill="#94a3b8">&amp;utm_campaign=<tspan fill="#fb923c">launch</tspan></text>
+  <text x="160" y="128" font-family="monospace" font-size="9" fill="#94a3b8">&amp;utm_content=<tspan fill="#fb923c">motorbike</tspan></text>
+  <path d="M160 146 H300" stroke="#334155" stroke-width="2"/>
+  <path d="M294 140 L302 146 L294 152" fill="none" stroke="#334155" stroke-width="2"/>
+  <rect x="316" y="72" width="152" height="108" rx="6" fill="#0f172a" stroke="#1e293b"/>
+  <text x="328" y="90" font-family="monospace" font-size="8" fill="#64748b">leads.csv</text>
+  <g font-family="monospace" font-size="8" fill="#e2e8f0">
+    <text x="328" y="108">name, phone, source</text>
+    <text x="328" y="124" fill="#94a3b8">…, …, <tspan fill="#fb923c">facebook</tspan></text>
+    <text x="328" y="140" fill="#94a3b8">…, …, <tspan fill="#fb923c">whatsapp</tspan></text>
+    <text x="328" y="156" fill="#94a3b8">…, …, <tspan fill="#fb923c">facebook</tspan></text>
+  </g>
+</svg>
