@@ -40,32 +40,6 @@
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
 }
 
-/* Dark theme — follows the visitor's OS setting */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-bg: #121212;
-    --color-bg-alt: #1a1a1a;
-    --color-text: #ededed;
-    --color-text-secondary: #b4b4b4;
-    --color-text-muted: #8f8f8f;
-    --color-border: #2c2c2c;
-    --color-accent: #fb923c;
-    --color-accent-hover: #fdba74;
-    --color-accent-soft: #2a1a10;
-    --color-accent-rgb: 251, 146, 60;
-    --color-nav-bg: rgba(18, 18, 18, 0.88);
-    --color-grid-line: rgba(255, 255, 255, 0.05);
-    --color-photo-ring: #1f1f1f;
-    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
-  }
-
-  /* Dark monochrome icons (GitHub, Claude, hobby icons) would vanish on a dark background */
-  :root .floating-icon img,
-  :root .numbered-list__icon img {
-    filter: grayscale(1) invert(1);
-  }
-}
-
 /* ========== Reset & Base ========== */
 *, *::before, *::after {
   box-sizing: border-box;
@@ -74,7 +48,7 @@
 }
 
 html {
-  color-scheme: light dark;
+  color-scheme: light;
   font-size: 16px;
   scroll-behavior: smooth;
 }

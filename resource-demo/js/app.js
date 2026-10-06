@@ -35,8 +35,7 @@
   /* ───────── Theme ───────── */
   function theme() {
     var t = store('ra-demo-theme');
-    if (!t) t = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    return t;
+    return t || 'light';
   }
   document.documentElement.setAttribute('data-theme', theme());
 
